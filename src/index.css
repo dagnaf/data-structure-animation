@@ -1,0 +1,226 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  background: coral;
+  list-style: none;
+  width: 80px;
+  word-wrap: break-word;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.list span {
+  display: block;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.list input.active, .list input:hover {
+  background: tomato;
+}
+
+.main.running .ace_active-line {
+  background: rgba(255,255,0,0.7) !important
+}
+
+.ace_cursor {
+  display: none !important;
+}
+
+.wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  position: relative;
+}
+
+.wrapper-row {
+  margin: 5px 0;
+  display: flex;
+  background-color: blueviolet;
+  flex: 1;
+  flex-direction: row;
+  align-content: stretch;
+}
+
+
+
+/*.ace-editor, .ace-editor-wrapper {
+  flex: 1;
+  position: relative;
+}*/
+
+.ace-flex {
+  flex: 1;
+  position: relative;
+}
+
+.wrapper-code {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-content: stretch;
+}
+
+.scene {
+  /*width: 100px;*/
+  flex: 1;
+  background-color: teal;
+}
+
+header {
+  height: 5px;
+  background-color: coral;
+  display: flex;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+header:hover {
+  height: 55px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  z-index: 10;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-item {
+  flex: 1;
+}
+
+.play-button {
+  padding: 7px 20px 5px 20px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: tomato;
+}
+
+.pause {
+  display: block;
+  height: 40px;
+  width: 40px;
+  border: 10px solid white;
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.play {
+  display: block;
+  height: 0px;
+  width: 0px;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
+  border-width: 20px 0 20px 40px;
+}
+.replay {
+  position: relative;
+  display: block;
+  height: 40px;
+  width: 40px;
+  border-radius: 40px;
+  border: 8px solid white;
+}
+.replay .play {
+  border-width: 10px 0px 10px 20px;
+  position: absolute;
+  top: 18px;
+  right: calc(50% + 5px);
+}
+.replay > .play {
+  transform: rotate(180deg);
+  border-left-color: tomato;
+}
+
+.replay > .play > .play {
+  top: -10px;
+  right: 5px;
+}
+
+input[type=range] {
+  flex: 1;
+}
+
+.control {
+  height: 5px;
+  background-color: coral;
+  display: flex;
+  align-content: stretch;
+  flex: 1;
+  overflow: hidden;
+}
+
+.control:hover {
+  height: 55px;
+}
+
+.range-bar {
+  display: flex;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.range-bar .progress {
+  background: tomato;
+  border-right: 1px solid white;
+}
+
+.list input {
+  border: 0;
+  font-size: 16px;
+  padding: 16px 5px;
+  background: coral;
+  width: 100%;
+  color: white;
+}
+.list input:hover {
+  background-color: tomato;
+}
+.list input:focus {
+  outline: none;
+  background-color: tomato;
+}
+
+.header-side {
+  width: 80px;
+  background-color: tomato;
+}
+
+.header-middle {
+  flex: 1;
+  background-color: coral;
+}
+
+::placeholder {
+  color: white;
+}
+
+.file-list input {
+  cursor: pointer;
+}
+
+.cmd-button {
+  cursor: pointer;
+}
+
+.footer-side {
+  background-color: tomato;
+  width: 80px;
+}
