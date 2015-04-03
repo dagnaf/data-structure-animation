@@ -9,12 +9,13 @@ module.exports = React.createClass({
     EventMixin
   ],
   registerListeners: function(props, state) {
-    this.listenTo(state.demo, 'change:hasDemo', function () {
-      // FIXME: this is fired before control componentDidMount
-      setTimeout(function () {
-        this.editor.resize(true);
-      }.bind(this), 500);
-    }.bind(this));
+    // UPDATE: no need to explicitly call for resize
+    // this.listenTo(state.demo, 'change:hasDemo', function () {
+    //   // FIXME: this is fired before control componentDidMount
+    //   setTimeout(function () {
+    //     this.editor.resize(true);
+    //   }.bind(this), 500);
+    // }.bind(this));
 
     this.listenTo(state.demo, 'change:running', function () {
       this.forceUpdate();
