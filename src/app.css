@@ -5,7 +5,10 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
-
+#dsaapp {
+  /*vertical height*/
+  height: 100vh;
+}
 .list {
   margin: 0;
   padding: 0;
@@ -64,7 +67,7 @@ body {
 }
 
 .wrapper {
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-content: stretch;
