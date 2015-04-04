@@ -6,8 +6,17 @@ module.exports = React.createClass({
     EventMixin
   ],
   registerListeners: function(props, state) {
-    this.listenTo(state.demo, 'change', function () {
-        this.forceUpdate();
+    this.listenTo(state.demo, 'change:isRunning', function () {
+      this.forceUpdate();
+      // FIXME: isRunning and isPlaying are interdependent
+      if (!this.state.demo.isRunning)
+        this.state.demo.isPlaying = false;
+    });
+    this.listenTo(state.demo, 'change:isPlaying', function () {
+      this.forceUpdate();
+    });
+    this.listenTo(state.demo, 'change:stamp', function () {
+      this.setState({width: this.state.demo.stamp*100/this.state.demo.length});
     });
   },
   getInitialState: function () {
@@ -34,7 +43,8 @@ module.exports = React.createClass({
     e.preventDefault();
     // FIXME: 80 is width of play-button
     var totalWidth = window.innerWidth - 80*2;
-    this.setState({width: Math.min(totalWidth, e.clientX - 80)*100/totalWidth});
+    var clientWidth = Math.max(0,Math.min(totalWidth, e.clientX - 80));
+    this.setState({width: clientWidth*100/totalWidth});
     return false;
   },
   // Solution copy from dat.gui .slider
@@ -44,46 +54,60 @@ module.exports = React.createClass({
     window.removeEventListener('mousemove', this.onMouseDrag);
     window.removeEventListener('mouseup', this.onMouseUp);
     var totalWidth = window.innerWidth - 80*2;
-    this.setState({width: Math.max(0,Math.min(totalWidth, e.clientX - 80))*100/totalWidth});
+    var clientWidth = Math.max(0,Math.min(totalWidth, e.clientX - 80));
+    var unitWidth = totalWidth/this.state.demo.length;
+    // FIXME: width is binded to stamp, listened in change events
+    // this.setState({width: clientWidth*100/totalWidth});
+    this.state.demo.stamp = Math.round(clientWidth/unitWidth);
+    this.setState({width: this.state.demo.stamp*100/this.state.demo.length})
   },
   onContextMenu: function (e) {
     e.preventDefault();
   },
+
+  pause: function () {
+    this.state.demo.pause();
+  },
+  replay: function () {
+    this.state.demo.replay();
+  },
+  play: function () {
+    this.state.demo.play();
+  },
+
   render: function () {
-    // if (this.state.demo.hasDemo === false) return (
-    //     // <div className="demo-title">栈——算术表达式</div>
-    //     null
-    // );
     var playButton;
-    var demo = this.state.demo;
-    if (this.state.demo.running) {
+    if (this.state.demo.isRunning) {
+      if (this.state.demo.isPlaying) {
         playButton = (
-            <span className="pause" onClick={this.state.demo.pause.bind(demo)}></span>
+            <span className="pause" onClick={this.pause}></span>
         );
-    } else if (this.state.demo.ended) {
+      } else {
         playButton = (
-            <span className="replay" onClick={this.state.demo.replay.bind(demo)}>
+            <span className="play" onClick={this.play}></span>
+        );
+      }
+    } else {
+        playButton = (
+            <span className="replay" onClick={this.replay}>
                 <span className="play">
                     <span className="play"></span>
                 </span>
             </span>
         );
-    } else {
-        playButton = (
-            <span className="play" onClick={this.state.demo.play.bind(demo)}></span>
-        );
     }
+
     var inlineStyle = {
         width: this.state.width + '%'
     };
     return (
-      <div className="control">
-        <div className="play-button">{playButton}</div>
-        <div className="range-bar" onMouseDown={this.onMouseDown} onContextMenu={this.onContextMenu}>
+      <footer>
+        <div className="play-button header-left">{playButton}</div>
+        <div className="range-bar header-middle" onMouseDown={this.onMouseDown} onContextMenu={this.onContextMenu}>
           <div className="progress" style={inlineStyle}></div>
         </div>
-        <div className="footer-side"></div>
-      </div>
+        <div className="header-right"></div>
+      </footer>
     )
   }
 });

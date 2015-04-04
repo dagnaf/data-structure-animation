@@ -3,7 +3,8 @@ var Code = require('./code.jsx');
 var Input = require('./input.jsx');
 var List = require('./list.jsx');
 var Scene = require('./scene.jsx');
-var Control = require('./control.jsx');
+var Header = require('./header.jsx');
+var Footer = require('./footer.jsx');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -14,20 +15,14 @@ module.exports = React.createClass({
   render: function () {
     return (
       <div className="wrapper">
-        <header>
-          <div className="header-side"></div>
-          <div className="header-middle"></div>
-          <div className="header-side"></div>
-        </header>
+        <Header />
         <div className="wrapper-row">
           <List />
           <Code />
           <Scene />
           <Input />
         </div>
-        <footer>
-          <Control />
-        </footer>
+        <Footer />
       </div>
     );
   }

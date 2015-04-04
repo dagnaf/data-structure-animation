@@ -17,13 +17,13 @@ module.exports = React.createClass({
     //   }.bind(this), 500);
     // }.bind(this));
 
-    this.listenTo(state.demo, 'change:running', function () {
+    this.listenTo(state.demo, 'change:isRunning', function () {
       this.forceUpdate();
     }.bind(this));
 
-    this.listenTo(state.demo, 'code:break', function (curr) {
-      if (this.state.file.main) {
-        this.editor.gotoLine(curr.line)
+    this.listenTo(state.demo, 'change:activeLine', function (curr) {
+      if (this.state.file.main && this.state.demo.activeLine !== undefined) {
+        this.editor.gotoLine(this.state.demo.activeLine);
       }
     }.bind(this));
 
@@ -68,7 +68,7 @@ module.exports = React.createClass({
   render: function () {
     var classes = 'wrapper-code';
     if (this.state.file.main) classes += ' main';
-    if (this.state.demo.running) classes += ' running';
+    if (this.state.demo.isRunning) classes += ' running';
     return (
       <div className={classes}>
         <div className="ace-flex" ref="code"></div>

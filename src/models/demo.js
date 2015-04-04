@@ -2,50 +2,77 @@
 var AmpersandState = require('ampersand-state');
 // var deval = require('deval');
 // var weevil = require('weevil');
+var debounce = require('lodash.debounce');
 var dsa = require('../codes/stack-built');
 
 module.exports = AmpersandState.extend({
   props: {
-    running: ['boolean', true, false],
+    isPlaying: ['boolean', true, false],
     hasDemo: ['boolean', true, false],
-    ended: ['boolean', true, false],
-    stamp: ['number', true, 0]
+    stamp: ['number', true, 0],
+    delay: ['number', true, 800],
+    length: ['number', true, 0]
+  },
+  derived: {
+    activeLine: {
+      deps: ['stamp'],
+      fn: function () {
+        return this.breakpoints[this.stamp];
+      }
+    },
+    isRunning: {
+      deps: ['hasDemo', 'stamp', 'length'],
+      fn: function () {
+        return this.hasDemo && (this.stamp !== this.length);
+      }
+    },
   },
   play: function () {
-    console.log('play demo');
-    this.running = true;
+    if (this.isPlaying) return;
+    this.isPlaying = true;
+    this.playing(this.stamp);
+    console.log('play');
   },
+
   pause: function () {
-    console.log('pause demo');
-    this.running = false;
+    this.playing.cancel();
+    this.isPlaying = false;
+    console.log('pause');
   },
+
   replay: function () {
-    console.log('replay demo');
-    this.running = true;
+    console.log('replay');
+    this.isPlaying = true;
+    this.playing(0);
   },
+
   run: function (str) {
     console.log('running the code');
-    var breakpoints = [];
+
     var save = function(breakpoint) {
-        breakpoints.push({line: breakpoint});
-    }
+        this.breakpoints.push(breakpoint);
+    }.bind(this);
     var val = dsa(save).eval(str);
-    this.running = true;
+    this.length = this.breakpoints.length;
+
     this.hasDemo = true;
-    this.ended = false;
+    this.isPlaying = true;
+    this.playing(0);
+  },
+
+  initialize: function () {
+    this.breakpoints = [];
+    this.maxDelay = 2500;
+    this.minDelay = 100;
     var self = this;
-    (function () {
-        var i = 0;
-        var id = setInterval(function () {
-            self.trigger('code:break', breakpoints[i]);
-            i++;
-            if (i >= breakpoints.length) {
-                clearInterval(id);
-                self.running = false;
-                self.ended = true;
-                console.log(val);
-            }
-        }, 1000)
-    })();
+    this.playing = debounce(function (startStamp) {
+      console.log('play from ' + startStamp);
+      self.stamp = startStamp;
+      if (self.stamp === self.length) {
+        isPlaying = false;
+        return;
+      }
+      self.playing(startStamp+1);
+    }, this.delay)
   }
 })

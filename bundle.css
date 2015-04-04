@@ -9,7 +9,7 @@ body {
 .list {
   margin: 0;
   padding: 0;
-  background: coral;
+  background-color: coral;
   list-style: none;
   width: 80px;
   word-wrap: break-word;
@@ -17,15 +17,37 @@ body {
   overflow-y: auto;
 }
 
-.list span {
-  display: block;
-  padding: 10px;
+.file-list {
+  background-color: tomato;
+}
+
+.list input {
+  border: 0;
+  font-size: 16px;
+  padding: 16px 5px;
+  background-color: coral;
+  width: 100%;
   color: white;
+}
+
+.file-list input {
+  background-color: tomato;
+}
+
+.list input:hover {
+  background-color: tomato;
+}
+.list input:focus {
+  outline: none;
+  background-color: tomato;
+}
+
+.file-list input {
   cursor: pointer;
 }
 
-.list input.active, .list input:hover {
-  background: tomato;
+.file-list input.active, .file-list input:hover, .file-list input:focus{
+  background-color: coral;
 }
 
 .main.running .ace_active-line {
@@ -74,12 +96,6 @@ body {
           align-content: stretch;
 }
 
-
-
-/*.ace-editor, .ace-editor-wrapper {
-  flex: 1;
-  position: relative;
-}*/
 
 .ace-flex {
   -webkit-box-flex: 1;
@@ -142,6 +158,15 @@ footer {
   display: flex;
   width: 100%;
   z-index: 10;
+  height: 5px;
+  -webkit-align-content: stretch;
+      -ms-flex-line-pack: stretch;
+          align-content: stretch;
+  overflow: hidden;
+}
+
+footer:hover {
+  height: 55px;
 }
 
 .flex-container {
@@ -162,7 +187,6 @@ footer {
   padding: 7px 20px 5px 20px;
   overflow: hidden;
   cursor: pointer;
-  background-color: tomato;
 }
 
 .pause {
@@ -207,43 +231,13 @@ footer {
   right: 5px;
 }
 
-input[type=range] {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-}
 
-.control {
-  height: 5px;
-  background-color: coral;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-content: stretch;
-      -ms-flex-line-pack: stretch;
-          align-content: stretch;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  overflow: hidden;
-}
-
-.control:hover {
-  height: 55px;
-}
 
 .range-bar {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
   -webkit-align-content: flex-start;
       -ms-flex-line-pack: start;
           align-content: flex-start;
@@ -254,23 +248,13 @@ input[type=range] {
   border-right: 1px solid white;
 }
 
-.list input {
-  border: 0;
-  font-size: 16px;
-  padding: 16px 5px;
-  background: coral;
-  width: 100%;
-  color: white;
-}
-.list input:hover {
-  background-color: tomato;
-}
-.list input:focus {
-  outline: none;
-  background-color: tomato;
-}
 
-.header-side {
+
+.header-left {
+  width: 80px;
+  background-color: coral;
+}
+.header-right {
   width: 80px;
   background-color: tomato;
 }
@@ -299,15 +283,8 @@ input[type=range] {
   color: white;
 }
 
-.file-list input {
-  cursor: pointer;
-}
+
 
 .cmd-button {
   cursor: pointer;
-}
-
-.footer-side {
-  background-color: tomato;
-  width: 80px;
 }
