@@ -15,6 +15,7 @@ module.exports = React.createClass({
 
   propTypes: {
     val: ReactPropTypes.number.isRequired,
+    delay: ReactPropTypes.number.isRequired,
     domain: ReactPropTypes.array.isRequired,
     isRunning: ReactPropTypes.bool.isRequired,
     isPlaying: ReactPropTypes.bool.isRequired,
@@ -73,6 +74,7 @@ module.exports = React.createClass({
         e.preventDefault();
         return;
     }
+    // FIXME: difference with Header.js
     DsaActions.pauseDemo();
     // FIXME: don't know by react how to attach events to window
     window.addEventListener('mousemove', this._onMouseDrag);
@@ -99,6 +101,7 @@ module.exports = React.createClass({
     // var totalWidth = window.innerWidth - 80*2;
     // var clientWidth = Math.max(0,Math.min(totalWidth, e.clientX - 80));
     // var unitWidth = totalWidth/this.state.demo.length;
+    // FIXME: difference with Footer.js
     DsaActions.updateStamp(Math.round(this.state.draggingWidth * this.props.domain[1] / 100), true);
     this.setState({draggingWidth: undefined})
   },

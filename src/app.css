@@ -14,14 +14,20 @@ body {
   padding: 0;
   background-color: coral;
   list-style: none;
-  width: 80px;
-  word-wrap: break-word;
+  width: 5px;
+  /*word-wrap: break-word;*/
   overflow: hidden;
   overflow-y: auto;
+  position: absolute;
+  height: 100%;
+  z-index: 10;
 }
-
+.list:hover {
+  width: 80px;
+}
 .file-list {
   background-color: tomato;
+  right: 0;
 }
 
 .list input {
@@ -49,7 +55,7 @@ body {
   cursor: pointer;
 }
 
-.file-list input.active, .file-list input:hover, .file-list input:focus{
+.file-list input.active, .file-list input:hover, .file-list input:focus {
   background-color: coral;
 }
 
@@ -72,20 +78,23 @@ body {
   flex-direction: column;
   align-content: stretch;
   position: relative;
+  background-color: teal;
 }
 
 .wrapper-row {
   margin: 5px 0;
   display: flex;
-  background-color: blueviolet;
+  background-color: teal;
   flex: 1;
   flex-direction: row;
   align-content: stretch;
+  position: relative;
 }
 
 .ace-flex {
   flex: 1;
   position: relative;
+  margin-right: 5px;
 }
 
 .wrapper-code {
@@ -93,11 +102,12 @@ body {
   flex: 1;
   flex-direction: row;
   align-content: stretch;
+  position: relative;
 }
 
 .scene {
   flex: 1;
-  background-color: teal;
+  margin-left: 5px;
 }
 
 header {
@@ -106,7 +116,11 @@ header {
   display: flex;
   position: absolute;
   width: 100%;
-  z-index: 10;
+  z-index: 20;
+  overflow: hidden;
+  text-align: center;
+  font-size: 30px;
+  color: white;
 }
 
 header:hover {
@@ -127,13 +141,14 @@ footer {
 footer:hover {
   height: 55px;
 }
-
-.header-left {
+.header-left, .header-right {
+  padding: 7px 20px 5px 20px;
   width: 80px;
+}
+.header-left {
   background-color: coral;
 }
 .header-right {
-  width: 80px;
   background-color: tomato;
 }
 
@@ -143,7 +158,6 @@ footer:hover {
 }
 
 .play-button {
-  padding: 7px 20px 5px 20px;
   overflow: hidden;
   cursor: pointer;
 }
@@ -180,7 +194,7 @@ footer:hover {
 }
 .replay > .play {
   transform: rotate(180deg);
-  border-left-color: tomato;
+  border-left-color: coral;
 }
 
 .replay > .play > .play {

@@ -1,6 +1,27 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var DsaConstants = require('../constants/DsaConstants');
+var debounce = require('lodash.debounce');
 
+// FIXME: Put debounced in actions or in store? it has been a
+//   mess!
+
+// return a debounced function, after invoke with specified
+// newStamp to update, it waits for delayed time
+var createDebounced = function (delay) {
+  return debounce(
+    function (newStamp, length) {
+      AppDispatcher.dispatch({
+        actionType: DsaConstants.DSA_UPDATE_STAMP,
+        newStamp: newStamp
+      });
+      AppDispatcher.dispatch(newStamp === length ? {
+        actionType: DsaConstants.DSA_PAUSE_DEMO,
+      } : {
+        actionType: DsaConstants.DSA_PLAY_DEMO,
+        callback: createDebounced
+      });
+    }, delay);
+};
 var DsaActions = {
 
   updateFile: function (newIndex, oldLine) {
@@ -10,6 +31,12 @@ var DsaActions = {
       oldLine: oldLine
     });
   },
+  updateDelay: function (newDelay) {
+    AppDispatcher.dispatch({
+      actionType: DsaConstants.DSA_UPDATE_DELAY,
+      newDelay: newDelay
+    });
+  },
   pauseDemo: function () {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_PAUSE_DEMO
@@ -17,13 +44,16 @@ var DsaActions = {
   },
   playDemo: function () {
     AppDispatcher.dispatch({
-      actionType: DsaConstants.DSA_PLAY_DEMO
+      actionType: DsaConstants.DSA_PLAY_DEMO,
+      callback: createDebounced
     });
   },
   replayDemo: function () {
     AppDispatcher.dispatch({
-      actionType: DsaConstants.DSA_REPLAY_DEMO
+      actionType: DsaConstants.DSA_UPDATE_STAMP,
+      newStamp: 0
     });
+    this.playDemo();
   },
   updateStamp: function (newStamp, pause) {
     AppDispatcher.dispatch({
@@ -33,10 +63,15 @@ var DsaActions = {
     });
   },
   runDemo: function (text) {
+    if (text.trim() === '') return;
+    AppDispatcher.dispatch({
+      actionType: DsaConstants.DSA_PAUSE_DEMO
+    });
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_RUN_DEMO,
       text: text
     });
+    this.replayDemo();
   }
 
 };

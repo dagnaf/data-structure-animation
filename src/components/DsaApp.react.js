@@ -34,10 +34,11 @@ var DsaApp = React.createClass({
   },
 
   render: function () {
+    // if (this.state.isPlaying) _onNextStamp();
     return (
       <div className="wrapper">
         <Header
-          val={this.props.delay}
+          val={this.state.delay}
           domain={[DsaStore.get('minDelay'), DsaStore.get('maxDelay')]}
         />
         <div className="wrapper-row">
@@ -53,6 +54,7 @@ var DsaApp = React.createClass({
         </div>
         <Footer
           val={this.state.stamp}
+          delay={this.state.delay}
           domain={[0, this.state.length]}
           isRunning={this.state.isRunning}
           isPlaying={this.state.isPlaying}
@@ -62,9 +64,13 @@ var DsaApp = React.createClass({
   },
 
   _onchange: function () {
-    console.log('setstage ' + getDsaState());
+    console.log('setstage ' + JSON.stringify(getDsaState()));
     this.setState(getDsaState());
-  }
+  },
+
+  // _onNextStamp: function () {
+  //   DsaActions.
+  // }
 });
 
 module.exports = DsaApp;

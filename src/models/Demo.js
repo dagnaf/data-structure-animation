@@ -14,22 +14,6 @@ var Demo = function (dsaType) {
 
   this.maxDelay = 2500;
   this.minDelay = 100;
-  // FIXME: have to wait assigning playing until initialization
-  var self = this;
-  this.playing = debounce(function (startStamp) {
-    console.log('play from ' + startStamp);
-    // FIXME: playing should be inside demo, but updateStamp is an action
-    DsaAction.updateStamp(startStamp);
-    // self.stamp = startStamp;
-    if (self.stamp === self.length) {
-      // FIXME: playing should be inside demo, but pauseDemo is an action
-      DsaAction.pauseDemo();
-      // isPlaying = false;
-      return;
-    }
-    self.playing(startStamp+1);
-  }, this.delay)
-
 };
 
 Demo.prototype.isRunning = function () {
@@ -40,36 +24,39 @@ Demo.prototype.breakpoint = function () {
   return this._breakpoints[this.stamp] || -1;
 };
 
+Demo.prototype.update = function (newStamp) {
+  this.stamp = newStamp;
+  console.log('goto demo '+ newStamp);
+}
+
+Demo.prototype.setDelay = function (newDelay) {
+  this.delay = newDelay;
+  console.log('delay changed '+ newDelay);
+}
+
 Demo.prototype.play = function () {
   this.isPlaying = true;
-  this.playing(this.stamp);
-  console.log('play');
+  console.log('play demo / demo playing'+ this.isPlaying);
 };
 
 Demo.prototype.pause = function () {
-  this.playing.cancel();
   this.isPlaying = false;
-  console.log('pause');
+  console.log('pause demo / demo stopped');
 };
 
 Demo.prototype.replay = function () {
-  console.log('replay');
-  this.isPlaying = true;
-  this.playing(0);
 };
 
+// Only run the built-program foreground, not start to
+//   play
 Demo.prototype.run = function (str) {
-  console.log('running the code');
-
+  console.log('code (not demo) running foreground');
   var save = function(breakpoint) {
       this._breakpoints.push(breakpoint);
   }.bind(this);
   var val = dsa(save).eval(str);
   this.length = this._breakpoints.length;
-
-  this.hasDemo = true;
-  this.isPlaying = true;
-  this.playing(0);
+  this.hasDemo = true;;
 };
 
 module.exports = Demo;
