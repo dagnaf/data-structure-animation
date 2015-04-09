@@ -12,15 +12,18 @@ module.exports = React.createClass({
     // cmd-button(fake-input) should show under the input element
     return (
       <div className="list">
-        <input onChange={this._onChange} value={this.state.text} placeholder="eval"/>
-        <input className="cmd-button" disabled onClick={this._onClick} value="运行"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'init')} value="初始化"/>
+        <input onChange={this._onChange} value={this.state.text} placeholder="整数"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'push')} value="入栈"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'pop')} value="出栈"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'peak')} value="栈顶"/>
       </div>
     );
   },
   _onChange: function (e) {
     this.setState({text: e.target.value});
   },
-  _onClick: function () {
-    DsaActions.runDemo(this.state.text);
+  _onClick: function (cmd) {
+    DsaActions.runDemo(cmd, this.state.text);
   }
 });

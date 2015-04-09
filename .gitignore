@@ -30,3 +30,7 @@ node_modules
 
 bundle.js
 bundle.css
+
+src/codes/*.out
+src/codes/in
+src/codes/*-built.js

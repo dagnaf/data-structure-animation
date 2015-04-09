@@ -1,127 +1,111 @@
-module.exports = function (save) {var N = 100;
-var Stack = function() {    this.top = 0;    this.data = new Array(N);};
-var Expression = function(s) {    this.str = s;    this.ptr = s;};
-            Stack.prototype.init = function() {
-save(line);      this.top = 0;
-            };
+var li = il = function () {},globalData = undefined,N = 5;
 
-            Stack.prototype.isFull = function() {
-save(line);     if (this.top === N) {
-save(line);         return 1;
-                } else {
-save(line);         return 0;
-                }
-            };
 
-            Stack.prototype.isEmpty = function() {
-save(line);     if (this.top === 0) {
-save(line);         return 1;
-                } else {
-save(line);         return 0;
-                }
-            };
+        var init = function() {
+li(ne,'init-top');  this.data = []; il(this.data);
+        };
 
-            Stack.prototype.push = function(val) {
-save(line);     if (this.isFull() === 1) {
-save(line);         console.log('stack full.');
-                } else {
-save(line);         this.data[this.top] = val;
-save(line);         this.top = this.top + 1;
-                }
-            };
+        var isFull = function() {
+li(ne); if (this.data.length === N) {
+li(ne);     return 1;
+            } else {
+li(ne);     return 0;
+            }
+        };
 
-            Stack.prototype.pop = function() {
-save(line);     if (this.isEmpty() === 1) {
-save(line);         console.log('stack empty.');
-                } else {
-save(line);         this.top = this.top - 1;
-                }
-            };
+        var isEmpty = function() {
+li(ne); if (this.data.length === 0) {
+li(ne);     return 1;
+            } else {
+li(ne);     return 0;
+            }
+        };
 
-            Stack.prototype.peak = function() {
-save(line);     if (this.isEmpty() === 1) {
-save(line);         console.log('stack empty.');
-save(line);         return -1;
-                } else {
-save(line);         return this.data[this.top - 1];
-                }
-            };
-
-            var prior = function(instack, coming) {
-save(line);     if (instack === '+' || instack === '-') {
-save(line);         if (coming == '+' || coming == '-' || coming === ')') {save(line);return 1;}
-                    else {save(line);return -1;}
-save(line);     } else if (instack === '*' || instack === '/') {
-save(line);         if (coming === '(') {save(line);return -1;}
-                    else {save(line);return 1;}
-save(line);     } else if (instack === '(') {
-save(line);         if (coming === ')') {save(line);return 0;}
-                    else {save(line);return -1;}
-                }
-save(line);     return -1;
-            };
-
-            var poppush = function(nums, ops) {
-                var a;
-                var b;
-                var op;
-save(line);     a = nums.peak();
-save(line);     nums.pop();
-save(line);     b = nums.peak();
-save(line);     nums.pop();
-save(line);     op = ops.peak();
-save(line);     ops.pop();
-save(line);     if (a === 0 && op === '/') {
-save(line);         console.log('divided by zero.\n');
-save(line);         return;
-                }
-save(line);     switch(op) {
-                    case '+': save(line); nums.push(a+b); break;
-                    case '-': save(line); nums.push(b-a); break;
-                    case '*': save(line); nums.push(a*b); break;
-                    case '/': save(line); nums.push(Math.round(b/a)); break;
-                    default: save(line); break;
-                }
-            };
-
-            Expression.prototype.eval = function() {
-                var i;
-save(line);     var nums = new Stack();
-save(line);     nums.init();
-save(line);     var ops = new Stack();
-save(line);     ops.init();
-                for (;save(line),this.ptr.length != 0; this.ptr = this.ptr.slice(1)) {
-save(line);         if ('0' <= this.ptr[0] && this.ptr[0] <= '9') {
-save(line);             nums.push(this.ptr[0] - '0');
-                    } else {
-                        while ((save(line),ops.isEmpty() === 0) && (save(line),prior((save(line),ops.peak()), this.ptr[0])) === 1) {
-save(line);                 poppush(nums, ops);
-                        }
-save(line);             if (this.ptr[0] === ')') {
-save(line);                 ops.pop();
+        var push = function(val) {
+li(ne); if (this.isFull() === 1) {
+li(ne,'push-full');     console.log('stack full.');
                         } else {
-save(line);                 ops.push(this.ptr[0]);
-                        }
-                    }
-                }
-                while (save(line),ops.isEmpty() === 0) {
-save(line);         poppush(nums, ops);
-                }
-save(line);     return nums.peak();
-            };
+li(ne,'push-ok');     this.data.push(val); il(this.data);
+            }
+        };
 
-// var str;
-// str = '3*5+(1+2)+(1-(2*4/(3+7))-4)/7+2';
-// expr.str = str;
-// expr.ptr = expr.str
-// var val = expr.eval();
-// console.log('%s=%d', str, val);
-    return {
-        eval: function(str) {
-            var expr = new Expression(str);
-            var val = expr.eval();
-            console.log('%s=%d', str, val);
-            return val;
+        var pop = function() {
+li(ne); if (this.isEmpty() === 1) {
+li(ne,'pop-empty');     console.log('stack empty.');
+            } else {
+li(ne,'pop-top');     this.data.pop(); il(this.data);
+            }
+        };
+
+        var peak = function() {
+li(ne); if (this.isEmpty() === 1) {
+li(ne,'peak-empty');     console.log('stack empty.');
+li(ne);     return -1;
+            } else {
+li(ne,'peak-val');     return this.data[this.data.length - 1];
+            }
+        };
+// ================================================== //
+var _ = require('underscore');
+var Stack = function () {
+    this.data = [];
+};
+Stack.prototype.init = init;
+Stack.prototype.isEmpty = isEmpty;
+Stack.prototype.isFull = isFull;
+Stack.prototype.push = push;
+Stack.prototype.pop = pop;
+Stack.prototype.peak = peak;
+
+li = function (line, name, inbetween) {
+    frames.push({
+        line: line,
+        name: name,
+        before: globalData,
+        inbetween: inbetween,
+    });
+}
+il = function (data) {
+    globalData = _.clone(data);
+}
+
+var frames = [];
+var defaultStack = new Stack();
+defaultStack.push(50);
+defaultStack.push(100);
+defaultStack.push(0);
+li(_.last(frames).line);
+
+module.exports = {
+    Stack: Stack,
+    defaultStack: defaultStack,
+    getBreakpoints: function () {
+        li(_.last(frames).line);
+        return frames;
+    },
+    getInitialFrame: function () {
+        return _.last(frames);
+    },
+    reset: function (hard) {
+        if (hard) {
+            delete defaultStack;
+            defaultStack = new Stack();
+            il(defaultStack.data);
         }
+        delete frames;
+        frames = [];
     }
 }
+
+// init: draw stack, two blocks, top and max, transition pan
+// push: draw block on top of the stack, transition down,
+//   top up one block. if stack full, deny with max
+// pop: transition up, top down one block. if stack empty, deny with
+//   top
+// peak: copy and transition up, remove
+
+// background: stackoutline
+// background-text: top/max
+// foreground: stack
+// foreground-text:
+// push(10)

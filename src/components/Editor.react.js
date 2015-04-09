@@ -25,7 +25,10 @@ module.exports = React.createClass({
 
     this.editor.setValue(this.props.files[this.props.index].src, -1);
   },
-
+  componentDidUpdate: function (prevProps, prevState) {
+    console.log('in Editor prev', prevProps);
+    console.log('in Editor curr', this.props);
+  },
   componentWillUnmount: function () {
     this.editor.destroy();
   },

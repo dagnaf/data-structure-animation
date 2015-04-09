@@ -43,7 +43,13 @@ var DsaApp = React.createClass({
         />
         <div className="wrapper-row">
           <Input />
-          <Scene />
+          <Scene
+            frame={DsaStore.getActiveFrame()}
+            isRunning={this.state.isRunning}
+            isPlaying={this.state.isPlaying}
+            delay={this.state.delay}
+            isFirstFrame={this.state.stamp === 0}
+          />
           <Editor
             files={DsaStore.getFiles()}
             index={this.state.fileIndex}
