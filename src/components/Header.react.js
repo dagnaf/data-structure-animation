@@ -23,9 +23,11 @@ module.exports = React.createClass({
   },
 
   render: function () {
-
-    var width = this.state.draggingWidth ||
-      D3.scale.linear()
+    var width;
+    if (this.state.draggingWidth >= 0)
+      width = this.state.draggingWidth;
+    else
+      width = D3.scale.linear()
         .domain(this.props.domain)
         .range([0, 100])(this.props.val);
     var inlineStyle = {
@@ -34,7 +36,7 @@ module.exports = React.createClass({
 
     return (
       <header>
-        <div className="header-left">慢</div>
+        <div className="header-left">快</div>
         <div
           className="range-bar header-middle"
           onMouseDown={this._onMouseDown}
@@ -42,7 +44,7 @@ module.exports = React.createClass({
         >
           <div className="progress" style={inlineStyle}></div>
         </div>
-        <div className="header-right">快</div>
+        <div className="header-right">慢</div>
       </header>
     )
   },
@@ -68,6 +70,7 @@ module.exports = React.createClass({
         .domain([0, totalWidth()])
         .range([0, 100])(clientWidth(e.clientX))
       });
+    console.log(this.state.draggingWidth);
     return false;
   },
   // Solution copy from dat.gui .slider

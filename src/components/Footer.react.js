@@ -47,8 +47,11 @@ module.exports = React.createClass({
             </span>
         );
     }
-    var width = this.state.draggingWidth ||
-      D3.scale.linear()
+    var width;
+    if (this.state.draggingWidth >= 0)
+      width = this.state.draggingWidth;
+    else
+      width = D3.scale.linear()
         .domain(this.props.domain)
         .range([0, 100])(this.props.val);
     var inlineStyle = {

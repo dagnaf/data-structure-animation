@@ -62,13 +62,15 @@ var DsaActions = {
       pause: pause
     });
   },
-  runDemo: function (text) {
-    if (text.trim() === '') return;
+  runDemo: function (command, text, check) {
+    // if (text && text.trim() === '') return;
     AppDispatcher.dispatch({
-      actionType: DsaConstants.DSA_PAUSE_DEMO
+      actionType: DsaConstants.DSA_PAUSE_DEMO,
+      // end: true
     });
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_RUN_DEMO,
+      command: command,
       text: text
     });
     this.replayDemo();

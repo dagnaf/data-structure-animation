@@ -26,7 +26,10 @@ var DsaStore = assign({}, EventEmitter.prototype, {
     return _demo.isRunning();
   },
   getActiveLine: function () {
-    return _demo.breakpoint();
+    return _demo.activeLine();
+  },
+  getActiveFrame: function () {
+    return _demo.activeFrame();
   },
 
   emitChange: function() {
@@ -63,6 +66,7 @@ AppDispatcher.register(function(action) {
       if (!!_demo.callback) _demo.callback.cancel();
       // Set isPlaying false
       _demo.pause();
+      // if (action.end) _demo.update(_demo.length);
       DsaStore.emitChange();
       break;
 
@@ -96,7 +100,7 @@ AppDispatcher.register(function(action) {
       break;
     // Actions have checked the text
     case DsaConstants.DSA_RUN_DEMO:
-      _demo.run(action.text);
+      _demo.run(action.command, action.text);
       DsaStore.emitChange();
       break;
 

@@ -1,9 +1,9 @@
 var fs = require('fs');
 
 var src = [
-fs.readFileSync(__dirname + '/../codes/stack.c', 'utf-8').trim(),
-fs.readFileSync(__dirname + '/../codes/stack.h', 'utf-8').trim(),
-fs.readFileSync(__dirname + '/../codes/main.c', 'utf-8').trim()
+fs.readFileSync(__dirname + '/../codes/stack/stack.c', 'utf-8').trim(),
+fs.readFileSync(__dirname + '/../codes/stack/stack.h', 'utf-8').trim(),
+fs.readFileSync(__dirname + '/../codes/stack/main.c', 'utf-8').trim()
 ]
 var File = function (t) {
   var dsaType = t || 'stack';

@@ -28,7 +28,8 @@
     "flux": "^2.0.1",
     "keymirror": "^0.1.1",
     "lodash.debounce": "^3.0.3",
-    "react": "^0.13.1"
+    "react": "^0.13.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "autoprefixer": "^5.1.0",

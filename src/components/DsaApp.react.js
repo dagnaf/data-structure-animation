@@ -42,8 +42,16 @@ var DsaApp = React.createClass({
           domain={[DsaStore.get('minDelay'), DsaStore.get('maxDelay')]}
         />
         <div className="wrapper-row">
+          <div className="scene">
           <Input />
-          <Scene />
+          <Scene
+            frame={DsaStore.getActiveFrame()}
+            isRunning={this.state.isRunning}
+            isPlaying={this.state.isPlaying}
+            delay={this.state.delay}
+            isFirstFrame={this.state.stamp === 0}
+          />
+          </div>
           <Editor
             files={DsaStore.getFiles()}
             index={this.state.fileIndex}

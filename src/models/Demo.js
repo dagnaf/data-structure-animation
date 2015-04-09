@@ -1,7 +1,5 @@
 var debounce = require('lodash.debounce');
-var dsa = require('../codes/stack-built');
-var DsaAction = require('../actions/DsaActions')
-
+var DsaFactory = require('../codes/stack/lined');
 
 var Demo = function (dsaType) {
   this.isPlaying = false;
@@ -9,7 +7,7 @@ var Demo = function (dsaType) {
   this.stamp = 0;
   this.delay = 800;
   this.length = 0;
-  this._breakpoints = [];
+  this._breakpoints = [ DsaFactory.getInitialFrame() ];
   this.dsaType = dsaType || 'stack';
 
   this.maxDelay = 2500;
@@ -20,8 +18,14 @@ Demo.prototype.isRunning = function () {
   return this.hasDemo && this.stamp !== this.length;
 };
 
-Demo.prototype.breakpoint = function () {
-  return this._breakpoints[this.stamp] || -1;
+Demo.prototype.activeLine = function () {
+  return this._breakpoints[this.stamp].line || -1;
+};
+Demo.prototype.activeFrame = function () {
+  return {
+    current: this._breakpoints[this.stamp],
+    next: this._breakpoints[this.stamp+1]
+  }
 };
 
 Demo.prototype.update = function (newStamp) {
@@ -49,14 +53,19 @@ Demo.prototype.replay = function () {
 
 // Only run the built-program foreground, not start to
 //   play
-Demo.prototype.run = function (str) {
-  console.log('code (not demo) running foreground');
-  var save = function(breakpoint) {
-      this._breakpoints.push(breakpoint);
-  }.bind(this);
-  var val = dsa(save).eval(str);
-  this.length = this._breakpoints.length;
-  this.hasDemo = true;;
+Demo.prototype.run = function (cmd, param) {
+  console.log('code (not demo) running foreground: '+ cmd);
+  DsaFactory.reset(false);
+  switch (cmd) {
+    case 'push': DsaFactory.defaultStack.push(parseInt(param)); break;
+    case 'pop': DsaFactory.defaultStack.pop(); break;
+    case 'peak': DsaFactory.defaultStack.peak(); break;
+    case 'init': DsaFactory.defaultStack.init(); break;
+  }
+  // DsaFactory.defaultStack.push(cmd);
+  this._breakpoints = DsaFactory.getBreakpoints();
+  this.length = this._breakpoints.length-1;
+  this.hasDemo = true;
 };
 
 module.exports = Demo;
