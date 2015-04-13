@@ -4,14 +4,23 @@
 
 int prior(char instack, char coming) {
     if (instack == '+' || instack == '-') {
-        if (coming == '+' || coming == '-' || coming == ')') return 1;
-        else return -1;
+        if (coming == '+' || coming == '-' || coming == ')') {
+            return 1;
+        } else {
+            return -1;
+        }
     } else if (instack == '*' || instack == '/') {
-        if (coming == '(') return -1;
-        else return 1;
+        if (coming == '(') {
+            return -1;
+        } else {
+            return 1;
+        }
     } else if (instack == '(') {
-        if (coming == ')') return 0;
-        else return -1;
+        if (coming == ')') {
+            return 0;
+        } else {
+            return -1;
+        }
     }
     return -1;
 };
@@ -26,10 +35,6 @@ void poppush(Stack *nums, Stack *ops) {
     pop(nums);
     op = peak(ops);
     pop(ops);
-    if (a == 0 && op == '/') {
-        printf("divided by zero.\n");
-        return;
-    }
     switch(op) {
         case '+': push(nums, a+b); break;
         case '-': push(nums, b-a); break;

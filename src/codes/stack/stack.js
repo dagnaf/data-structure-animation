@@ -1,4 +1,4 @@
-var li = il = function () {},globalData = undefined,N = 5;
+var _nothing = function () {},globalData = undefined,N = 5;
 
 
 
@@ -95,6 +95,9 @@ module.exports = {
         }
         delete frames;
         frames = [];
+    },
+    nullify: function () {
+        il = il = _nothing;
     }
 }
 
