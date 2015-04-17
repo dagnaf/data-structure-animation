@@ -26,8 +26,8 @@ module.exports = React.createClass({
     this.editor.setValue(this.props.files[this.props.index].src, -1);
   },
   componentDidUpdate: function (prevProps, prevState) {
-    console.log('in Editor prev', prevProps);
-    console.log('in Editor curr', this.props);
+    // console.log('in Editor prev', prevProps);
+    // console.log('in Editor curr', this.props);
   },
   componentWillUnmount: function () {
     this.editor.destroy();
@@ -40,7 +40,7 @@ module.exports = React.createClass({
       if (this.props.isRunning){ //&&
         //this.editor.getCursorPosition().row + 1 != this.props.activeLine) {
         this.editor.gotoLine(this.props.activeLine);
-        console.log('gotoline ' +this.props.activeLine)
+        // console.log('gotoline ' +this.props.activeLine)
       }
     }
     if (this.props.isRunning) classes += ' running';

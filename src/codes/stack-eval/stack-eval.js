@@ -1,28 +1,28 @@
-var _ = require('underscore'); var clone = require('clone'); var stop = function () {}; var _resultDatum = []; var stopid = 0; var rc;
+var _ = require('underscore'); var clone = require('clone'); var frames = []; var stopid = 0; var rc;
 var nums = []; var ops = []; var str = '';
 
 
                var prior = function (instack, coming) {
-stop(line),_row(instack);    if (instack === '+' || instack === '-') {
-stop(line),_col(coming);     if (coming == '+' || coming == '-' || coming === ')') {
-stop(line); _row(0),_col(0);     return 1;
-                 } else {
-stop(line); _row(0),_col(0);     return -1;
+                 if (stop(line),instack === '+' || instack === '-') {_row(instack);
+stop(line,1);     if (coming == '+' || coming == '-' || coming === ')') { _row(coming);
+stop(line,1);      return 1;
+                 } else { _row(coming);
+stop(line,1);      return -1;
                  }
-                 } else if (stop(line),_row(instack),instack === '*' || instack === '/') {
-stop(line,1),_col(coming);     if (coming === '(') {
-stop(line); _row(0),_col(0);     return -1;
-                 } else {
-stop(line); _row(0),_col(0);     return 1;
+                 } else if (stop(line,1),instack === '*' || instack === '/') { _row(instack);
+stop(line,1);     if (coming === '(') {_row(coming);
+stop(line,1);      return -1;
+                 } else { _row(coming);
+stop(line,1);      return 1;
                  }
-                 } else if (stop(line),_row(instack),instack === '(') {
-stop(line),_col(coming);     if (coming === ')') {
-stop(line); _row(0),_col(0);     return 0;
-                 } else {
-stop(line); _row(0),_col(0);     return -1;
+                 } else if (stop(line,1),instack === '(') {_row(instack);
+stop(line,1);     if (coming === ')') {_row(coming);
+stop(line,1);      return 0;
+                 } else { _row(coming);
+stop(line,1);      return -1;
                  }
                  }
-stop(line); _row(0),_col(0);   return -1;
+stop(line,1);    return -1;
                };
 
       var poppush = function(nums, ops) {
@@ -39,22 +39,22 @@ stop(line,1);   switch(op) {
           case '+': stop(line); nums.push(a+b); break;
           case '-': stop(line); nums.push(b-a); break;
           case '*': stop(line); nums.push(a*b); break;
-          case '/': stop(line); nums.push(Math.round(b/a)); break;
+          case '/': stop(line); nums.push(Math.floor(b/a)); break;
           default: stop(line); break;
         }  _peak();
       };
 
       var evaluate = function(str) {
         var i;
-stop(line);   nums = []; _addstack(nums);
+stop(line);   nums = []; _addStack(nums);
 stop(line,1);
-stop(line);   ops = []; _addstack();
+stop(line);   ops = []; _addStack(ops);
 stop(line,1);
-        for (i = 0;stop(line),_inci(),str.length != 0; str = str.slice(1), ++i) {
+        for (i = 0;stop(line,1),_inc(i),str.length != 0; str = str.slice(1), ++i) {
 stop(line,1);     if ('0' <= str[0] && str[0] <= '9') {
 stop(line);       nums.push(str[0] - '0');
           } else {
-            while ((stop(line,1),ops.length !== 0) && (rc=prior(_.last(ops), str[0]), stop(line,1),rc) === 1) {
+            while ((stop(line,1),ops.length !== 0) && (rc=prior(_.last(ops), str[0]), stop(line,1),_row(0),rc) === 1) {
 stop(line,1);         poppush(nums, ops);
             }
 stop(line,1);       if (str[0] === ')') {
@@ -63,7 +63,7 @@ stop(line);         ops.pop();
 stop(line);         ops.push(str[0]);
             }
           }
-        }
+        }//_inc();
         while (stop(line,1),ops.length !== 0) {
 stop(line,1);     poppush(nums, ops);
         }
@@ -77,33 +77,34 @@ lastStatus = {};
 function _addStack(s) {
   currentStatus.stack.push(s);
 }
-function _inci() {
-  currentStatus.iter++;
+function _inc(i) {
+  currentStatus.iter[0] = i;
+  if (i === undefined) currentStatus.iter = [];
 }
 function _row(r) {
-  currentStatus.row = r;
-}
-function _col(c) {
-  currentStatus.col = c;
+  currentStatus.table.push(r);
+  if (r === 0) currentStatus.table = [];
 }
 function _peak(i, a) {
   if (i === undefined) {
     currentStatus.peak = [];
   } else {
-    currentStatus.peak.push({i: 0, v: a});
+    if (currentStatus.peak[i] === undefined)
+      currentStatus.peak[i] = [];
+    currentStatus.peak[i].push(a);
   }
 }
 
-function stop(line, i, animation) {
+function stop(l, i, animation) {
   if (i === 1) {
     lastStatus = clone(currentStatus);
   }
   frames.push({
-  status: lastStatus,
-  line: line,
-  animation: animation,
-  id: stopid
-  }
+    status: lastStatus,
+    line: l,
+    animation: animation,
+    id: stopid
+  });
   stopid++;
 }
 
@@ -113,34 +114,25 @@ function over() {
 
 module.exports = {
   initialize: function () {
+    frames = [];
+    stopid = 0;
     currentStatus = {
       stack: [],
-      iter: -1,
+      iter: [],
       peak: [],
-      row: 0,
-      col: 0
+      table: []
     };
     lastStatus = clone(currentStatus);
     return this;
   },
   eval: function (str) {
-    str = args;
     evaluate(str);
+    over();
     return {
       frames: frames,
       others: {
-        string: str;
+        string: (str.trim()+'=').split('')
       }
     };
   }
 };
-
-// prior = {
-//   '+': { '+': '>', '-': '>', '*': '<', '/': '<', '(': '<', ')': '>' },
-//   '-': { '+': '>', '-': '>', '*': '<', '/': '<', '(': '<', ')': '>' },
-//   '*': { '+': '>', '-': '>', '*': '>', '/': '>', '(': '<', ')': '>' },
-//   '/': { '+': '>', '-': '>', '*': '>', '/': '>', '(': '<', ')': '>' },
-//   '(': { '+': '<', '-': '<', '*': '<', '/': '<', '(': '<', ')': '<' },
-//   '/': { '+': '/', '-': '/', '*': '/', '/': '/', '(': '/', ')': '/' },
-//   }
-// }

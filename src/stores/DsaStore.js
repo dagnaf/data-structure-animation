@@ -5,7 +5,7 @@ var EventEmitter = require('events').EventEmitter;
 var DsaConstants = require('../constants/DsaConstants');
 var assign = require('object-assign');
 var File = require('../models/File');
-var Demo = require('../models/Demo');
+var Demo = require('../models/Demo.eval');
 
 var CHANGE_EVENT = 'change';
 
@@ -31,7 +31,9 @@ var DsaStore = assign({}, EventEmitter.prototype, {
   getActiveFrame: function () {
     return _demo.activeFrame();
   },
-
+  getOthers: function () {
+    return _demo.others();
+  },
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },

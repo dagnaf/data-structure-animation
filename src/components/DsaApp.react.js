@@ -1,6 +1,7 @@
 var React = require('react');
-var Input = require('./Inputs.react');
-var Scene = require('./Scene.react');
+var Input = require('./Inputs.eval.react');
+// var Scene = require('./Scene.react');
+var Scene = require('./Scene.eval.react');
 var Editor = require('./Editor.react');
 var Header = require('./Header.react');
 var Footer = require('./Footer.react');
@@ -50,6 +51,7 @@ var DsaApp = React.createClass({
             isPlaying={this.state.isPlaying}
             delay={this.state.delay}
             isFirstFrame={this.state.stamp === 0}
+            others={DsaStore.getOthers()}
           />
           </div>
           <Editor
@@ -72,7 +74,7 @@ var DsaApp = React.createClass({
   },
 
   _onchange: function () {
-    console.log('setstage ' + JSON.stringify(getDsaState()));
+    // console.log('setstage ' + JSON.stringify(getDsaState()));
     this.setState(getDsaState());
   },
 
