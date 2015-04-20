@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include "../stack/stack.h"
 
 int prior(char instack, char coming) {

@@ -1,11 +1,15 @@
+require('../less/DsaApp.react.less');
+// TODO need requre.context?
+var req = require.context('./', true, /((Inputs)|(Scene))\.react(\.js)*$/);
+module.exports = function (arg) {
+// alert(req.keys());
 var React = require('react');
-var Input = require('./Inputs.eval.react');
-// var Scene = require('./Scene.react');
-var Scene = require('./Scene.eval.react');
+var Input = req('./'+arg+'/Inputs.react');
+var Scene = req('./'+arg+'/Scene.react');
 var Editor = require('./Editor.react');
 var Header = require('./Header.react');
 var Footer = require('./Footer.react');
-var DsaStore = require('../stores/DsaStore');
+var DsaStore = require('../stores/DsaStore')(arg);
 
 
 function getDsaState () {
@@ -17,7 +21,7 @@ function getDsaState () {
     stamp: DsaStore.get('stamp'),
     length: DsaStore.get('length'),
     delay: DsaStore.get('delay'),
-    activeLine: DsaStore.get('stamp')
+    activeLine: DsaStore.getActiveLine()
   }
 }
 
@@ -78,9 +82,8 @@ var DsaApp = React.createClass({
     this.setState(getDsaState());
   },
 
-  // _onNextStamp: function () {
-  //   DsaActions.
-  // }
 });
 
-module.exports = DsaApp;
+return DsaApp;
+
+};//end of module.exports

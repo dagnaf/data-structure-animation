@@ -1,5 +1,5 @@
 var React = require('react');
-var DsaActions = require('../actions/DsaActions');
+var DsaActions = require('../../actions/DsaActions');
 
 module.exports = React.createClass({
   getInitialState: function () {

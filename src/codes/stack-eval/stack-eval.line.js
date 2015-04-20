@@ -1,7 +1,6 @@
 var _ = require('underscore'); var clone = require('clone'); var frames = []; var stopid = 0; var rc;
 var nums = []; var ops = []; var str = '';
 
-
                var prior = function (instack, coming) {
                  if (stop(line),instack === '+' || instack === '-') {_row(instack);
 stop(line,1);     if (coming == '+' || coming == '-' || coming === ')') { _row(coming);
@@ -113,6 +112,9 @@ function over() {
 }
 
 module.exports = {
+  getInitialDescriptions: function () {
+    return this.run('eval', '1*(2+3)');
+  },
   initialize: function () {
     frames = [];
     stopid = 0;
@@ -127,11 +129,14 @@ module.exports = {
   },
   eval: function (str) {
     evaluate(str);
+  },
+  run: function (cmd, param) {
+    this.initialize().eval(param);
     over();
     return {
       frames: frames,
       others: {
-        string: (str.trim()+'=').split('')
+        string: (param.trim()+'=').split('')
       }
     };
   }

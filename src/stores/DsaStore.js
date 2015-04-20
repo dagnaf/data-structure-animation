@@ -1,26 +1,26 @@
-// DsaStore.js
+module.exports = function (arg) {
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var DsaConstants = require('../constants/DsaConstants');
 var assign = require('object-assign');
-var File = require('../models/File');
-var Demo = require('../models/Demo.eval');
+var File = require('../models/File')(arg);
+var Demo = require('../models/Demo')(arg);
 
 var CHANGE_EVENT = 'change';
 
-var _demo = new Demo();
-var _file = new File();
+var _demo = Demo;
+var _file = File;
 
 var DsaStore = assign({}, EventEmitter.prototype, {
   getIndex: function () {
-    return _file.index;
+    return _file.index();
   },
   getFiles: function () {
-    return _file.list;
+    return _file.list();
   },
   get: function (prop) {
-    return _demo[prop];
+    return _demo[prop]();
   },
   isRunning: function () {
     return _demo.isRunning();
@@ -81,12 +81,12 @@ AppDispatcher.register(function(action) {
       //   newStamp), then DSA_PLAY_DEMO (with callback), when
       //   stamp equals length, it stops dispatching
       //   DSA_PLAY_DEMO, instead it dispatches DSA_PAUSE_DEMO
-      _demo.callback = action.callback(_demo.delay);
+      _demo.callback = action.callback(_demo.delay());
       // FIXME: using callback that passed from actions, without
       //   relation to view, the callback was created in ACTIONS!
       // The _demo.callback(...) will execute in delay
       //   milliseconds
-      _demo.callback(_demo.stamp+1, _demo.length);
+      _demo.callback(_demo.stamp()+1, _demo.length());
       DsaStore.emitChange();
       break;
 
@@ -96,7 +96,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case DsaConstants.DSA_UPDATE_STAMP:
-      if (_demo.stamp === action.newStamp) break;
+      if (_demo.stamp() === action.newStamp) break;
       _demo.update(action.newStamp);
       DsaStore.emitChange();
       break;
@@ -114,4 +114,7 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = DsaStore;
+return DsaStore;
+// end of module exports
+};
+

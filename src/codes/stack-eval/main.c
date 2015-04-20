@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "stack-eval.h"
+#include "./stack-eval.h"
 
 int main(int argc, char const *argv[]) {
   freopen("in", "r", stdin);
