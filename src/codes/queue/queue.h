@@ -1,8 +1,8 @@
-#define N 5
+#define N 15
 
 typedef struct {
     int head;
-    int tail
+    int tail;
     int data[N];
 } Queue;
 

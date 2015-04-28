@@ -4,7 +4,7 @@ var DsaActions = require('../../actions/DsaActions');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      text: '1*(2+3)'
+      text: ''
     }
   },
   render: function () {
@@ -12,8 +12,11 @@ module.exports = React.createClass({
     // cmd-button(fake-input) should show under the input element
     return (
       <div className="list">
-        <input onChange={this._onChange} value={this.state.text} placeholder="表达式"/>
-        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'eval')} value="计算"/>
+        <input onChange={this._onChange} value={this.state.text} placeholder="整数"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'insert')} value="插入"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'delete')} value="删除"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'search')} value="查找"/>
+        <input className="cmd-button" disabled onClick={this._onClick.bind(this, 'inorder')} value="查找"/>
       </div>
     );
   },

@@ -6,7 +6,7 @@ module.exports = function (arg) {
 var DsaFactory = req('./'+arg+'/'+arg+'.line');
 
 var isPlaying = false;
-var hasDemo = true;
+// var hasDemo = true;
 var delay = 800;
 var _descriptions = DsaFactory.getInitialDescriptions();
 var _breakpoints = _descriptions.frames;
@@ -19,19 +19,19 @@ var maxDelay = 2500;
 var minDelay = 100;
 
 function isRunning () {
-  return hasDemo && stamp !== length;
+  return stamp !== length;
 }
 
 function activeLine () {
-  if (hasDemo) {
+  // if (hasDemo) {
     if (_breakpoints[stamp]) {
       return _breakpoints[stamp].line || -1;
     } else {
       return -1;
     }
-  } else {
-    return -1;
-  }
+  // } else {
+  //   return -1;
+  // }
 }
 function activeFrame () {
   return {
@@ -44,22 +44,22 @@ function others () {
 }
 function update (newStamp) {
   stamp = newStamp;
-  console.log('goto demo '+ newStamp);
+  console.log('_DEMO update stamp= '+ newStamp);
 }
 
 function setDelay (newDelay) {
   delay = newDelay;
-  console.log('delay changed '+ newDelay);
+  console.log('_DEMO set delay= '+ newDelay);
 }
 
 function play () {
   isPlaying = true;
-  console.log('play demo / demo playing');
+  console.log('_DEMO set isPlaying true');
 }
 
 function pause () {
   isPlaying = false;
-  console.log('pause demo / demo stopped');
+  console.log('_DEMO set isPlaying false');
 }
 
 function replay () {
@@ -68,7 +68,7 @@ function replay () {
 // Only run the built-program foreground, not start to
 //   play
 function run (cmd, param) {
-  console.log('code (not demo) running foreground: '+ cmd);
+  console.log('_DEMO run '+ cmd + ' '+param);
   // DsaFactory.reset(false);
   // switch (cmd) {
   //   case 'push': DsaFactory.defaultStack.push(parseInt(param)); break;
@@ -82,7 +82,7 @@ function run (cmd, param) {
   // _breakpoints = DsaFactory.getBreakpoints();
   _breakpoints = _descriptions.frames;
   length = _breakpoints.length-1;
-  hasDemo = true;
+  // hasDemo = true;
 }
 
 //
@@ -103,7 +103,7 @@ return {
   run: run,
 
   isPlaying: function () { return isPlaying; },
-  hasDemo: function () { return hasDemo; },
+  // hasDemo: function () { return hasDemo; },
   stamp: function () { return stamp; },
   delay: function () { return delay; },
   length: function () { return length; },

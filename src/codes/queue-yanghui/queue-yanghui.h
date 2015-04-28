@@ -1,2 +1,2 @@
-void print_line(int n);
+void yanghui(int n);
 

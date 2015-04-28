@@ -29,8 +29,7 @@ module.exports = React.createClass({
     }
   },
   componentDidUpdate: function (prevProps, prevState) {
-    // console.log('in Editor prev', prevProps);
-    // console.log('in Editor curr', this.props);
+    console.log('%cEditor update line\n'+prevProps.activeLine+'\n'+this.props.activeLine, 'blue');
     if (this.props.index === 0 && this.props.isRunning) {
       this.editor.gotoLine(this.props.activeLine);
     }

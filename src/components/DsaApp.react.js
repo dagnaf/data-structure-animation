@@ -16,12 +16,12 @@ function getDsaState () {
   return {
     fileIndex: DsaStore.getIndex(),
     isRunning: DsaStore.isRunning(),
-    hasDemo: DsaStore.get('hasDemo'),
+    // hasDemo: DsaStore.get('hasDemo'),
     isPlaying: DsaStore.get('isPlaying'),
     stamp: DsaStore.get('stamp'),
     length: DsaStore.get('length'),
     delay: DsaStore.get('delay'),
-    activeLine: DsaStore.getActiveLine()
+    // activeLine: DsaStore.getActiveLine()
   }
 }
 
@@ -78,7 +78,7 @@ var DsaApp = React.createClass({
   },
 
   _onchange: function () {
-    // console.log('setstage ' + JSON.stringify(getDsaState()));
+    console.log('setstage ' + JSON.stringify(getDsaState()));
     this.setState(getDsaState());
   },
 

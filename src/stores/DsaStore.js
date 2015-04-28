@@ -34,7 +34,8 @@ var DsaStore = assign({}, EventEmitter.prototype, {
   getOthers: function () {
     return _demo.others();
   },
-  emitChange: function() {
+  emitChange: function(src) {
+    console.log('%cEMIT FROM ' + src, 'color:red');
     this.emit(CHANGE_EVENT);
   },
 
@@ -60,22 +61,24 @@ AppDispatcher.register(function(action) {
     case DsaConstants.DSA_UPDATE_FILE:
       _file.update(action.oldLine);
       _file.open(action.newIndex)
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
       break;
 
     case DsaConstants.DSA_PAUSE_DEMO:
       // If callback exists, then cancel, even if cancelled
       if (!!_demo.callback) _demo.callback.cancel();
       // Set isPlaying false
-      _demo.pause();
-      // if (action.end) _demo.update(_demo.length);
-      DsaStore.emitChange();
+      if (_demo.isPlaying()) {
+        _demo.pause();
+        // if (action.end) _demo.update(_demo.length);
+        DsaStore.emitChange(action.actionType);
+      }
       break;
 
     case DsaConstants.DSA_PLAY_DEMO:
       // Set isPlaying true naively, stop will be handled by
       // dispatching new actions
-      _demo.play()
+      // _demo.play()
       // Save action.callback in _demo, it return a debounced
       //   function that dispatch DSA_UPDATE_STAMP (with
       //   newStamp), then DSA_PLAY_DEMO (with callback), when
@@ -87,7 +90,10 @@ AppDispatcher.register(function(action) {
       // The _demo.callback(...) will execute in delay
       //   milliseconds
       _demo.callback(_demo.stamp()+1, _demo.length());
-      DsaStore.emitChange();
+      if (!_demo.isPlaying()) {
+        _demo.play()
+        DsaStore.emitChange(action.actionType);
+      }
       break;
 
     case DsaConstants.DSA_REPLAY_DEMO:
@@ -98,17 +104,19 @@ AppDispatcher.register(function(action) {
     case DsaConstants.DSA_UPDATE_STAMP:
       if (_demo.stamp() === action.newStamp) break;
       _demo.update(action.newStamp);
-      DsaStore.emitChange();
+      // FIXME
+      if (action.ignore) break;
+      DsaStore.emitChange(action.actionType);
       break;
     // Actions have checked the text
     case DsaConstants.DSA_RUN_DEMO:
       _demo.run(action.command, action.text);
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
       break;
 
     case DsaConstants.DSA_UPDATE_DELAY:
       _demo.setDelay(action.newDelay);
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
     default:
       // no op
   }

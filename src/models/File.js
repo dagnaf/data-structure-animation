@@ -1,19 +1,21 @@
-// TODO require.context
 var req = require.context('../codes', true, /((\.(c|h))|(Makefile))$/);
+// FIXME the files should be update when I want to create new dsa
+//   also I need to add these to create-entry.js
+//   Better put these additions in the same place.
 var commons = ['main.c', 'Makefile'];
 var dsaFiles = {
   'stack': {},
   'stack-eval': {deps: ['stack']},
   'queue': {},
-  'queue-tri': {},
-  'matrix': {},
-  'rb-tree': {},
-  'huffman': {},
-  'graph': {},
-  'sort-merge': {},
-  'sort-quick': {},
-  'search-order': {},
-  'search-binary': {}
+  'queue-yanghui': {deps: ['queue']},
+  // 'matrix': {},
+  'rb-tree': {},//{extra: ['../common/util.c', '../common/util.h']},
+  // 'huffman': {},
+  // 'graph': {},
+  // 'sort-merge': {},
+  // 'sort-quick': {},
+  // 'search-order': {},
+  // 'search-binary': {}
 };
 var base_url = function (type) {
   return function (f) {
@@ -49,7 +51,7 @@ var index = 0;
 var list = getFiles(arg).map(function (f, i) {
   return {
     name: f.name,
-    src: req(f.path),
+    src: req(f.path).trim(),
     line: -1
   }
 });

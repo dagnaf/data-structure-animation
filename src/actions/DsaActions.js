@@ -55,13 +55,17 @@ var DsaActions = {
       actionType: DsaConstants.DSA_UPDATE_STAMP,
       newStamp: 0
     });
-    this.playDemo();
+    var self = this;
+    debounce(function () {
+      self.playDemo()
+    }, 100)()
+    // this.playDemo();
   },
-  updateStamp: function (newStamp, pause) {
+  updateStamp: function (newStamp, ignore) {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_UPDATE_STAMP,
       newStamp: newStamp,
-      pause: pause
+      ignore: ignore
     });
   },
   runDemo: function (command, text, check) {

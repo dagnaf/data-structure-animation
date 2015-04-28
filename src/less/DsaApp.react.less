@@ -190,9 +190,34 @@ text {
   &.char, &.op-grid, &.item, &.stack-top, &.peak, &.push {
     fill: white;
   }
+  fill: white;
 }
 g.high rect {
   &.char, &.op-grid, &.item, &.stack-top, &.stack-top-high {
     fill: deepskyblue;
   }
 }
+
+path {
+  &.queue {
+    fill: brown;
+  }
+  &.head, &.tail {
+    fill: tomato;
+  }
+  &.item, &.toque, &.tofront {
+    fill: coral;
+  }
+}
+
+line {
+  stroke: black;
+  stroke-dasharray: 3 3;
+  stroke-width: 3;
+  &.parent {
+    stroke: red;
+    stroke-dashoffset: 3;
+  }
+}
+
+/* FIXME scene.react.js should be parted */

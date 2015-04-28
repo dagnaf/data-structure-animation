@@ -1,68 +1,73 @@
 var _ = require('underscore'); var clone = require('clone'); var frames = []; var stopid = 0; var rc;
-var queue = []; var N = 5; head = 0, tail = 1; _id = 0;
+var N = 8; var _id = 0; var currentStatus = {};
 
-        var print_line = function() {
-stop(line,1); head = 0;
-stop(line,1); tail = 1; queue = []; currentStatus.queue = queue;
-        };
-
-        var isFull = function() { _headtail(1);
-stop(line,1); if (queue.length === N) {
-stop(line,1);    return true;
-            } else {
-stop(line,1); _headtail();    return false;
-            }
-        };
-
-        var isEmpty = function() { _headtail(1);
-stop(line,1); if (queue.length === 0) {
-stop(line,1);     return true;
-            } else {
-stop(line,1); _headtail();    return false;
-            }
-        };
-
-        var enque = function(val) { _toque(val);
-stop(line,1); if (isFull()) {
-stop(line,1);     console.log('queue full.');
-                        } else {
-stop(line,1);     queue.push({v:val, id:_id++}); tail=(tail+1)%N; _toque();;
-            }
-        };
-
-        var deque = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('queue empty.');
-            } else {
-stop(line,1);     queue.shift();
-            }
-        };
-
-        var front = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('queue empty.');
-stop(line,1);     return -1;
-            } else {
-stop(line,1);  rc=queue[0].v; _tofront(rc);  return rc;
-            }
-        };
+        var yanghui = function(n) {
+          var i;
+          var j;
+          var a;
+          var b;
+stop(line);
+stop(line,1);     //currentStatus.init(true);
+          currentStatus.push(1,0,0);
+          for (i = 1; stop(line,1),(i <= n); ++i) {
+stop(line);              currentStatus.push(1,i,0);
+              for (j = 0; stop(line,1),currentStatus.front(1),(j < i-1); ++j) {
+stop(line,1);                  a = currentStatus.front();
+stop(line,1);                  currentStatus.shift();
+stop(line,1);                  b = currentStatus.front();
+stop(line,1);                  currentStatus.push(a+b,i,j+1); currentStatus.last();
+              }
+stop(line,1);              currentStatus.shift();
+stop(line,1);              currentStatus.push(1,i,i);
+          }
+          for (i = 0; stop(line,1),(i < n+1); ++i) {
+stop(line);              a = currentStatus.front();
+stop(line,1);              // currentStatus.front(1);
+stop(line);              currentStatus.shift();
+          }
+stop(line);
+stop(line);          return;
+        }
 // ===================================
 
-currentStatus = {};
+currentStatus.init = function (hard) {
+  _id = 0;
+  this.nums = [];
+  this.tofront = [];
+  this.yh = [];
+}
+currentStatus.last = function () {
+  var l = this.nums.length;
+  this.tofront.push(this.yh[this.nums[l-1].i]);
+}
+currentStatus.front = function (c) {
+  if (c) {
+    this.tofront = [];
+  } else {
+    this.tofront.push(this.yh[this.nums[0].i]);
+  }
+  return this.nums[0].v;
+}
+currentStatus.push = function(v, r, c) {
+  this.nums.push({v: v, i:_id});
+  this.yh.push({v:v, r: r, c:c, i:_id});
+  _id++;
+}
+currentStatus.shift = function() {
+  this.nums.shift();
+}
+currentStatus.clone = function () {
+  return {
+    nums: clone(this.nums),
+    tofront: clone(this.tofront),
+    yh: clone(this.yh)
+  }
+}
 lastStatus = {};
 
-function _headtail(s) {
-  currentStatus.headtail = (s === undefined ? [] : [1]);
-}
-function _toque(s) {
-  currentStatus.toque = (s === undefined ? [] : [s]);
-}
-function _tofront(s) {
-  currentStatus.tofront = [s];
-}
 function stop(l, i, animation) {
   if (i === 1) {
-    lastStatus = clone(currentStatus);
+    lastStatus = currentStatus.clone();
   }
   frames.push({
     status: lastStatus,
@@ -79,36 +84,20 @@ function over() {
 
 module.exports = {
   getInitialDescriptions: function () {
-    this.initialize(true);
-    enque(0);
-    enque(50);
-    // push(100);
-    return this.run('enque', 100);
+    this.initialize();
+    return this.run('yanghui', 6);
   },
-  initialize: function (hard) {
+  initialize: function () {
     frames = [];
     stopid = 0;
-    if (hard) {
-      queue = [];
-    }
-    currentStatus = {
-      queue: queue,
-      tofront: [],
-      toque: [],
-      headtail: [],
-      head: head,
-      tail: tail
-    }
-    lastStatus = clone(currentStatus);
+    currentStatus.init(true);
+    lastStatus = currentStatus.clone();
     return this;
   },
-  enque: enque,
-  deque: deque,
-  front: front,
-  init: init,
+  yanghui: yanghui,
   run: function (cmd, param) {
-    this.initialize()[cmd](param);
+    this.initialize()[cmd](isNaN(parseInt(param)) ? 0 : parseInt(param));
     over();
-    return { frames: frames };
+    return { frames: frames, others: {N:N} };
   }
 };

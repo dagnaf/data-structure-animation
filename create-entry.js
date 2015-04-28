@@ -4,7 +4,9 @@ var entries = {};
 [
   'stack',
   'stack-eval',
-  'queue'
+  'queue',
+  'queue-yanghui',
+  'rb-tree'
 ].forEach(function (n) {
   // copy js files
   var pages = path.join(__dirname, 'src', 'pages');

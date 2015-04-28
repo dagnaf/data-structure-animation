@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "./queue-yanghui.h"
 
 int main(int argc, char const *argv[]) {

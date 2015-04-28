@@ -6,8 +6,8 @@ void init(Queue *q) {
     q->tail = 1;
 }
 
-int isFull(Queue q) {
-    if (q->head == (q->tail + 1) % N) {
+int isFull(Queue *q) {
+    if (q->head == q->tail) {
         return 1;
     } else {
         return 0;
@@ -15,7 +15,7 @@ int isFull(Queue q) {
 }
 
 int isEmpty(Queue *q) {
-    if (q->head == q->tail) {
+    if ((q->head + 1) % N == q->tail) {
         return 1;
     } else {
         return 0;
@@ -24,7 +24,7 @@ int isEmpty(Queue *q) {
 
 void enque(Queue *q, int val) {
     if (isFull(q) == 1) {
-        print("queue full.\n");
+        printf("queue full.\n");
     } else {
         q->data[q->tail] = val;
         q->tail = (q->tail + 1) % N;
@@ -33,7 +33,7 @@ void enque(Queue *q, int val) {
 
 void deque(Queue *q) {
     if (isEmpty(q) == 1) {
-        print("queue empty.\n");
+        printf("queue empty.\n");
     } else {
         q->head = (q->head + 1) % N;
     }
@@ -41,9 +41,9 @@ void deque(Queue *q) {
 
 int front(Queue *q) {
     if (isEmpty(q) == 1) {
-        print("queue empty.\n");
+        printf("queue empty.\n");
         return -1;
     } else {
-        return q->data[q->head];
+        return q->data[(q->head + 1) % N];
     }
 }

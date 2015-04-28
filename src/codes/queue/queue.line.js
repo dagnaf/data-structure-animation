@@ -1,31 +1,52 @@
 var _ = require('underscore'); var clone = require('clone'); var frames = []; var stopid = 0; var rc;
-var nums = []; var N = 5; head = 0, tail = 1; _id = 0;
+var nums = []; var N = 8; _id = 0;
 
-        var init = function(n) {
-          var i;
-          var j;
-          var a;
-          var b;
-stop(line,1);
-stop(line);          nums = []; head = 0; tail = 1;
-          for (stop(line,1),i = 1; i <= n; ++i) {
-stop(line);              nums.push({v: 1, i: _id++}); tail++;
-              for (stop(line,1),j = 0; j < i-2; ++j) {
-stop(line);                  a = nums[0].v;
-stop(line,1);                  nums.shift(); head++;
-stop(line,1);                  b = nums[0].v;
-stop(line,1);                  nums.push({v: a+b, i: _id++}); tail++;
-              }
-stop(line,1);              nums.shift(); head++;
-stop(line,1);              nums.push({v: 1, i: _id++}); tail++;
-          }
-          for (stop(line,1),i = 1; i <= n; ++i) {
-stop(line);              a = nums[0].v;
-stop(line);              // console.log("%d ", a);
-stop(line);              nums.shift(); head++;
-          }
-stop(line,1);          return;
-        }
+        var init = function() {
+stop(line,1); currentStatus.head = 0;
+stop(line,1); currentStatus.tail = 1; queue = []; currentStatus.queue = queue;
+        };
+
+        var isFull = function() {
+stop(line,1);_headtail(1);if (queue.length === N-1) {
+stop(line,1);    return true;
+            } else {
+stop(line,1); _headtail();    return false;
+            }
+        };
+
+        var isEmpty = function() { _headtail(1);
+stop(line,1); if (queue.length === 0) {
+stop(line,1);     return true;
+            } else {
+stop(line,1); _headtail();    return false;
+            }
+        };
+
+        var enque = function(val) { _toque(val);
+stop(line,1); if (isFull()) {
+stop(line,1);     console.log('queue full.'); _toque()
+                        } else {
+stop(line,1);     queue.push({v:val, i:_id++}); _toque();
+stop(line,1);     currentStatus.tail++;
+            }
+        };
+
+        var deque = function() {
+stop(line,1); if (isEmpty()) {
+stop(line,1);     console.log('queue empty.');
+            } else {
+stop(line,1);     queue.shift(); currentStatus.head++;
+            }
+        };
+
+        var front = function() {
+stop(line,1); if (isEmpty()) {
+stop(line,1);     console.log('queue empty.');
+stop(line,1);     return -1;
+            } else {
+stop(line,1);  rc=queue[0].v; _tofront(rc);  return rc;
+            }
+        };
 
 // ===================================
 
@@ -33,13 +54,13 @@ currentStatus = {};
 lastStatus = {};
 
 function _headtail(s) {
-  currentStatus.headtail = (s === undefined ? [] : [1]);
+  currentStatus.headtail = (s === undefined ? 0 : 1);
 }
 function _toque(s) {
   currentStatus.toque = (s === undefined ? [] : [s]);
 }
 function _tofront(s) {
-  currentStatus.tofront = [s];
+  currentStatus.tofront = (s === undefined ? [] : [s]);
 }
 function stop(l, i, animation) {
   if (i === 1) {
@@ -76,9 +97,9 @@ module.exports = {
       queue: queue,
       tofront: [],
       toque: [],
-      headtail: [],
-      head: head,
-      tail: tail
+      headtail: 0,
+      head: currentStatus.head || 0,
+      tail: currentStatus.tail || 1
     }
     lastStatus = clone(currentStatus);
     return this;
@@ -90,6 +111,6 @@ module.exports = {
   run: function (cmd, param) {
     this.initialize()[cmd](param);
     over();
-    return { frames: frames };
+    return { frames: frames, others: { N: N } };
   }
 };
