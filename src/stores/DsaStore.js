@@ -1,26 +1,26 @@
-// DsaStore.js
+module.exports = function (arg) {
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var DsaConstants = require('../constants/DsaConstants');
 var assign = require('object-assign');
-var File = require('../models/File');
-var Demo = require('../models/Demo');
+var File = require('../models/File')(arg);
+var Demo = require('../models/Demo')(arg);
 
 var CHANGE_EVENT = 'change';
 
-var _demo = new Demo();
-var _file = new File();
+var _demo = Demo;
+var _file = File;
 
 var DsaStore = assign({}, EventEmitter.prototype, {
   getIndex: function () {
-    return _file.index;
+    return _file.index();
   },
   getFiles: function () {
-    return _file.list;
+    return _file.list();
   },
   get: function (prop) {
-    return _demo[prop];
+    return _demo[prop]();
   },
   isRunning: function () {
     return _demo.isRunning();
@@ -31,8 +31,11 @@ var DsaStore = assign({}, EventEmitter.prototype, {
   getActiveFrame: function () {
     return _demo.activeFrame();
   },
-
-  emitChange: function() {
+  getOthers: function () {
+    return _demo.others();
+  },
+  emitChange: function(src) {
+    console.log('%cEMIT FROM ' + src, 'color:red');
     this.emit(CHANGE_EVENT);
   },
 
@@ -58,34 +61,39 @@ AppDispatcher.register(function(action) {
     case DsaConstants.DSA_UPDATE_FILE:
       _file.update(action.oldLine);
       _file.open(action.newIndex)
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
       break;
 
     case DsaConstants.DSA_PAUSE_DEMO:
       // If callback exists, then cancel, even if cancelled
       if (!!_demo.callback) _demo.callback.cancel();
       // Set isPlaying false
-      _demo.pause();
-      // if (action.end) _demo.update(_demo.length);
-      DsaStore.emitChange();
+      if (_demo.isPlaying()) {
+        _demo.pause();
+        // if (action.end) _demo.update(_demo.length);
+        DsaStore.emitChange(action.actionType);
+      }
       break;
 
     case DsaConstants.DSA_PLAY_DEMO:
       // Set isPlaying true naively, stop will be handled by
       // dispatching new actions
-      _demo.play()
+      // _demo.play()
       // Save action.callback in _demo, it return a debounced
       //   function that dispatch DSA_UPDATE_STAMP (with
       //   newStamp), then DSA_PLAY_DEMO (with callback), when
       //   stamp equals length, it stops dispatching
       //   DSA_PLAY_DEMO, instead it dispatches DSA_PAUSE_DEMO
-      _demo.callback = action.callback(_demo.delay);
+      _demo.callback = action.callback(_demo.delay());
       // FIXME: using callback that passed from actions, without
       //   relation to view, the callback was created in ACTIONS!
       // The _demo.callback(...) will execute in delay
       //   milliseconds
-      _demo.callback(_demo.stamp+1, _demo.length);
-      DsaStore.emitChange();
+      _demo.callback(_demo.stamp()+1, _demo.length());
+      if (!_demo.isPlaying()) {
+        _demo.play()
+        DsaStore.emitChange(action.actionType);
+      }
       break;
 
     case DsaConstants.DSA_REPLAY_DEMO:
@@ -94,22 +102,27 @@ AppDispatcher.register(function(action) {
       break;
 
     case DsaConstants.DSA_UPDATE_STAMP:
-      if (_demo.stamp === action.newStamp) break;
+      if (_demo.stamp() === action.newStamp) break;
       _demo.update(action.newStamp);
-      DsaStore.emitChange();
+      // FIXME
+      if (action.ignore) break;
+      DsaStore.emitChange(action.actionType);
       break;
     // Actions have checked the text
     case DsaConstants.DSA_RUN_DEMO:
       _demo.run(action.command, action.text);
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
       break;
 
     case DsaConstants.DSA_UPDATE_DELAY:
       _demo.setDelay(action.newDelay);
-      DsaStore.emitChange();
+      DsaStore.emitChange(action.actionType);
     default:
       // no op
   }
 });
 
-module.exports = DsaStore;
+return DsaStore;
+// end of module exports
+};
+

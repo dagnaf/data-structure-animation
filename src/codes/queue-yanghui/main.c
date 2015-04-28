@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "./stack-eval.h"
+#include "./queue-yanghui.h"
 
 int main(int argc, char const *argv[]) {
+  int n;
   freopen("in", "r", stdin);
-  char s[10];
-  scanf("%s", s);
-  printf("%s = %d\n", s, eval(s));
+  scanf("%d", &n);
+  print_line(n);
   return 0;
-}
+};

@@ -35,3 +35,7 @@ src/codes/*/a.out
 
 # post procession
 src/codes/*/lined.js
+
+dev
+src/pages
+!src/pages/template.js

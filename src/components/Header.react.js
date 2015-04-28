@@ -5,7 +5,8 @@ var D3 = require('d3');
 
 var sideWidth = 80;
 var totalWidth = function () {
-  return document.getElementById('dsaapp').clientWidth - sideWidth*2;
+  return document.body.clientWidth - sideWidth*2;
+  // return document.getElementById('dsaapp').clientWidth - sideWidth*2;
 }
 var clientWidth = function (clientX) {
   return Math.max(0,Math.min(totalWidth(), clientX - sideWidth));

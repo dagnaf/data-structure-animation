@@ -24,10 +24,15 @@ module.exports = React.createClass({
     this.editor.setAnimatedScroll(true);
 
     this.editor.setValue(this.props.files[this.props.index].src, -1);
+    if (this.props.index === 0) {
+      this.editor.gotoLine(this.props.activeLine);
+    }
   },
   componentDidUpdate: function (prevProps, prevState) {
-    console.log('in Editor prev', prevProps);
-    console.log('in Editor curr', this.props);
+    console.log('%cEditor update line\n'+prevProps.activeLine+'\n'+this.props.activeLine, 'blue');
+    if (this.props.index === 0 && this.props.isRunning) {
+      this.editor.gotoLine(this.props.activeLine);
+    }
   },
   componentWillUnmount: function () {
     this.editor.destroy();
@@ -37,13 +42,10 @@ module.exports = React.createClass({
     var classes = 'wrapper-code';
     if (this.props.index === 0) {
       classes += ' main';
-      if (this.props.isRunning){ //&&
-        //this.editor.getCursorPosition().row + 1 != this.props.activeLine) {
-        this.editor.gotoLine(this.props.activeLine);
-        console.log('gotoline ' +this.props.activeLine)
-      }
     }
-    if (this.props.isRunning) classes += ' running';
+    if (this.props.isRunning) {
+      classes += ' running';
+    }
     return (
       <div className={classes}>
         <div className="ace-flex" ref="code"></div>

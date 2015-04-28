@@ -1,11 +1,11 @@
-#include "./stack.h"
+#include "./queue.h"
 
 int main(int argc, char const *argv[]) {
-  Stack stack;
+  Queue queue;
   init(&stack);
-  push(&stack, 0);
-  push(&stack, 50);
-  push(&stack, 100);
+  enque(&stack, 0);
+  enque(&stack, 50);
+  euque(&stack, 100);
   // 在系统中运行命令：
   // 初始化、入栈、出栈、栈顶
   return 0;

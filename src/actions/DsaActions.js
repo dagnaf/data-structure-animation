@@ -10,11 +10,13 @@ var debounce = require('lodash.debounce');
 var createDebounced = function (delay) {
   return debounce(
     function (newStamp, length) {
-      AppDispatcher.dispatch({
-        actionType: DsaConstants.DSA_UPDATE_STAMP,
-        newStamp: newStamp
-      });
-      AppDispatcher.dispatch(newStamp === length ? {
+      if (newStamp <= length) {
+        AppDispatcher.dispatch({
+          actionType: DsaConstants.DSA_UPDATE_STAMP,
+          newStamp: newStamp
+        });
+      }
+      AppDispatcher.dispatch(newStamp >= length ? {
         actionType: DsaConstants.DSA_PAUSE_DEMO,
       } : {
         actionType: DsaConstants.DSA_PLAY_DEMO,
@@ -53,13 +55,17 @@ var DsaActions = {
       actionType: DsaConstants.DSA_UPDATE_STAMP,
       newStamp: 0
     });
-    this.playDemo();
+    var self = this;
+    debounce(function () {
+      self.playDemo()
+    }, 100)()
+    // this.playDemo();
   },
-  updateStamp: function (newStamp, pause) {
+  updateStamp: function (newStamp, ignore) {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_UPDATE_STAMP,
       newStamp: newStamp,
-      pause: pause
+      ignore: ignore
     });
   },
   runDemo: function (command, text, check) {

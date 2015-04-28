@@ -1,0 +1,223 @@
+@import "./common.less";
+@list-width: 80px;
+@banner-height: 55px;
+@active-line: rgba(255,99,71,0.7);
+
+.list {
+  margin: 0;
+  padding: 0;
+  background-color: @page-color;
+  list-style: none;
+  width: @list-width;
+  overflow: hidden;
+  overflow-y: auto;
+  z-index: 10;
+
+  & input {
+    border: 0;
+    font-size: 16px;
+    padding: 16px 5px;
+    background-color: @page-color;
+    width: 100%;
+    color: white;
+    &:hover {
+      background-color: @back-color;
+    }
+    &:focus {
+      background-color: @back-color;
+      outline: none;
+    }
+  }
+}
+.cmd-button {
+  cursor: pointer;
+}
+.file-list input {
+  cursor: pointer;
+  &.active, &:hover, &:focus {
+    background-color: @back-color;
+  }
+}
+::placeholder {
+  color: white;
+}
+
+.main.running .ace_active-line {
+  background-color: @active-line !important;
+}
+
+.ace_cursor {
+  display: none !important;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+  position: relative;
+}
+
+.wrapper-row {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-content: stretch;
+  position: relative;
+}
+
+.ace-flex {
+  flex: 1;
+  position: relative;
+}
+
+.wrapper-code {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-content: stretch;
+  position: relative;
+}
+
+.scene {
+  flex: 1;
+  display: flex;
+  align-content: stretch;
+  & svg {
+    flex: 1;
+  }
+}
+
+header, footer {
+  height: @banner-height
+}
+
+header {
+  background-color: @page-color;
+  display: flex;
+  width: 100%;
+  z-index: 20;
+  overflow: hidden;
+  text-align: center;
+  font-size: 30px;
+  color: white;
+}
+
+footer {
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  z-index: 10;
+  align-content: stretch;
+  overflow: hidden;
+}
+
+.header-left, .header-right {
+  padding: 7px 20px 5px 20px;
+  width: @list-width;
+  background-color: @page-color;
+}
+
+.header-middle {
+  flex: 1;
+  background-color: @page-color;
+}
+
+.play-button {
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.pause {
+  display: block;
+  height: 40px;
+  width: 40px;
+  border: 10px solid white;
+  border-top-width: 0;
+  border-bottom-width: 0;
+}
+.play {
+  display: block;
+  height: 0px;
+  width: 0px;
+  border-style: solid;
+  border-color: transparent transparent transparent white;
+  border-width: 20px 0 20px 40px;
+}
+.replay {
+  position: relative;
+  display: block;
+  height: 40px;
+  width: 40px;
+  border-radius: 40px;
+  border: 8px solid white;
+  & .play {
+    border-width: 10px 0px 10px 20px;
+    position: absolute;
+    top: 18px;
+    right: calc(50% + 5px);
+  }
+  & > .play {
+    transform: rotate(180deg);
+    border-left-color: @page-color;
+    & > .play {
+      top: -10px;
+      right: 5px;
+    }
+  }
+}
+
+
+.range-bar {
+  display: flex;
+  align-content: flex-start;
+}
+
+.range-bar .progress {
+  background-color: @back-color;
+  border-right: 1px solid white;
+}
+
+rect {
+  &.stack {
+    fill: brown;
+  }
+  &.char, &.op-grid, &.item, &.stack-top, &.peak, &.push {
+    fill: coral;
+  }
+}
+text {
+  &.char, &.op-grid, &.item, &.stack-top, &.peak, &.push {
+    fill: white;
+  }
+  fill: white;
+}
+g.high rect {
+  &.char, &.op-grid, &.item, &.stack-top, &.stack-top-high {
+    fill: deepskyblue;
+  }
+}
+
+path {
+  &.queue {
+    fill: brown;
+  }
+  &.head, &.tail {
+    fill: tomato;
+  }
+  &.item, &.toque, &.tofront {
+    fill: coral;
+  }
+}
+
+line {
+  stroke: black;
+  stroke-dasharray: 3 3;
+  stroke-width: 3;
+  &.parent {
+    stroke: red;
+    stroke-dashoffset: 3;
+  }
+}
+
+/* FIXME scene.react.js should be parted */

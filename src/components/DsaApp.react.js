@@ -1,22 +1,27 @@
+require('../less/DsaApp.react.less');
+// TODO need requre.context?
+var req = require.context('./', true, /((Inputs)|(Scene))\.react(\.js)*$/);
+module.exports = function (arg) {
+// alert(req.keys());
 var React = require('react');
-var Input = require('./Inputs.react');
-var Scene = require('./Scene.react');
+var Input = req('./'+arg+'/Inputs.react');
+var Scene = req('./'+arg+'/Scene.react');
 var Editor = require('./Editor.react');
 var Header = require('./Header.react');
 var Footer = require('./Footer.react');
-var DsaStore = require('../stores/DsaStore');
+var DsaStore = require('../stores/DsaStore')(arg);
 
 
 function getDsaState () {
   return {
     fileIndex: DsaStore.getIndex(),
     isRunning: DsaStore.isRunning(),
-    hasDemo: DsaStore.get('hasDemo'),
+    // hasDemo: DsaStore.get('hasDemo'),
     isPlaying: DsaStore.get('isPlaying'),
     stamp: DsaStore.get('stamp'),
     length: DsaStore.get('length'),
     delay: DsaStore.get('delay'),
-    activeLine: DsaStore.get('stamp')
+    // activeLine: DsaStore.getActiveLine()
   }
 }
 
@@ -50,6 +55,7 @@ var DsaApp = React.createClass({
             isPlaying={this.state.isPlaying}
             delay={this.state.delay}
             isFirstFrame={this.state.stamp === 0}
+            others={DsaStore.getOthers()}
           />
           </div>
           <Editor
@@ -76,9 +82,8 @@ var DsaApp = React.createClass({
     this.setState(getDsaState());
   },
 
-  // _onNextStamp: function () {
-  //   DsaActions.
-  // }
 });
 
-module.exports = DsaApp;
+return DsaApp;
+
+};//end of module.exports
