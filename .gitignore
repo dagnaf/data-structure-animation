@@ -26,16 +26,20 @@ build/Release
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
-# dist
-bundle.js
-bundle.css
-
 # c program
-src/codes/*/a.out
+src/dsa/*/a.out
+*.o
 
-# post procession
-src/codes/*/lined.js
+# gh-pages
+example/bower_components
+example/*.html
 
-dev
-src/pages
-!src/pages/template.js
+# webpack.github.io/analyse
+analysis.json
+
+# build
+example/dsa.js
+example/chunks
+
+# test for new skills
+test

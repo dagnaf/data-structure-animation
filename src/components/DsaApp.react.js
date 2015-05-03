@@ -1,31 +1,22 @@
-require('../less/DsaApp.react.less');
-// TODO need requre.context?
-var req = require.context('./', true, /((Inputs)|(Scene))\.react(\.js)*$/);
-module.exports = function (arg) {
-// alert(req.keys());
+require('./DsaApp.react.less');
 var React = require('react');
-var Input = req('./'+arg+'/Inputs.react');
-var Scene = req('./'+arg+'/Scene.react');
+var DsaStore = require('../stores/DsaStore');
+var Scene = require('./Scene.react');
 var Editor = require('./Editor.react');
 var Header = require('./Header.react');
 var Footer = require('./Footer.react');
-var DsaStore = require('../stores/DsaStore')(arg);
-
 
 function getDsaState () {
   return {
-    fileIndex: DsaStore.getIndex(),
     isRunning: DsaStore.isRunning(),
-    // hasDemo: DsaStore.get('hasDemo'),
     isPlaying: DsaStore.get('isPlaying'),
     stamp: DsaStore.get('stamp'),
     length: DsaStore.get('length'),
     delay: DsaStore.get('delay'),
-    // activeLine: DsaStore.getActiveLine()
   }
 }
 
-var DsaApp = React.createClass({
+module.exports = React.createClass({
   getInitialState: function () {
     return getDsaState();
   },
@@ -39,40 +30,31 @@ var DsaApp = React.createClass({
   },
 
   render: function () {
-    // if (this.state.isPlaying) _onNextStamp();
     return (
       <div className="wrapper">
         <Header
           val={this.state.delay}
-          domain={[DsaStore.get('minDelay'), DsaStore.get('maxDelay')]}
-        />
+          domain={[DsaStore.get('minDelay'), DsaStore.get('maxDelay')]} />
         <div className="wrapper-row">
-          <div className="scene">
-          <Input />
           <Scene
             frame={DsaStore.getActiveFrame()}
             isRunning={this.state.isRunning}
             isPlaying={this.state.isPlaying}
             delay={this.state.delay}
             isFirstFrame={this.state.stamp === 0}
-            others={DsaStore.getOthers()}
-          />
-          </div>
+            others={DsaStore.getOthers()} />
           <Editor
             files={DsaStore.getFiles()}
-            index={this.state.fileIndex}
             isRunning={this.state.isRunning}
             isPlaying={this.state.isPlaying}
-            activeLine={DsaStore.getActiveLine()}
-          />
+            activeLine={DsaStore.getActiveLine()} />
         </div>
         <Footer
           val={this.state.stamp}
           delay={this.state.delay}
           domain={[0, this.state.length]}
           isRunning={this.state.isRunning}
-          isPlaying={this.state.isPlaying}
-        />
+          isPlaying={this.state.isPlaying} />
       </div>
     );
   },
@@ -83,7 +65,3 @@ var DsaApp = React.createClass({
   },
 
 });
-
-return DsaApp;
-
-};//end of module.exports

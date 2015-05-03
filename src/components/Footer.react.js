@@ -1,11 +1,10 @@
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var DsaActions = require('../actions/DsaActions');
 var d3 = require('d3');
+var DsaActions = require('../actions/DsaActions');
 
 var sideWidth = 80;
 var totalWidth = function () {
-  return document.body.clientWidth - sideWidth*2;
+  return document.querySelector('.dsa-app').clientWidth - sideWidth*2;
   // return document.getElementById('dsaapp').clientWidth - sideWidth*2;
 }
 var clientWidth = function (clientX) {
@@ -15,11 +14,11 @@ var clientWidth = function (clientX) {
 module.exports = React.createClass({
 
   propTypes: {
-    val: ReactPropTypes.number.isRequired,
-    delay: ReactPropTypes.number.isRequired,
-    domain: ReactPropTypes.array.isRequired,
-    isRunning: ReactPropTypes.bool.isRequired,
-    isPlaying: ReactPropTypes.bool.isRequired,
+    val: React.PropTypes.number.isRequired,
+    delay: React.PropTypes.number.isRequired,
+    domain: React.PropTypes.array.isRequired,
+    isRunning: React.PropTypes.bool.isRequired,
+    isPlaying: React.PropTypes.bool.isRequired,
   },
   // getInitialState: function () {
   //   return {

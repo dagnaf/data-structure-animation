@@ -1,24 +1,42 @@
 var path = require('path');
-var entries = require('./create-entry');
+var global = require('./global');
+
+var line_loader = path.join(global.root,'loaders','line.js');
+var highlight_loader = path.join(global.root,'loaders','highlight.js');
+var router_loader = path.join(global.root,'loaders','router.js');
+var code_loader = 'raw!'+highlight_loader;
+
+var output_path = path.join(__dirname,'example');
 
 module.exports = {
-  context: path.join(__dirname,'src','pages'),
-  entry: entries,
+  context: __dirname,
+  entry: global.externals.concat(global.modules).concat(path.join(global.root,'src/app.react.js')),
   output: {
-    path: path.join(__dirname,'dev'),
-    filename: '[name].entry.js'
+    path: output_path,
+    filename: 'dsa.js',
+    chunkFilename: 'chunks/[name].js',
+    // TODO
+    library: 'dsa',
+    libraryTarget: 'umd'
   },
   module: {
+    // file tested with absolute path, so only care about the suffix
     loaders: [
-      // file tested with absolute path, so only care about the suffix
-      { test: /\.less$/, loader: 'style-loader!css-loader!less-loader'},
-      { test: /\.react\.js$/, loader: "jsx-loader" },
-      // transform 'line' to actual #line before required
-      { test: /\.line\.js$/, loader: path.join(__dirname,'loader','line.js') },
+      { test: /\.less$/, loader: 'style-loader!css-loader!autoprefixer-loader!less-loader'},
+      { test: /\.css$/, loader: 'style-loader!css-loader'},
+      { test: /\.react\.js$/, loader: 'jsx-loader' },
       // read raw files
-      { test: /\.c$/, loader: "raw" },
-      { test: /\.h$/, loader: "raw" },
-      { test: /Makefile$/, loader: "raw" }
+      { test: /\.c$/, loader: code_loader },
+      { test: /\.h$/, loader: code_loader },
+      { test: /Makefile$/, loader: code_loader },
+      // transform 'line' to actual #line before required
+      { test: /\.line\.js$/, loader: line_loader },
+      // generate routers
+      { test: /require-dsa\.js$/, loader: router_loader }
     ]
+  },
+  externals: {
+    'react': 'React',
+    'd3': 'd3'
   }
 };

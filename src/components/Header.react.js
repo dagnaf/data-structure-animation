@@ -1,11 +1,10 @@
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
+var d3 = require('d3');
 var DsaActions = require('../actions/DsaActions');
-var D3 = require('d3');
 
 var sideWidth = 80;
 var totalWidth = function () {
-  return document.body.clientWidth - sideWidth*2;
+  return document.querySelector('.dsa-app').clientWidth - sideWidth*2;
   // return document.getElementById('dsaapp').clientWidth - sideWidth*2;
 }
 var clientWidth = function (clientX) {
@@ -14,8 +13,8 @@ var clientWidth = function (clientX) {
 
 module.exports = React.createClass({
   propTypes: {
-    val: ReactPropTypes.number.isRequired,
-    domain: ReactPropTypes.array.isRequired,
+    val: React.PropTypes.number.isRequired,
+    domain: React.PropTypes.array.isRequired,
   },
   getInitialState: function () {
     return {
@@ -28,7 +27,7 @@ module.exports = React.createClass({
     if (this.state.draggingWidth >= 0)
       width = this.state.draggingWidth;
     else
-      width = D3.scale.linear()
+      width = d3.scale.linear()
         .domain(this.props.domain)
         .range([0, 100])(this.props.val);
     var inlineStyle = {
@@ -67,7 +66,7 @@ module.exports = React.createClass({
     // e is synthetic event by react
     e.preventDefault();
     this.setState({
-      draggingWidth: D3.scale.linear()
+      draggingWidth: d3.scale.linear()
         .domain([0, totalWidth()])
         .range([0, 100])(clientWidth(e.clientX))
       });
@@ -84,7 +83,7 @@ module.exports = React.createClass({
     // var clientWidth = Math.max(0,Math.min(totalWidth, e.clientX - 80));
     // var unitWidth = totalWidth/this.state.demo.length;
     // FIXME: difference with Footer.js
-    DsaActions.updateDelay(Math.round(D3.scale.linear()
+    DsaActions.updateDelay(Math.round(d3.scale.linear()
       .domain([0,100])
       .range(this.props.domain)(this.state.draggingWidth)));
     this.setState({draggingWidth: undefined})

@@ -1,11 +1,9 @@
-module.exports = function (arg) {
-
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
 var DsaConstants = require('../constants/DsaConstants');
+var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var File = require('../models/File')(arg);
-var Demo = require('../models/Demo')(arg);
+var File = require('../models/File');
+var Demo = require('../models/Demo');
 
 var CHANGE_EVENT = 'change';
 
@@ -122,7 +120,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-return DsaStore;
-// end of module exports
-};
-
+module.exports = DsaStore;

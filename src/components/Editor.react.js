@@ -1,46 +1,43 @@
+require('../css/default.css');
+require('./Editor.react.less');
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var ace = require('brace');
-require('brace/mode/c_cpp');
-require('brace/theme/chrome');
 var DsaActions = require('../actions/DsaActions');
+
+var _line_height = 15;
 
 module.exports = React.createClass({
   propTypes: {
-    files: ReactPropTypes.array.isRequired,
-    index: ReactPropTypes.number.isRequired,
-    isRunning: ReactPropTypes.bool.isRequired,
-    isPlaying: ReactPropTypes.bool.isRequired,
-    activeLine: ReactPropTypes.number.isRequired
+    files: React.PropTypes.array.isRequired,
+    isRunning: React.PropTypes.bool.isRequired,
+    isPlaying: React.PropTypes.bool.isRequired,
+    activeLine: React.PropTypes.number.isRequired
   },
 
+  getInitialState: function () {
+    this.scrolls = [];
+    return {
+      index: 0
+    };
+  },
   componentDidMount: function () {
-    this.editor = ace.edit(this.refs.code.getDOMNode());
-
-    this.editor.getSession().setMode('ace/mode/c_cpp');
-    this.editor.setTheme('ace/theme/chrome');
-
-    this.editor.setReadOnly(true);
-    this.editor.setAnimatedScroll(true);
-
-    this.editor.setValue(this.props.files[this.props.index].src, -1);
-    if (this.props.index === 0) {
-      this.editor.gotoLine(this.props.activeLine);
-    }
   },
   componentDidUpdate: function (prevProps, prevState) {
-    console.log('%cEditor update line\n'+prevProps.activeLine+'\n'+this.props.activeLine, 'blue');
-    if (this.props.index === 0 && this.props.isRunning) {
-      this.editor.gotoLine(this.props.activeLine);
+    // if is running, then scrolltop depends on activeLine
+    //   else it depends on the your scroll history
+    if (this.state.index === 0 && this.props.isRunning &&
+      this.props.activeLine !== prevProps.activeLine) {
+      this._gotoLine(this.props.activeLine, prevProps.activeLine);
+    } else if (this.state.index !== prevState.index) {
+      this.refs.code.getDOMNode().scrollTop = (this.scrolls[this.state.index] || 0);
     }
   },
-  componentWillUnmount: function () {
-    this.editor.destroy();
-  },
-
+  // remember render should be pure state/props oriented
+  //   other jobs better done in didupdate or didmount
   render: function () {
+    var self = this;
     var classes = 'wrapper-code';
-    if (this.props.index === 0) {
+    var htmls = this.props.files[this.state.index].src.split('\n');
+    if (this.state.index === 0) {
       classes += ' main';
     }
     if (this.props.isRunning) {
@@ -48,15 +45,39 @@ module.exports = React.createClass({
     }
     return (
       <div className={classes}>
-        <div className="ace-flex" ref="code"></div>
+        <pre>
+          <div ref="numbers" className="numbers">
+            {htmls.map(function (h, i) {
+              var classes = 'line';
+              if (self.state.index === 0 && self.props.activeLine === i+1) {
+                classes += ' active';
+              }
+              return (
+                <div key={i} className={classes}>{i+1}</div>
+              );
+            })}
+            <div className="line" />
+          </div>
+          <code ref="code" onScroll={this._onScroll}>
+            {htmls.map(function (h, i) {
+              var classes = 'line';
+              if (self.state.index === 0 && self.props.activeLine === i+1) {
+                classes += ' active';
+              }
+              return (
+                <div key={i} className={classes} dangerouslySetInnerHTML={{ __html: h }} />
+              );
+            })}
+          </code>
+        </pre>
         <ul className="list file-list">
           {this.props.files.map(function (file, i) {
             var classes = '';
-            if (this.props.index === i) classes += ' active';
+            if (this.state.index === i) classes += ' active';
             return (
               <li key={i}>
                 <input
-                  disabled={true}
+                  readOnly={true}
                   className={classes}
                   onClick={this._onClick.bind(this, i)}
                   value={file.name}
@@ -68,10 +89,25 @@ module.exports = React.createClass({
       </div>
     );
   },
+  _onScroll: function (e) {
+    this.refs.numbers.getDOMNode().scrollTop = e.target.scrollTop;
+  },
   _onClick: function (i) {
-    if (this.props.index === i) return;
-    DsaActions.updateFile(i, this.editor.getCursorPosition().row + 1);
-    this.editor.setValue(this.props.files[i].src, -1);
-    this.editor.gotoLine(this.props.files[i].line)
-  }
+    if (this.state.index === i) {
+      return;
+    }
+    this.scrolls[this.state.index] = this.refs.code.getDOMNode().scrollTop;
+    this.setState({
+      index: i
+    })
+  },
+  _gotoLine: function (i, j) {
+    var node = this.refs.code.getDOMNode();
+    var from = node.scrollTop;
+    var to = _line_height*(i-1);
+    var half = node.clientHeight/2;
+    if (Math.abs(from + half - to) > node.clientHeight/3) {
+      node.scrollTop = to - node.clientHeight/2;
+    }
+  },
 });
