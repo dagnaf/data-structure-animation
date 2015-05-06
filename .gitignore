@@ -1,3 +1,6 @@
+# ignore for gh-pages branch
+# for other braches
+# git add -f templates bower.json init.jsfor other braches
 bower_components
 templates
 bower.json
