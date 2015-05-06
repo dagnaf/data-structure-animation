@@ -9,16 +9,12 @@ int _BLACK = 0;
 rb_tree * RBTreeCreate() {
     rb_tree* newTree;
     rb_tree_node* newNode;
-
     newTree = (rb_tree*) SafeMalloc(sizeof(rb_tree));
-
     newTree->nil = newNode = (rb_tree_node*) SafeMalloc(sizeof(rb_tree_node));
     newNode->left = newNode->right = newNode->p = newNode;
     newNode->key = 0;
     newNode->color = _BLACK;
-
     newTree->root = newTree->nil;
-
     return newTree;
 }
 

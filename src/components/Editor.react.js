@@ -16,7 +16,8 @@ module.exports = React.createClass({
   getInitialState: function () {
     this.scrolls = [];
     return {
-      index: 0
+      index: 0,
+      hidden: true
     };
   },
   componentDidMount: function () {
@@ -36,6 +37,9 @@ module.exports = React.createClass({
   render: function () {
     var self = this;
     var classes = 'wrapper-code';
+    if (this.state.hidden) {
+      classes += ' hidden';
+    }
     var htmls = this.props.files[this.state.index].src.split('\n');
     if (this.state.index === 0) {
       classes += ' main';
@@ -53,22 +57,23 @@ module.exports = React.createClass({
                 classes += ' active';
               }
               return (
-                <div key={i} className={classes}>{i+1}</div>
+                <span key={i} className={classes}>{(i+1)+'\n'}</span>
               );
             })}
-            <div className="line" />
+            <span className="line" />
           </div>
-          <code ref="code" onScroll={this._onScroll}>
-            {htmls.map(function (h, i) {
-              var classes = 'line';
-              if (self.state.index === 0 && self.props.activeLine === i+1) {
-                classes += ' active';
-              }
-              return (
-                <div key={i} className={classes} dangerouslySetInnerHTML={{ __html: h }} />
-              );
-            })}
-          </code>
+          <div className="wrapper">
+            <div className="wrapper-hl">
+              <span ref="hl" className="line active hl" />
+            </div>
+            <code ref="code" onScroll={this._onScroll}>
+              {htmls.map(function (h, i) {
+                return (
+                  <span key={i} className="line" dangerouslySetInnerHTML={{ __html: h+'\n' }} />
+                );
+              })}
+            </code>
+          </div>
         </pre>
         <ul className="list file-list">
           {this.props.files.map(function (file, i) {
@@ -91,15 +96,22 @@ module.exports = React.createClass({
   },
   _onScroll: function (e) {
     this.refs.numbers.getDOMNode().scrollTop = e.target.scrollTop;
+    if (this.state.index === 0 && this.props.isRunning) {
+      this.refs.hl.getDOMNode().style.top = (_line_height*(this.props.activeLine-1) - e.target.scrollTop) + 'px';
+    }
   },
   _onClick: function (i) {
     if (this.state.index === i) {
-      return;
+      this.setState({
+        hidden: !this.state.hidden
+      });
+    } else {
+      this.scrolls[this.state.index] = this.refs.code.getDOMNode().scrollTop;
+      this.setState({
+        index: i,
+        hidden: false
+      });
     }
-    this.scrolls[this.state.index] = this.refs.code.getDOMNode().scrollTop;
-    this.setState({
-      index: i
-    })
   },
   _gotoLine: function (i, j) {
     var node = this.refs.code.getDOMNode();
@@ -108,6 +120,8 @@ module.exports = React.createClass({
     var half = node.clientHeight/2;
     if (Math.abs(from + half - to) > node.clientHeight/3) {
       node.scrollTop = to - node.clientHeight/2;
+    } else {
+      this.refs.hl.getDOMNode().style.top = (to - node.scrollTop) + 'px';
     }
   },
 });

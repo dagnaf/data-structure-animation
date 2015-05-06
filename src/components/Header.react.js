@@ -70,7 +70,6 @@ module.exports = React.createClass({
         .domain([0, totalWidth()])
         .range([0, 100])(clientWidth(e.clientX))
       });
-    console.log(this.state.draggingWidth);
     return false;
   },
   // Solution copy from dat.gui .slider

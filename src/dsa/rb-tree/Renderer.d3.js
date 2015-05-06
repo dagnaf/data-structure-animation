@@ -1,132 +1,160 @@
+// require('./Renderer.d3.less');
 var d3 = require('d3');
 var d3Transform = require('d3-transform');
 
 var gbase, gtext, ghigh, gnodes, gedges;
 var status, delay;
 
+var pos = {};
 var nodes = [];
 var edges = [];
-var _x_skip = 40;
-var _y_skip = 40;
+var hide;
+var ids = [];
+var _x_skip =20+15;
+var _y_skip = 70;
 var _rad = 15;
-var root;
-var nil;
 var _RED = 1;
 var _BLACK = 0;
 
-function _getNodesAndEdges (v) {
-  if (v === nil) {
-    return;
+function _node_color (d) {
+  if (d.color === undefined) return 'transparent';
+  return d.color === _RED ? 'red' : 'black';
+}
+
+function _newPos(v, curr, nn) {
+  pos[v.id] = (pos[v.id] || {});
+  pos[v.id].curr = curr;
+}
+
+function _newEdge (u, r, to_id) {
+  var from = u.id;
+  var to = (to_id || u[r].id);
+  var id = from+r; // r is string
+  if (status.ne[id]) {
+    to = status.ne[id];
   }
-  nodes.push({
-    color: v.color,
-    pos: v.pos,
+  var dx = pos[to].curr.x-pos[from].curr.x;
+  var dy = pos[to].curr.y-pos[from].curr.y;
+  var dr = Math.sqrt(dx*dx+dy*dy);
+  dx *= _rad/dr;
+  dy *= _rad/dr;
+  return {
+    dx: dx,
+    dy: dy,
+    from: u.id,
+    to: to,
+    type: r,
+    id: id,
+    hide: hide
+  };
+}
+
+function _newNode (v) {
+  ids.push(v.id);
+  var color = v.color;
+  if (status.co[v.id] !== undefined) {
+    color = status.co[v.id];
+  }
+  return {
+    color: color,
+    v: v.key,
     id: v.id,
-    v: v.key
-  });
-  if (v.p !== nil) {
-    edges.push({
-      pos1: v.p.pos,
-      pos2: v.pos,
-      type: 'p',
-      id: 'p'+v.p.id + '-'+v.id
-    })
+    hide: hide
   }
-  var nil_node;
-  if (v.left === nil) {
-    nil_node = {
-      color: _BLACK,
-      pos: { x: v.pos.x - _x_skip, y: v.pos.y + _y_skip },
-      id: 'left-nil'+v.id,
-      v: 'nil'
-    };
-    nodes.push(nil_node);
-    edges.push({
-      pos1: v.pos,
-      pos2: nil_node.pos,
-      type: 'left',
-      id: 'left'+v.id + '-'+nil_node.id
-    })
-  } else {
-    edges.push({
-      pos1: v.pos,
-      pos2: v.left.pos,
-      type: 'left',
-      id: 'left' + v.id + '-' + v.left.id
-    })
-    _getNodesAndEdges(v.left);
+}
+function _getNodesAndEdges (v, pid) {
+  // nil has no p, param pid for nil
+  pid = pid || v.p.id;
+  // update pos.prev if not defined
+  if (pos[v.id].prev === undefined) {
+    if (pos[pid] === undefined) {
+      pos[v.id].prev = pos[v.id].curr;
+    } else {
+      pos[v.id].prev = (pos[pid].prev || pos[v.id].curr);
+    }
   }
-  if (v.right === nil) {
-    nil_node = {
-      color: _BLACK,
-      pos: { x: v.pos.x + _x_skip, y: v.pos.y + _y_skip },
-      id: 'right-nil'+v.id,
-      v: 'nil'
-    };
-    nodes.push(nil_node);
-    edges.push({
-      pos1: v.pos,
-      pos2: nil_node.pos,
-      type: 'right',
-      id: 'right'+v.id + '-'+nil_node.id
-    })
-  } else {
-    edges.push({
-      pos1: v.pos,
-      pos2: v.right.pos,
-      type: 'right',
-      id: 'right' + v.id + '-' + v.right.id
-    })
-    _getNodesAndEdges(v.right);
+  if (v.p) {
+    edges.push(_newEdge(v, 'p'));
+  }
+  if (v.id === status.hl) {
+    hide = false;
+  }
+  nodes.push(_newNode(v));
+  if (v.left) {
+    edges.push(_newEdge(v, 'left'));
+    _getNodesAndEdges(v.left, v.id);
+  }
+  if (v.right) {
+    edges.push(_newEdge(v, 'right'));
+    _getNodesAndEdges(v.right, v.id);
+  }
+  if (v.id === status.hl) {
+    hide = true;
   }
 }
 
 function _getNodesAndEdgesWithNil() {
+  // console.log(JSON.stringify(status.co));
   nodes = [];
   edges = [];
-  // FIXME root should fix at (0,0) no matter how tree changes
-  // then I have to make the following left/right case
-  _setPosition(root.left, 0, 0, -_x_skip);
-  _setPosition(root.right, 0, 0, _x_skip);
-  var nil_node = {
-    color: _BLACK,
-    pos: { x: 0, y: -_y_skip },
-    id: '-nil',
-    v: 'nil'
-  };
-  nodes.push(nil_node);
-  if (root !== nil) {
-    root.pos = { x: 0, y: 0 };
-    edges.push({
-      pos1: nil_node.pos,
-      pos2: root.pos,
-      type: 'p',
-      id: 'p' + nil_node.id + '-' + root.id
-    })
+  ids = [];
+  // copy last scene position
+  for (var p in pos) {
+    pos[p].prev = pos[p].curr;
   }
-  _getNodesAndEdges(root);
+  _newPos(status.tree.nil, { x: 0, y: -_y_skip*1.5 });
+  pos[status.tree.nil.id].prev = pos[status.tree.nil.id].curr;
+  if (status.tree.root.nil !== true) {
+    _newPos(status.tree.root, { x: 0, y: 0 });
+    _setPosition(status.tree.root.left, 0, 0, -_x_skip);
+    _setPosition(status.tree.root.right, 0, 0, _x_skip);
+  }
+  if (status.hl === undefined) {
+    hide = false;
+  } else {
+    hide = true;
+  }
+  nodes.push(_newNode(status.tree.nil));
+  if (status.tree.root.nil !== true) {
+    _getNodesAndEdges(status.tree.root);
+  }
+  hide = false;
+  if (status.nn) {
+    // push new add node
+    nodes.push(_newNode(status.nn));
+    // push new add node edge not be identified by tree before clone
+    if (status.ne[status.nn.id+'p']) {
+      _newEdge(status.nn, 'p', status.ne[status.nn.id+'p'])
+    }
+    // push new node pos
+    _newPos(status.nn, {x: pos[status.nn.ref].curr.x, y: pos[status.nn.ref].curr.y-_y_skip/2}, 1);
+    if (pos[status.nn.id].prev === undefined) {
+      pos[status.nn.id].prev = pos[status.nn.ref].curr;
+    }
+  }
+  // delete invisible pos
+  Object.keys(pos).filter(function (id) {
+    return ids.indexOf(+id) === -1;
+  }).forEach(function (id) { delete pos[id]; })
 }
 
 function _setPosition(v, y, b, x) {
-  if (v === nil || v.pos !== undefined) {
-    return;
-  }
-  v.pos = { y: y + _y_skip };
+  if (v === undefined) return;
   var l, r;
   if (x < 0) {
     l = 'right'; r = 'left';
   } else {
     l = 'left'; r = 'right';
   }
-  if (v[l] === nil) {
-    v.pos.x = b + x * 2;
+  if (v.nil || v[l] === undefined) {
+    _newPos(v, {x: b+x, y: y+_y_skip});
   } else {
-    v.pos.x = _setPosition(v[l], v.pos.y, b, x) + x;
+    _newPos(v, {x: _setPosition(v[l], y + _y_skip, b, x) + x, y: y+_y_skip});
   }
-  if (v[r] === nil) {
-    return v.pos.x + x;
+  if (v.nil || v[r] === undefined) {
+    return pos[v.id].curr.x;
   } else {
-    return _setPosition(v[r], v.pos.y, v.pos.x, x);
+    return _setPosition(v[r], y + _y_skip, pos[v.id].curr.x, x);
   }
 }
 
@@ -135,16 +163,19 @@ function _draw_nodes() {
     return d.id;
   }).enter().append('circle')
     .attr('class', 'node')
-    .attr('cx', function (d) { return d.pos.x })
-    .attr('cy', function (d) { return d.pos.y })
+    .attr('cx', function (d) { return pos[d.id].prev.x })
+    .attr('cy', function (d) { return pos[d.id].prev.y })
     .attr('r', _rad)
     .style('fill', function (d) { return d.color ? 'red' : 'black' });
   gnodes.selectAll('circle.node').data(nodes, function (d) {
     return d.id;
   })
-    .attr('cx', function (d) { return d.pos.x })
-    .attr('cy', function (d) { return d.pos.y })
-    .style('fill', function (d) { return d.color ? 'red' : 'black' });
+    .transition()
+    .duration(delay)
+    .attr('cx', function (d) { return pos[d.id].curr.x })
+    .attr('cy', function (d) { return pos[d.id].curr.y })
+    .style('fill', _node_color)
+    .style('opacity', function (d) { return d.hide ? 0.3 : 1 })
   gnodes.selectAll('circle.node').data(nodes, function (d) {
     return d.id;
   }).exit()
@@ -156,18 +187,22 @@ function _draw_edges() {
     return d.id;
   }).enter().append('line')
     .attr('class', 'edge')
-    .attr('x1', function (d) { return d.pos1.x })
-    .attr('y1', function (d) { return d.pos1.y })
-    .attr('x2', function (d) { return d.pos1.x })
-    .attr('y2', function (d) { return d.pos1.y })
+    .attr('x1', function (d) { return pos[d.from].prev.x+d.dx })
+    .attr('y1', function (d) { return pos[d.from].prev.y+d.dy })
+    .attr('x2', function (d) { return pos[d.from].prev.x+d.dx })
+    .attr('y2', function (d) { return pos[d.from].prev.y+d.dy })
     .classed('parent', function (d) { return d.type === 'p' ? true : false})
+    .classed('child', function (d) { return d.type !== 'p' ? true : false})
   gedges.selectAll('line.edge').data(edges, function (d) {
     return d.id;
   })
-    .attr('x1', function (d) { return d.pos1.x })
-    .attr('y1', function (d) { return d.pos1.y })
-    .attr('x2', function (d) { return d.pos2.x })
-    .attr('y2', function (d) { return d.pos2.y })
+    .transition()
+    .duration(delay)
+    .attr('x1', function (d) { return pos[d.from].curr.x+d.dx })
+    .attr('y1', function (d) { return pos[d.from].curr.y+d.dy })
+    .attr('x2', function (d) { return pos[d.to].curr.x-d.dx })
+    .attr('y2', function (d) { return pos[d.to].curr.y-d.dy })
+    .style('opacity', function (d) { return d.hide ? 0.3 : 1 })
   gedges.selectAll('line.edge').data(edges, function (d) {
     return d.id;
   }).exit()
@@ -179,15 +214,18 @@ function _draw_nodes_text() {
     return d.id;
   }).enter().append('text')
     .attr('class', 'node')
-    .attr('x', function (d) { return d.pos.x })
-    .attr('y', function (d) { return d.pos.y })
+    .attr('x', function (d) { return pos[d.id].prev.x })
+    .attr('y', function (d) { return pos[d.id].prev.y })
     .attr('dy', 5)
-    .text(function (d) { return d.v});
+    .text(function (d) { return d.id+'-'+d.v});
   gtext.selectAll('text.node').data(nodes, function (d) {
     return d.id;
   })
-    .attr('x', function (d) { return d.pos.x })
-    .attr('y', function (d) { return d.pos.y })
+    .transition()
+    .duration(delay)
+    .attr('x', function (d) { return pos[d.id].curr.x })
+    .attr('y', function (d) { return pos[d.id].curr.y })
+    .style('opacity', function (d) { return d.hide ? 0.3 : 1 })
   gtext.selectAll('text.node').data(nodes, function (d) {
     return d.id;
   }).exit()
@@ -195,8 +233,7 @@ function _draw_nodes_text() {
 }
 
 function _init(_status, _delay) {
-  root = _status.tree.root;
-  nil = _status.tree.nil;
+  status = _status;
   delay = _delay;
 }
 
@@ -221,7 +258,7 @@ function init () {
   this.svg = d3.select(this.refs.svg.getDOMNode()).append('svg').call(zoom)
     .append('g');
   this.g = this.svg.append('g')
-    .attr('transform', d3Transform().translate(300, 50).scale(1));
+    .attr('transform', d3Transform().translate(100, 100).scale(1));
 
   this.gbase = this.g.append('g').attr('class', 'base');
   this.ghigh = this.g.append('g').attr('class', 'high');

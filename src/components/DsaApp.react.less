@@ -57,6 +57,8 @@
   flex-direction: column;
   align-content: stretch;
   position: relative;
+  /*fix hl in editor*/
+  overflow: hidden;
 }
 
 .wrapper-row {
@@ -78,6 +80,10 @@
   flex-direction: row;
   align-content: stretch;
   position: relative;
+  &.hidden {
+    width: @list-width;
+    flex: initial;
+  }
 }
 
 .scene {
@@ -193,9 +199,10 @@ rect {
 text {
   text-anchor: middle;
   &.char, &.op-grid, &.item, &.stack-top, &.peak, &.push {
-    fill: white;
+    /*fill: white;*/
   }
-  fill: white;
+  /*fill: white;*/
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
 g.high rect {
   &.char, &.op-grid, &.item, &.stack-top, &.stack-top-high {
@@ -216,14 +223,16 @@ path {
 }
 
 line {
-  stroke: black;
-  stroke-dasharray: 3 3;
   stroke-width: 3;
+  stroke-opacity: 0.5;
   &.parent {
     stroke: red;
-    stroke-dashoffset: 3;
+  }
+  &.child {
+    stroke: black;
   }
 }
+
 
 /* FIXME scene.react.js should be parted */
 
