@@ -142,6 +142,7 @@ void _Transplant(rb_tree* t, rb_tree_node* u, rb_tree_node* v) {
 }
 
 void _DeleteFixUp(rb_tree* t, rb_tree_node* x) {
+    int tmp;
     rb_tree_node* w;
     while (x != t->root && x->color == _BLACK) {
         if (x == x->p->left) {
@@ -162,8 +163,9 @@ void _DeleteFixUp(rb_tree* t, rb_tree_node* x) {
                     _RightRotate(t, w);
                     w = x->p->right;
                 }
-                w->color = x->p->color;
+                tmp = x->p->color;
                 x->p->color = _BLACK;
+                w->color = tmp;
                 w->right->color = _BLACK;
                 _LeftRotate(t, x->p);
                 x = t->root;
@@ -186,8 +188,9 @@ void _DeleteFixUp(rb_tree* t, rb_tree_node* x) {
                     _LeftRotate(t,w);
                     w = x->p->left;
                 }
-                w->color = x->p->color;
+                tmp = x->p->color;
                 x->p->color = _BLACK;
+                w->color = tmp;
                 w->left->color = _BLACK;
                 _RightRotate(t, x->p);
                 x = t->root;

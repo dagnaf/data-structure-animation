@@ -64,6 +64,8 @@ function _newEdge (u, r) {
     to: to,
     type: r,
     id: id,
+    // nil has edge out, it is unconditionally added
+    unconditional: u.nil
   };
 }
 
@@ -74,6 +76,7 @@ function _newNode (v) {
     color = status.co[v.id];
   }
   return {
+    extra: v.extra,
     color: color,
     v: v.key,
     id: v.id,
@@ -90,7 +93,7 @@ function _getNodesAndEdges (v, pid) {
       pos[v.id].prev = (pos[pid].prev || pos[v.id].curr);
     }
   }
-  if (v.p) {
+  if (v.p || status.ne[v.id+'p']) {
     edges.push(_newEdge(v, 'p'));
   }
   if (v.id === status.hl) {
@@ -111,38 +114,46 @@ function _getNodesAndEdges (v, pid) {
 }
 
 function _getNodesAndEdgesWithNil() {
-  // console.log(JSON.stringify(status.co));
+  // initialize
   nodes = [];
   edges = [];
   ids = [];
   hl = {};
-
+  // set nil highlight
   hl[status.tree.nil.id] = (status.hl.indexOf(status.tree.nil.id) === -1 ? 0 : hl_top()-1);
   _setHighlight(status.tree.root, 0);
-
-  // copy last scene position
+  // copy last scene position, for d3-update/d3-enter
   for (var p in pos) {
     pos[p].prev = pos[p].curr;
   }
+  // set nil position
   _newPos(status.tree.nil, { x: 0, y: -_y_skip*1.5 });
   pos[status.tree.nil.id].prev = pos[status.tree.nil.id].curr;
-
+  // set root and nodes position
   if (status.tree.root.nil !== true) {
     _newPos(status.tree.root, { x: 0, y: 0 });
     _setPosition(status.tree.root.left, 0, 0, -_x_skip, _BLACK);
     _setPosition(status.tree.root.right, 0, 0, _x_skip, _BLACK);
   }
-
+  // add nill node and edge
   nodes.push(_newNode(status.tree.nil));
   if (status.tree.root.nil !== true) {
     _getNodesAndEdges(status.tree.root);
   }
-
+  // set transplant position, store tmp in case inter-dependent
+  var pos_curr_y = {};
+  for (var i in status.np) {
+    pos_curr_y[i] = pos[status.np[i]].curr.y;
+  }
+  for (var i in status.np) {
+    pos[i].curr.y = pos_curr_y[i];
+  }
+  // add new/extra/min/pointer node
   if (status.nn) {
     // push new add node
     nodes.push(_newNode(status.nn));
     // push new node pos
-    _newPos(status.nn, {x: pos[status.nn.ref].curr.x, y: pos[status.nn.ref].curr.y-_y_skip/2}, 1);
+    _newPos(status.nn, {x: pos[status.nn.ref].curr.x, y: pos[status.nn.ref].curr.y-(status.nn.extra ? _y_skip/3 : _y_skip/2)}, 1);
     if (pos[status.nn.id].prev === undefined) {
       pos[status.nn.id].prev = pos[status.nn.ref].curr;
     }
@@ -150,19 +161,31 @@ function _getNodesAndEdgesWithNil() {
     if (status.ne[status.nn.id+'p'] !== undefined) {
       edges.push(_newEdge(status.nn, 'p'));
     }
-    hl[status.nn.id] = status.hls.length;
+    // hl[status.nn.id] = status.hls.length;
+    if (status.hl.indexOf(status.nn.id) !== -1) {
+      hl[status.nn.id] = hl_top() - 1;
+    } else {
+      hl[status.nn.id] = hl[status.nn.ref];
+    }
   }
-
+  // jobs to do when all positions set
+  // calc dx,dy out of the node circle
   for (var i = 0; i < edges.length; ++i) {
     var from = edges[i].from;
     var to = edges[i].to;
     var dx = pos[to].curr.x-pos[from].curr.x;
     var dy = pos[to].curr.y-pos[from].curr.y;
     var dr = Math.sqrt(dx*dx+dy*dy);
-    edges[i].dx = dx*_rad/dr;
-    edges[i].dy = dy*_rad/dr;
+    // in case two node are very close
+    if (dr < _rad) {
+      edges[i].dx = 0;
+      edges[i].dy = 0;
+    } else {
+      edges[i].dx = dx*_rad/dr;
+      edges[i].dy = dy*_rad/dr;
+    }
   }
-  // delete invisible pos
+  // delete invisible pos, for next call
   Object.keys(pos).filter(function (id) {
     return ids.indexOf(+id) === -1;
   }).forEach(function (id) { delete pos[id]; })
@@ -208,14 +231,16 @@ function _setPosition(v, y, b, x, pc) {
 }
 
 function _draw_nodes() {
+  // d3-enter
   gnodes.selectAll('circle.node').data(nodes, function (d) {
     return d.id;
   }).enter().append('circle')
     .attr('class', 'node')
     .attr('cx', function (d) { return pos[d.id].prev.x })
     .attr('cy', function (d) { return pos[d.id].prev.y })
-    .attr('r', _rad)
+    .attr('r', function (d) { return d.extra ?  _rad/2 : _rad })
     .style('fill', function (d) { return d.color ? 'red' : 'black' });
+  // d3-update
   gnodes.selectAll('circle.node').data(nodes, function (d) {
     return d.id;
   })
@@ -223,14 +248,20 @@ function _draw_nodes() {
     .duration(delay)
     .attr('cx', function (d) { return pos[d.id].curr.x })
     .attr('cy', function (d) { return pos[d.id].curr.y })
+    .attr('r', function (d) { return d.extra ?  _rad/2 : _rad })
     .style('fill', _node_color)
+  // d3-exit
   gnodes.selectAll('circle.node').data(nodes, function (d) {
     return d.id;
   }).exit()
+      .transition()
+      .duration(delay)
+    .style('opacity', 0)
     .remove();
 }
 
 function _draw_edges() {
+  // d3-enter
   gedges.selectAll('line.edge').data(edges, function (d) {
     return d.id;
   }).enter().append('line')
@@ -241,6 +272,7 @@ function _draw_edges() {
     .attr('y2', function (d) { return pos[d.from].prev.y+d.dy })
     .classed('parent', function (d) { return d.type === 'p' ? true : false})
     .classed('child', function (d) { return d.type !== 'p' ? true : false})
+  // d3-update
   gedges.selectAll('line.edge').data(edges, function (d) {
     return d.id;
   })
@@ -251,13 +283,19 @@ function _draw_edges() {
     .attr('x2', function (d) { return pos[d.to].curr.x-d.dx })
     .attr('y2', function (d) { return pos[d.to].curr.y-d.dy })
     .style('opacity', _edge_opacity)
+    .style('stroke-dasharray', function (d) { return d.unconditional ? '5 5' : null })
+  // d3-exit
   gedges.selectAll('line.edge').data(edges, function (d) {
     return d.id;
   }).exit()
+      .transition()
+      .duration(delay)
+    .style('opacity', 0)
     .remove();
 }
 
 function _draw_nodes_text() {
+  // d3-enter
   gtext.selectAll('text.node').data(nodes, function (d) {
     return d.id;
   }).enter().append('text')
@@ -265,6 +303,7 @@ function _draw_nodes_text() {
     .attr('x', function (d) { return pos[d.id].prev.x })
     .attr('y', function (d) { return pos[d.id].prev.y })
     .attr('dy', 5)
+  // d3-update
   gtext.selectAll('text.node').data(nodes, function (d) {
     return d.id;
   })
@@ -275,14 +314,19 @@ function _draw_nodes_text() {
     .style('fill', _node_color)
     .text(function (d) { return d.v});
     // .text(function (d) { return d.id+'-'+d.v+'('+hl[d.id]+')'});
+  // d3-exit
   gtext.selectAll('text.node').data(nodes, function (d) {
     return d.id;
   }).exit()
+      .transition()
+      .duration(delay)
+    .style('opacity', 0)
     .remove();
 }
 
 function _draw_rot() {
-  var data = (status.ro ? [status.ro] : []);
+  var data = (status.ro ? [status.ro.ids] : []);
+  // d3-enter
   ghigh.selectAll('path.rot').data(data).enter()
     .append('path')
       .attr('class', 'rot')
@@ -297,6 +341,7 @@ function _draw_rot() {
         .transition()
         .duration(delay)
       .style('opacity', 1);
+  // d3-update
   ghigh.selectAll('path.rot').data(data)
     .attr('d', function (d) {
         this.__prev__ = d;
@@ -304,6 +349,7 @@ function _draw_rot() {
           return [pos[id].curr.x, pos[id].curr.y];
         }).join('L');
     })
+  // d3-exit
   ghigh.selectAll('path.rot').data(data)
     .exit()
       .transition()
@@ -323,6 +369,35 @@ function _draw_rot() {
     .remove();
 }
 
+function _draw_rot_text() {
+  var data = (status.ro ? [status.ro.ids] : []);
+  function xy(x) {
+    return function (d) {
+      return d.reduce(function (s,id) {
+        return s+pos[id].curr[x]
+      }, 0) / d.length;
+    }
+  }
+  // d3-enter
+  gtext.selectAll('text.rot').data(data).enter()
+    .append('text')
+      .attr('class', 'rot')
+      .attr('x', xy('x'))
+      .attr('y', xy('y'))
+      .attr('dy', 5)
+      .text(function () { return status.ro.type === 'left' ? '左旋' : '右旋'})
+      .style('fill-opacity', 0.5)
+  gtext.selectAll('text.rot').data(data)
+    .attr('x', xy('x'))
+    .attr('y', xy('y'))
+    .text(function () { return status.ro.type === 'left' ? '左旋' : '右旋'});
+  gtext.selectAll('text.rot').data(data).exit()
+      .transition()
+      .duration(delay)
+    .style('opacity', 0)
+    .remove();
+}
+
 function _init(_status, _delay) {
   status = _status;
   delay = _delay;
@@ -335,6 +410,7 @@ function render(status, delay) {
   _draw_nodes();
   _draw_nodes_text();
   _draw_rot();
+  _draw_rot_text();
 }
 
 function init () {

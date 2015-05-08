@@ -17,7 +17,7 @@ module.exports = React.createClass({
     this.scrolls = [];
     return {
       index: 0,
-      hidden: true
+      hidden: false
     };
   },
   componentDidMount: function () {
