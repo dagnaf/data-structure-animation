@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=test.c ../common/util.c ../common/util.h
+SOURCES=test.c min-heap.c min-heap.h ../common/util.c ../common/util.h
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=a.out
 

@@ -14,12 +14,12 @@ var index = fs.readFileSync(path.join(output, 'templates', 'template_index.html'
 // generate html pages for each dsa
 global.entries.forEach(function (e) {
   fs.writeFileSync(path.join(output, e+'.html'), html.replace(/dsa-name/g, e), 'utf-8');
-})
+});
 
 // generate index (simple list)
 fs.writeFileSync(path.join(output, 'index.html'), index.replace('listofdsa', global.entries.map(function (e) {
-  return '<li><a href="'+e+'.html">'+e+'.html</a></li>'
-}).join('\n')), 'utf-8');
+  return '<li><a href="'+e+'.html">'+global.zh[e] +' | ' + global.en[e]+'</a></li>'
+}).join('\n')).replace('lastupdate', new Date()), 'utf-8');
 
 
 if (_gh) {

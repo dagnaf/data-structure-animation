@@ -44,3 +44,19 @@ module.exports.getFunctionBody = function (fn, opt) {
   var b = fn.toString().lastIndexOf(opt.t);
   return fn.toString().substr(a, b-a);
 };
+
+module.exports.zh = {
+  'stack': '栈',
+  'stack-eval': '计算表达式',
+  'queue': '队列',
+  'queue-yanghui': '杨辉三角',
+  'rb-tree': '红黑树'
+};
+
+module.exports.en = {
+  'stack': 'Stack',
+  'stack-eval': 'Evaluate Expressions',
+  'queue': 'Queue',
+  'queue-yanghui': 'Yang Hui\'s Triangle',
+  'rb-tree': 'Red Black Tree'
+};

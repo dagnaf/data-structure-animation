@@ -223,7 +223,7 @@ path {
 }
 
 line {
-  stroke-width: 3;
+  /*stroke-width: 3;*/
   stroke-opacity: 0.5;
   &.parent {
     stroke: red;
@@ -232,7 +232,15 @@ line {
     stroke: black;
   }
 }
-
+#p-end, #left-end, #right-end {
+  opacity: 0.5;
+}
+#p-end {
+  fill: red;
+}
+#left-end, #right-end {
+  fill: black;
+}
 
 /* FIXME scene.react.js should be parted */
 

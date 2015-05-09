@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=test.c ../common/util.c ../common/util.h
+SOURCES=test.c huffman-tree.c huffman-tree.h ../common/util.c ../common/util.h ../min-heap/min-heap.c ../min-heap/min-heap.h
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=a.out
 

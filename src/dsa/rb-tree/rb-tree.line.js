@@ -117,9 +117,9 @@ stop(line,1);        y.left = z;_ne(y,'left');
     } else {//_hls(y.right);
 stop(line,1);        y.right = z;_ne(y,'right');
     }_hls(z);
-stop(line,1);    z.left = nil();_cl();
-stop(line,1);    z.right = nil();_cl();
-stop(line,1);    z.color = _RED;_co(z);
+stop(line,1);    z.left = nil();_cl();_ne(z,'left');
+stop(line,1);    z.right = nil();_cl();_ne(z,'right');
+stop(line,1);    z.color = _RED;_co(z);_ne();
 stop(line,1);    _InsertFixUp(z);
 }
 
@@ -323,6 +323,7 @@ function _ne(a, b) {
     var id = a.id+b;
     currentStatus.ne = (currentStatus.ne || {});
     currentStatus.ne[id] = a[b].id;
+    currentStatus.ne.curr = id;
   }
 }
 function _np(a, b) {
