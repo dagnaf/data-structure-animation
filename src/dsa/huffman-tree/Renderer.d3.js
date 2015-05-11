@@ -5,33 +5,14 @@ var d3Transform = require('d3-transform');
 var gbase, gtext, ghigh, gnodes, gedges, gx, gy;
 var status, delay;
 
-var margin = {top: 40, right: 10, bottom: 20, left: 10};
-var width = 720 - margin.left - margin.right;
-var height = 500 - margin.top - margin.bottom;
-var _height;
-// domain decided by data
-var xScale = d3.scale.ordinal().rangeRoundBands([0, width], .08);
-var xSubScale = d3.scale.ordinal();
-var xPopScale = d3.scale.ordinal();
-var yScale = d3.scale.linear().range([height, 0]);
-var keyScale = d3.scale.linear().range([40,100]);
+var xScale = d3.scale.ordinal()
+var yScale = d3.scale.linear()
 var color = d3.scale.category20();
 var yMax;
 var nodes;
 var edges;
-var _node_height = 40;
-var items;
-
-var xAxis = d3.svg.axis()
-  .scale(xScale)
-  .tickSize(0)
-  .tickPadding(6)
-  .orient('bottom');
-
-var yAxis = d3.svg.axis()
-  .scale(yScale)
-  .tickSubdivide(1)
-  .orient('left');
+var xi;
+var _inner_width = 10;
 
 function _fn_id(d) { return d.id; }
 
@@ -40,55 +21,124 @@ function _init(_status, _delay) {
   delay = _delay;
 }
 
-function _draw_axis() {
-  gx
-    .attr("transform", "translate(0,"+_height+")")
-    .transition()
-    .style('opacity', status.onlyTree ? 0 : 1)
-    .call(xAxis);
-  // gy
-  //   .transition()
-  // .call(yAxis);
-}
-
 function _draw_nodes() {
-  function nh(d) {
-    if (d.inner) {
-      return 10;
+  function _add_paths(d) {
+    if (d.paths === undefined) {
+      d.paths = [];
+      d.ancestors = [];
+      var x = d;
+      while (x.p !== null) {
+        d.paths.push(x.p.id+'-'+x.id);
+        d.ancestors.push(x.p.id);
+        x = x.p
+      }
     }
-    return (d.inner === false && status.onlyTree) ? keyScale(d.key) : _node_height;
   }
-  gnodes.selectAll('rect.node').data(nodes,_fn_id)
+  function _mouseover(d,i,j) {
+    // console.log(d,i,j,this)
+    _add_paths(d);
+    var paths = d.paths;
+    var ancestors = d.ancestors;
+    var id = d.id;
+    d3.selectAll('line.edge')
+    .style('opacity', function (d) {
+      return paths.indexOf(d.id) === -1 ? 0.3 : 1;
+    })
+    d3.selectAll('text.edge')
+    .style('opacity', function (d) {
+      return paths.indexOf(d.id) === -1 ? 0.3 : 1;
+    })
+    d3.selectAll('rect.node')
+    .style('opacity', function (d) {
+      return (ancestors.indexOf(d.id) === -1 && d.id !== id) ? 0.3 : 1;
+    })
+    d3.selectAll('text.char')
+    .style('opacity', function (d) {
+      return (ancestors.indexOf(d.id) === -1 && d.id !== id) ? 0.3 : 1;
+    })
+    .text(function (d) {
+      return (id === d.id ? d.key : d.val)
+    })
+  }
+  function _mouseout(d) {
+    d3.selectAll('line.edge').style('opacity', 1)
+    d3.selectAll('text.edge').style('opacity', 1)
+    d3.selectAll('rect.node').style('opacity', 1)
+    d3.selectAll('text.char').style('opacity', 1).text(function (d) { return d.val})
+
+  }
+
+  var data_inner = nodes.filter(function (d) { return d.inner === true});
+  var data = nodes.filter(function (d) { return d.inner !== true });
+  gnodes.selectAll('rect.node').data(data,_fn_id)
   .enter().append('rect')
     .attr('class', 'node')
-    .attr('x', function (d) { return d.ex-d.ew/2;})
-    .attr('y', function (d) { return _height;})
-    .attr('width', function (d) { return d.ew; })
-    .attr('height', function (d) { return d.inner ? 10 : _node_height})
-    .style('fill', function (d) { return d.inner ? 'black' : color(d.id)})
-    // .text(function (d) { return d.val+':'+d.key;})
+    .attr('x', function (d) { return d.x-d.w/2})
+    .attr('y', function (d) { return d.inner ? d.y-d.h/2 : 0 })
+    .attr('width', function (d) { return d.w })
+    .attr('height', 0)
+    .style('fill', function (d) { return color(d.id)})
+    .on('mouseover', _mouseover)
+    .on('mouseout', _mouseout)
+
+
+  gnodes.selectAll('rect.node').data(data_inner,_fn_id)
+  .enter().append('rect')
+    .attr('class', 'node')
+    .attr('x', function (d) { return d.x-d.w/2})
+    .attr('y', function (d) { return d.inner ? d.y-d.h/2 : 0 })
+    .attr('width', function (d) { return d.w })
+    .attr('height', 0)
+    .style('fill', function (d) { return 'black' })
+
   gnodes.selectAll('rect.node').data(nodes,_fn_id)
     .transition()
     .duration(delay)
-    .attr('x', function (d) { return d.x-d.w/2;})
-    .attr('y', function (d) { return d.y-5;})
-    .attr('width', function (d) { return d.w; })
-    .attr('height', nh)
+    .attr('x', function (d) { return d.x-d.w/2})
+    .attr('y', function (d) { return d.inner ? d.y-d.h/2 : 0 })
+    .attr('width', function (d) { return d.w })
+    .attr('height', function (d) { return d.h })
+    .style('opacity', function (d) { return d.o ? 0.3 : 1 })
   gnodes.selectAll('rect.node').data(nodes,_fn_id)
-  .exit().remove()
+    .exit().remove()
+
+  // text-key
+  gtext.selectAll('text.node').data(nodes, _fn_id)
+    .enter().append('text')
+    .attr('class', 'node')
+    .attr('x', function (d) { return d.tx})
+    .attr('y', function (d) { return d.ty-5 })
+  gtext.selectAll('text.node').data(nodes,_fn_id)
+    .transition()
+    .duration(delay)
+    .attr('x', function (d) { return d.tx})
+    .attr('y', function (d) { return d.ty-5 })
+    .text(function (d) { return d.top ? d.key :  ''})
+    .style('opacity', function (d) { return d.o ? 0.3 : 1 })
+  gtext.selectAll('text.node').data(nodes,_fn_id)
+    .exit().remove()
+
+  // text-val
+
+  gtext.selectAll('text.char').data(data, _fn_id)
+    .enter().append('text')
+    .attr('class','char')
+    .attr('x', function (d){ return d.tx })
+    .attr('y', function (d){ return d.h > 40 ? d.h-10: d.h+10 })
+    .style('fill', function (d) { return d.h > 40 ? color(d.id) : 'black' })
+  gtext.selectAll('text.char').data(nodes,_fn_id)
+    .transition()
+    .duration(delay)
+    .attr('x', function (d){ return d.tx })
+    .attr('y', function (d){ return d.h > 40 ? d.h/2+5: d.h+10 })
+    .text(function (d) { return d.val })
+    .style('opacity', function (d) { return d.o ? 0.3 : 1 })
+  gtext.selectAll('text.char').data(nodes,_fn_id)
+    .exit().remove()
 }
 
 function _draw_edges() {
-  function _fn_fin() {
-    this.attr('x1', function (d) { return d.x1;} )
-    .attr('y1', function (d) { return d.y1;} )
-    .attr('x2', function (d) { return d.x2;} )
-    .attr('y2', function (d) { return d.y2;} )
-  }
-  gedges.selectAll('line.edge').data(edges, _fn_id)
-    .transition()
-    .duration(delay)
-    .call(_fn_fin);
+
   gedges.selectAll('line.edge').data(edges, _fn_id)
   .enter().append('line')
     .attr('class', 'edge')
@@ -99,10 +149,16 @@ function _draw_edges() {
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
     .attr('stroke-opacity', 1)
+
+  gedges.selectAll('line.edge').data(edges, _fn_id)
     .transition()
-    .duration(delay/2)
-    .delay(delay/2)
-    .call(_fn_fin)
+    .duration(delay)
+    .attr('x1', function (d) { return d.x1;} )
+    .attr('y1', function (d) { return d.y1;} )
+    .attr('x2', function (d) { return d.x2;} )
+    .attr('y2', function (d) { return d.y2;} )
+    .style('opacity', function (d) { return d.o ? 0.3 : 1 })
+
   gedges.selectAll('line.edge').data(edges, _fn_id)
   .exit().remove();
 
@@ -117,136 +173,59 @@ function _draw_edges() {
     var r = Math.sqrt(dx*dx+dy*dy);
     return (r/5)+'px'
   }
-  gtext.selectAll('text.edge').data(edges, _fn_id)
-    .transition()
-    .duration(delay)
-    .call(_fn_fin_text)
-    .text(function (d) { return d.left ? '0' : '1'})
-    .style('font-size', _fn_ft)
-  gtext.selectAll('text.edge').data(edges, _fn_id)
+
+  var data = status.zo ? edges : [];
+  gtext.selectAll('text.edge').data(data, _fn_id)
   .enter().append('text')
     .attr('class', 'edge')
     .attr('x', function (d) { return (d.x1+d.x1) / 2;})
     .attr('y', function (d) { return (d.y1+d.y1) / 2;})
     .style('fill', 'black')
-    .attr('stroke-opacity', 1)
-    .transition()
-    .duration(delay/2)
-    .delay(delay/2)
-    .call(_fn_fin_text)
-    .text(function (d) { return d.left ? '0' : '1'})
     .style('font-size', _fn_ft)
-  gtext.selectAll('text.edge').data(edges, _fn_id)
+    .text(function (d) { return d.left ? '0' : '1'})
+  gtext.selectAll('text.edge').data(data, _fn_id)
+    .transition()
+    .duration(delay)
+    .attr('x', function (d) { return (d.x1+d.x2) / 2;} )
+    .attr('y', function (d) { return (d.y1+d.y2) / 2;} )
+    .text(function (d) { return d.t })
+    .style('font-size', _fn_ft)
+    .style('opacity', function (d) { return d.o ? 0.3 : 1 })
+  gtext.selectAll('text.edge').data(data, _fn_id)
   .exit().remove();
 }
 
-function _draw_items() {
-  var data = items
-  if (status.onlyTree) {
-    data = [];
-  }
-  function _fn_y_x() {
-    this.transition()
-    .duration(delay/2)
-    .attr('y', function (d) { return yScale(d.y0+d.y)})
-    .attr('height', function (d) { return yScale(d.y0) - yScale(d.y0+d.y)})
-    .transition()
-    .duration(delay/2)
-    .attr('x', function (d) { return xScale(d.fi)})
-    .attr('width', function (d) { return xScale.rangeBand() })
-  }
-  function _fn_xy() {
-    this.transition()
-    .duration(delay)
-    .attr('x', function (d) { return xScale(d.fi)})
-    .attr('width', function (d) { return xScale.rangeBand() })
-    .attr('y', function (d) { return yScale(d.y0+d.y)})
-    .attr('height', function (d) { return yScale(d.y0) - yScale(d.y0+d.y)})
-  }
-  gbase.selectAll('rect.item').data(data, _fn_id)
-  .enter().append('rect')
-    .attr('class', 'item')
-    .attr('x', function (d) { return xScale(d.fi)})
-    .attr('y', function (d) { return _height})
-    .attr('width', function (d) { return xScale.rangeBand() })
-    .attr('height', 0)
-    .style('fill', function (d) { return color(d.id)})
-  if (status.pop) {
-    gbase.selectAll('rect.item').data(data, _fn_id)
-    .call(_fn_y_x);
-  } else {
-    gbase.selectAll('rect.item').data(data, _fn_id)
-    .call(_fn_xy);
-  }
-
-  gbase.selectAll('rect.item').data(data, _fn_id)
-    .exit()
-    .transition()
-    .duration(delay)
-    .style('opacity', 0)
-    .remove();
-
-  // text
-  gtext.selectAll('text.item').data(items, _fn_id)
-  .enter().append('text')
-    .attr('class', 'item')
-    .attr('x', function (d) { return d.tx})
-    .attr('y', function (d) { return d.ty + 20})
-    .style('fill', function (d) { return color(d.id)})
-    .text(function (d) { return d.val })
-  gtext.selectAll('text.item').data(items, _fn_id)
-    .transition()
-    .duration(delay)
-    .attr('x', function (d) { return d.tx})
-    .attr('y', function (d) { return d.ty+20})
-  gtext.selectAll('text.item').data(items, _fn_id)
-    .exit()
-    .transition()
-    .duration(delay)
-    .style('opacity', 0)
-    .remove();
-}
-
-
-function _process_node(n, p, x, y, skip, w) {
-  if (n === null) {
-    return;
-  }
-  var data = {
-    key: n.key,
-    val: n.val,
-    x: x+(p.size-n.size)*skip,
-    y: y+(p.size-n.size)*(skip > 0 ? skip : -skip),
-    w: n.size === 1 ? w : 10,
-    inner: n.size !== 1,
-    id: n.id,
-    ex: xPopScale(skip < 0 ? 0 : 1) + xPopScale.rangeBand()/2,
-    ew: n.size === 1 ? xPopScale.rangeBand() : 10
-  };
+function _process_node(n, opacity) {
   if (n.size === 1) {
-    items.push({
-      val: n.val,
-      id: n.id,
-      y: n.key,
-      tx: data.x,
-      ty: data.y
-    })
+    n.x = xScale(xi++)+xScale.rangeBand()/2;
+    n.y = 0;
+    n.w = xScale.rangeBand();
+    n.h = yScale(n.key);
+    n.tx = n.x;
+    n.ty = 0;
+    n.inner = false;
+    n.o = opacity;
+    nodes.push(n);
+    return [n.x,n.x];
   }
-  nodes.push(data);
-  edges.push({
-    x1: data.x,
-    y1: data.y,
-    x2: x,
-    y2: y,
-    id: n.id+'-'+p.id,
-    left: n === p.left
-  });
-  _process_node(n.left,n,data.x,data.y, skip < 0 ? skip : -skip,w);
-  _process_node(n.right,n,data.x,data.y, skip > 0 ? skip : -skip, w);
+  var xl = _process_node(n.left,opacity)[0];
+  var xr = _process_node(n.right,opacity)[1];
+  n.w = _inner_width;
+  n.h = _inner_width;
+  n.x = (xl+xr)/2;
+  n.y = n.left.y-(n.size - n.left.size)*xScale.rangeBand()/2;
+  n.tx = n.x;
+  n.ty = n.y;
+  n.inner = true;
+  n.o = opacity;
+  nodes.push(n);
+  edges.push({o:opacity,x1: n.left.x,y1: n.left.y,x2: n.x,y2: n.y,id: n.id+'-'+n.left.id,t: 0});
+  edges.push({o:opacity,x1: n.right.x,y1: n.right.y,x2: n.x,y2: n.y,id: n.id+'-'+n.right.id,t: 1});
+  return [xl, xr];
 }
 
 function _process_data() {
-  if (status.array.sorted === undefined) {
+  if (status.sorted && status.array.sorted === undefined) {
     status.array.sort(function (a,b) {
       if (a.key === b.key) {
         return a.id - b.id;
@@ -256,78 +235,29 @@ function _process_data() {
     })
     status.array.sorted = true;
   }
-  tmpa = [];
+  array = status.pop.concat(status.array);
   nodes = [];
   edges = [];
-  items = [];
-  if (status.pop) {
-    offset = 1;
-    tmpa.push(status.pop);
-  } else {
-    offset = 0;
-  }
-  tmpa = tmpa.concat(status.array);
-  xScale.rangeRoundBands([0, Math.max(width,width/10*status.n)], .08).domain(d3.range(tmpa.length));
-  xSubScale.rangeRoundBands([0,xScale.rangeBand()], .08);
-  xPopScale = xScale.copy().domain(d3.range(tmpa.length+1));
-  yMax = d3.max(tmpa, function (d) {return d.key;});
-  yMax = yMax || 20;
-  _height = Math.max(height,height/10*status.n);
-  yScale.range([_height, 0]).domain([0,yMax]);
-  for (var i = 0; i < tmpa.length; ++i) {
-    if (tmpa[i].size > 1) {
-      xSubScale.domain(d3.range(tmpa[i].size));
-      var w = xSubScale.rangeBand();
-      var skip = (xSubScale(1)-xSubScale(0))/2;
-      var pos_x = xScale(i) + xScale.rangeBand()/2;
-      var j = items.length;
-      var k = 0;
-      var sum = 0;
-      function _helper(lr) {
-        _process_node(tmpa[i][lr], tmpa[i], pos_x, _height, lr === 'left' ? -skip : skip, w);
-        for (; j < items.length; ++j) {
-          items[j].y0 = sum;
-          items[j].fi = i;
-          items[j].si = k++;
-          sum += items[j].y;
-        }
+  xScale.rangeRoundBands([0, 720], .08).domain(d3.range(status.n))
+  yScale.range([0, 400]).domain([0, status.l]);
+  xi = 0;
+  array.forEach(function (n, i) {
+    n.top = true;
+    var opacity = false;
+    if (status.pop.length === status.hl) {
+      if (status.hl !== 0 && i >= status.hl) {
+        opacity = true;
       }
-      _helper('left');
-      _helper('right');
-    } else {
-      items.push({
-        val: tmpa[i].val,
-        id: tmpa[i].id,
-        y: tmpa[i].key,
-        y0: 0,
-        fi: i,
-        si: 0,
-        tx: xScale(i)+xScale.rangeBand()/2,
-        ty: _height
-      });
     }
-  }
-  keyScale.domain([0,d3.max(items, function (d) { return d.y})]);
-}
-
-function _move_canvas() {
-  function _move() {
-    this.transition()
-    .duration(delay)
-    .attr("transform", "translate(0,"+(status.onlyTree ? -_height : 0)+")");
-  }
-  gtree.call(_move);
-  gtext.call(_move);
+    _process_node(n, opacity);
+  })
 }
 
 function render(status, delay) {
   _init(status, delay);
   _process_data();
-  _draw_axis();
   _draw_nodes();
   _draw_edges();
-  _draw_items();
-  _move_canvas();
 }
 
 function init () {

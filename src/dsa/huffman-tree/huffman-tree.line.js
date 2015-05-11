@@ -6,11 +6,11 @@ var currentStatus = {}; var _id = 0;
 
  */
 function _NewNode(k,v,l,r) {
-  var node = { id: _id++};
+  var node = { id: _id++, p: null};
   node.key = k;
   node.val = v;
-  node.left = l;
-  node.right = r; _set_size(node);
+  node.left = l; if (l !== null) {l.p = node;}
+  node.right = r; if (r !== null) {r.p = node}; _set_size(node);
   return node;
 }
 
@@ -40,26 +40,26 @@ function _Traverse(t, x, s) {
 }
 
 function HuffmanTreeCreate(s) {
-    var tbl = [];
+    var tbl = {};
     var tbl2 = [];
     var val;
     var c;
     var i;
 
 
-
+currentStatus.l = s.length;
 stop(line,1);    for (i = 0; i < s.length; ++i) {
         var c = s.charCodeAt(i);
-        if (0 <= c && c < 256) {
-            tbl[c] = (tbl[c] || 0)+1
-        }
+        tbl[c] = (tbl[c] || 0)+1
+
+
     }
 /*
 
 
 
  */
-stop(line,1);    for (i = 0; i < 256; ++i) {
+stop(line,1);    for (i in tbl) {
         if (tbl[i] > 0) {
             val = String.fromCharCode(i);
             tbl2.push(_NewNode(tbl[i], val, null, null));
@@ -83,39 +83,45 @@ function HuffmanTreeCreateWithFreq(tbl) {
     var node1;
     var node2;
     n = tbl.length;
-stop(line,1);    h = new heap(_CompareFn);
+stop(line,1);    h = new heap(_CompareFn); currentStatus.sorted = true;
     for (i = 0; i < n; ++i) {
         h.insert(tbl[i]);
     }currentStatus.array = h.array;
 
     while (stop(line,1),h.array.length > 1) {
-stop(line);        node1 = h.pop();
-stop(line);        node2  = h.pop();
-stop(line);        node = _NewNode(node1.key + node2.key, '', node1, node2); currentStatus.pop = node;
-stop(line,1);        h.insert(node); currentStatus.pop = undefined;
-stop(line,1);    }
-stop(line,1);    t = { root: null }
-stop(line,1);    t.root = h.pop(); currentStatus.array = [t.root]; currentStatus.onlyTree = true;
-stop(line,1);    t.size = 0;
-stop(line);    t.table = [];
-stop(line);    if (t.root) { _Traverse(t, t.root, ""); }
-stop(line);    return t;
+stop(line);        node1 = h.pop();currentStatus.hl = 1; currentStatus.pop = [node1];
+stop(line,1);        node2  = h.pop();currentStatus.hl = 2; currentStatus.pop.push(node2);
+stop(line,1);        node = _NewNode(node1.key + node2.key, '', node1, node2); currentStatus.pop = [node]; currentStatus.hl = 1;
+stop(line,1);        h.insert(node); currentStatus.pop = []; currentStatus.hl = 0;
+    }
+stop(line,1);
+stop(line);
+stop(line);
+stop(line);
+stop(line);currentStatus.zo = true;
+stop(line,1);    return t;
 }
 // ===================================
 
 currentStatus.clone = function () {
   return {
     array: clone(this.array) || [],
-    pop: clone(this.pop),
+    pop: clone(this.pop) || [],
     n: this.n || 0,
-    onlyTree: this.onlyTree
+    l: this.l || 0,
+    zo: this.zo || false,
+    sorted: this.sorted || false,
+    hl: this.hl || 0
   }
 }
 currentStatus.init = function (hard) {
   this.array = [];
-  this.pop = undefined;
+  this.pop = [];
   this.n = 0;
-  this.onlyTree = false;
+  this.l = 0;
+  this.zo = false;
+  this.sorted = false;
+  this.hl = 0;
 }
 lastStatus = {};
 
