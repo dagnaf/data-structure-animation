@@ -86,6 +86,7 @@ module.exports = React.createClass({
                   className={classes}
                   onClick={this._onClick.bind(this, i)}
                   value={file.name}
+                  title={file.name}
                 />
               </li>
             );
@@ -95,6 +96,7 @@ module.exports = React.createClass({
     );
   },
   _onScroll: function (e) {
+    e = e || { target: this.refs.code.getDOMNode() };
     this.refs.numbers.getDOMNode().scrollTop = e.target.scrollTop;
     if (this.state.index === 0 && this.props.isRunning) {
       this.refs.hl.getDOMNode().style.top = (_line_height*(this.props.activeLine-1) - e.target.scrollTop) + 'px';
@@ -120,6 +122,7 @@ module.exports = React.createClass({
     var half = node.clientHeight/2;
     if (Math.abs(from + half - to) > node.clientHeight/3) {
       node.scrollTop = to - node.clientHeight/2;
+      this._onScroll();
     } else {
       this.refs.hl.getDOMNode().style.top = (to - node.scrollTop) + 'px';
     }

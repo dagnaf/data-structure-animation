@@ -11,7 +11,12 @@ module.exports.modules = [
 ];
 
 module.exports.entries = [
-  'stack', 'stack-eval', 'queue', 'queue-yanghui', 'rb-tree'
+  'stack',
+  'stack-eval',
+  'queue',
+  'queue-yanghui',
+  'rb-tree',
+  'huffman-tree',
 ];
 
 module.exports.deps = {
@@ -32,6 +37,16 @@ module.exports.deps = {
       path: 'common',
       files: ['util.c', 'util.h']
     }
+  ],
+  'huffman-tree': [
+    {
+      path: 'common',
+      files: ['util.c', 'util.h']
+    },
+    {
+      path: 'min-heap',
+      files: ['min-heap.c', 'min-heap.h']
+    }
   ]
 };
 
@@ -50,7 +65,8 @@ module.exports.zh = {
   'stack-eval': '计算表达式',
   'queue': '队列',
   'queue-yanghui': '杨辉三角',
-  'rb-tree': '红黑树'
+  'rb-tree': '红黑树',
+  'huffman-tree': '哈夫曼树',
 };
 
 module.exports.en = {
@@ -58,5 +74,6 @@ module.exports.en = {
   'stack-eval': 'Evaluate Expressions',
   'queue': 'Queue',
   'queue-yanghui': 'Yang Hui\'s Triangle',
-  'rb-tree': 'Red Black Tree'
+  'rb-tree': 'Red Black Tree',
+  'huffman-tree': 'Huffman Tree',
 };

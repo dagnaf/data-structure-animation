@@ -11,7 +11,7 @@ min_heap* MinHeapCreate(int n, int (*CompFn)(const void*, const void*)) {
     return h;
 }
 int _P(int x) {
-    return (x-1)/2;
+    return x == 0 ? 0 : (x-1)/2;
 }
 int _L(int x) {
     return x*2+1;

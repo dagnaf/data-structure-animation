@@ -8,23 +8,23 @@ Animation for data structure, or the graduation project.
 ```
 # devtools
 # npm install -g webpack webpack-dev-server bower
-# or, export PATH=./node_modules/.bin:$PATH
+# or, npm install && export PATH=$PWD/node_modules/.bin:$PATH
 ```
 ```
 # install
-clone repo.git
-cd repo.dir
+clone path/to/git/address
+cd path/to/repo/dir
 npm install
 ```
 ```
-# examples, go to http://localhost:8080/webpack-dev/server/
+# examples, go to http://localhost:8080/webpack-dev-server/
 node example/init.js
 cd example
 bower install
 npm run start
 ```
 ```
-# dist
+# dist, check analysis.json before use
 npm run build
 ```
 
@@ -38,7 +38,7 @@ npm run build
 ## Todos
 
 - [ ] FIXMEs
-- [ ] DS
+- [ ] data structure
   - [X] stack
     - [X] self
     - [X] eval expression
@@ -49,22 +49,27 @@ npm run build
     - [ ] triangular matrix
     - [ ] sparse matrix
   - [ ] tree
-    - [ ] binary search tree
-    - [ ] red-black tree
+    - [X] red-black tree
     - [ ] Huffman tree
+  - [ ] graph
+    - [ ] depth/breath first traverse
+    - [ ] single source shortest path (Dijkstra)
+    - [ ] minimum spanning tree (Prim)
+    - [ ] topological sort
+    - [ ] strongly connected components (Tarjan)
   - [ ] hash
     - [ ] open ports
     - [ ] link ports
-- [ ] A
+- [ ] algorithm
   - [ ] sort
     - [ ] merge sort
     - [ ] quick sort
   - [ ] search
     - [ ] linear search
     - [ ] binary search
-- [ ] Tests (C & JS)
-- [ ] Webpack code splitting
-- [ ] Webpage Contents
+- [ ] tests (.c & .js)
+- [ ] webpack code splitting
+- [ ] webpage contents
 
 ## Inspiration
 

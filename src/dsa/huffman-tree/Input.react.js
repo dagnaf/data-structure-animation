@@ -12,11 +12,8 @@ module.exports = React.createClass({
     // cmd-button(fake-input) should show under the input element
     return (
       <div className="list">
-        <input onChange={this._onChange} value={this.state.text} placeholder="整数"/>
-        <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'insert')} value="插入"/>
-        <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'delete')} value="删除"/>
-        <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'search')} value="查找"/>
-        <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'inorder')} value="中序遍历"/>
+        <input onChange={this._onChange} value={this.state.text} placeholder="字符串"/>
+        <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'create')} value="编码" title="编码"/>
       </div>
     );
   },

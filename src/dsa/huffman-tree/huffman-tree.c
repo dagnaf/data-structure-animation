@@ -42,35 +42,31 @@ void _Traverse(huffman_tree* t, huffman_tree_node* x, char* s) {
 huffman_tree* HuffmanTreeCreate(char *s) {
     int tbl[256];
     int i;
-    int j;
-    int n;
-    char* s2;
-    int* tbl2;
+    int n = 0;
+    char* s2 = NULL;
+    int* tbl2 = NULL;
     for (i = 0; i < 256; ++i) {
         tbl[i] = 0;
     }
     for (i = 0; i < strlen(s); ++i) {
         if (0 <= s[i] && s[i] < 256) {
+            if (tbl[(int)s[i]] == 0) {
+                n++;
+            }
             tbl[(int)s[i]]++;
         }
     }
+    s2 = (char*)SafeMalloc(sizeof(char)*(n+1));
+    tbl2 = (int*)SafeMalloc(sizeof(int)*(n));
     n = 0;
     for (i = 0; i < 256; ++i) {
         if (tbl[i] > 0) {
+            s2[n] = (char)i;
+            tbl2[n] = tbl[i];
             n++;
         }
     }
-    j = 0;
-    s2 = (char*)SafeMalloc(sizeof(char)*(n+1));
-    tbl2 = (int*)SafeMalloc(sizeof(int)*(n));
-    for (i = 0; i < 256; ++i) {
-        if (tbl[i] > 0) {
-            s2[j] = (char)i;
-            tbl2[j] = tbl[i];
-            j++;
-        }
-    }
-    s2[n] = 0;
+    s2[n] = '\0';
     return HuffmanTreeCreateWithFreq(s2,tbl2);
 }
 

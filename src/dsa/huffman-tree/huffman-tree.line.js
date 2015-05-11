@@ -1,38 +1,38 @@
 var clone = require('clone'); var frames = []; var stopid = 0; var rc; var line = 0;
 var currentStatus = {}; var _id = 0;
+/*
 
 
 
-
-
-function _NewNode(k, v, l, r) {
-  var node = {};
+ */
+function _NewNode(k,v,l,r) {
+  var node = { id: _id++};
   node.key = k;
-  node.v = v;
+  node.val = v;
   node.left = l;
-  node.right = r;
+  node.right = r; _set_size(node);
   return node;
 }
 
-function _NewItem(k, v, c) {
-    var item = {}
-    item.key = k;
-    item.val = v;
-    item.code = '';
-    item.code = c;
-    return item;
+function _set_size(x) {
+  if (x.left === null && x.right === null) {
+    x.size = 1;
+  } else {
+    x.size = 0;
+    if (x.left !== null) {
+      x.size += x.left.size;
+    }
+    if (x.right !== null) {
+      x.size += x.right.size;
+    }
+  }
 }
 
 
 
-
-
-
-
-
-function _Traverse(t, x,s) {
+function _Traverse(t, x, s) {
     if (x.left === null && x.right === null) {
-        t.table[t.size++] = _NewItem(x.key, x.val, s);
+        t.table[t.size++] = { key: x.key, val: x.val, code: s};
         return;
     }
     _Traverse(t, x.left, s+'0');
@@ -41,176 +41,81 @@ function _Traverse(t, x,s) {
 
 function HuffmanTreeCreate(s) {
     var tbl = [];
+    var tbl2 = [];
+    var val;
+    var c;
     var i;
 
+
+
+stop(line,1);    for (i = 0; i < s.length; ++i) {
+        var c = s.charCodeAt(i);
+        if (0 <= c && c < 256) {
+            tbl[c] = (tbl[c] || 0)+1
+        }
+    }
+/*
+
+
+
+ */
+stop(line,1);    for (i = 0; i < 256; ++i) {
+        if (tbl[i] > 0) {
+            val = String.fromCharCode(i);
+            tbl2.push(_NewNode(tbl[i], val, null, null));
+        }
+    }currentStatus.array = tbl2;currentStatus.n = tbl2.length;
+
+
+stop(line,1);    return HuffmanTreeCreateWithFreq(tbl2);
+}
+
+function _CompareFn(a,b) {
+  return (a.key !== b.key) ? (a.key-b.key) : (a.id -b.id);
+}
+
+function HuffmanTreeCreateWithFreq(tbl) {
+    var i;
     var n;
-    var s2;
-    var tbl2;
-    for (i = 0; i < 256; ++i) {
-        tbl[i] = 0;
-    }
-    for (i = 0; i < s.length; ++i) {
-        if (0 <= s[i] && s[i] < 256) {
-            tbl[s.charCodeAt(i)] = (tbl[s.charCodeAt(i)] || 0)+1;
-        }
-    }
-    n = 0;
-    for (i = 0; i < 256; ++i) {
-        if (tbl[i] > 0) {
-            n++;
-        }
-    }
-    j = 0;
-    s2 = [];
-    tbl2 = [];
-    for (i = 0; i < 256; ++i) {
-        if (tbl[i] > 0) {
-            s2.push(String.fromCharCode(i));
-            tbl2.push(tbl[i]);
+    var h;
+    var t;
+    var node;
+    var node1;
+    var node2;
+    n = tbl.length;
+stop(line,1);    h = new heap(_CompareFn);
+    for (i = 0; i < n; ++i) {
+        h.insert(tbl[i]);
+    }currentStatus.array = h.array;
 
-        }
-    }
-    return HuffmanTreeCreateWithFreq(s2,tbl2);
+    while (stop(line,1),h.array.length > 1) {
+stop(line);        node1 = h.pop();
+stop(line);        node2  = h.pop();
+stop(line);        node = _NewNode(node1.key + node2.key, '', node1, node2); currentStatus.pop = node;
+stop(line,1);        h.insert(node); currentStatus.pop = undefined;
+stop(line,1);    }
+stop(line,1);    t = { root: null }
+stop(line,1);    t.root = h.pop(); currentStatus.array = [t.root]; currentStatus.onlyTree = true;
+stop(line,1);    t.size = 0;
+stop(line);    t.table = [];
+stop(line);    if (t.root) { _Traverse(t, t.root, ""); }
+stop(line);    return t;
 }
-
-function pop()
-
-
-
-
-function HuffmanTreeCreateWithFreq(s, tbl) {
-stop(line,1)    int i;
-stop(line,1)    int n;
-stop(line,1)    var heap;
-stop(line,1)    var t;
-stop(line,1)    var node;
-stop(line,1)    var node1;
-stop(line,1)    var node2;
-stop(line,1)    n = s.length;
-stop(line,1)    heap = { size: 0, capacity: n, array: [] };
-stop(line,1)    for (i = 0; i < n; ++i) {
-        node = { key: tbl[i], val: s[i], left: null, right: null };
-        _HeapInsert(heap, node);
-    }
-stop(line,1)    while (heap.size > 1) {
-stop(line,1)        node1 = _HeapPopMin(heap);
-stop(line,1)        node2  = _HeapPopMin(heap);
-stop(line,1)        node = _NewNode(node1.key + node2.key, node1.val, node1, node2);
-stop(line,1)        _HeapInsert(heap, node);
-stop(line,1)    }
-stop(line,1)    t = (huffman_tree*)SafeMalloc(sizeof(huffman_tree));
-stop(line,1)    t.root = _HeapPopMin(heap);
-stop(line,1)    t.size = 0;
-stop(line,1)    t.table = (huffman_tree_item**)SafeMalloc(sizeof(huffman_tree_item*)*n);
-stop(line,1)    _Traverse(t, t.root, "");
-stop(line,1)    return t;
-}
-
 // ===================================
-function _ro(x, d) {
-  if (x === undefined) {
-    currentStatus.ro = undefined;
-  } else {
-    var p = (d === 'left' ? 'right' : 'left');
-    var ids = [x.id, x[p].id,x[p][p].id, x[p][d].id,x[d].id];
-    currentStatus.ro = {
-      ids: ids,
-      type: d
-    }
-  }
-}
-function _co(a) {
-  if (a === undefined) {
-    currentStatus.co = {};
-  } else {
-    currentStatus.co = (currentStatus.co || {});
-    currentStatus.co[a.id] = a.color;
-  }
-}
-function _hlsa(x) {
-  currentStatus.hls.push(x.id);
-}
-function _hls(x) {
-  currentStatus.hls.pop();
-  if (x !== undefined) {
-    _hlsa(x);
-  }
-}
-function _hl() {
-  if (arguments.length === 0) {
-    currentStatus.hl = [];
-  } else {
-    currentStatus.hl = Array.prototype.map.call(arguments, function (x) {
-      return x.id;
-    })
-  }
-}
-function _hla(x) {
-  currentStatus.hl.push(x.id);
-}
-function _ne(a, b) {
-  if (a === undefined) {
-    currentStatus.ne = {};
-  } else {
-    var id = a.id+b;
-    currentStatus.ne = (currentStatus.ne || {});
-    currentStatus.ne[id] = a[b].id;
-    currentStatus.ne.curr = id;
-  }
-}
-function _np(a, b) {
-  if (a === undefined) {
-    currentStatus.np = {};
-  } else {
-    currentStatus.np = (currentStatus.np || {});
-    currentStatus.np[a.id] = b.id;
-  }
-}
-function _nn(a,b) {
-  if (arguments.length === 0) {
-    currentStatus.nn = undefined;
-  } else {
-    currentStatus.nn = { id: a.id, key: a.key, color: a.color, ref: b.id, extra: a.extra };
-  }
-}
-function _cl() {
-  _co();
-  _ne();
-  _np();
-  _nn();
-  currentStatus.lastTree = clone(tree);
-}
-
-function rbtCheck() {
-  //
-}
 
 currentStatus.clone = function () {
-  if (this.lastTree === undefined) {
-    this.lastTree = clone(tree);
-  }
   return {
-    tree: this.lastTree,
-    hl: clone(this.hl) || [],
-    hls: clone(this.hls) || [],
-    ne: clone(this.ne) || {},
-    np: clone(this.np) || {},
-    nn: clone(this.nn),
-    co: clone(this.co) || {},
-    ro: clone(this.ro) || undefined,
+    array: clone(this.array) || [],
+    pop: clone(this.pop),
+    n: this.n || 0,
+    onlyTree: this.onlyTree
   }
 }
 currentStatus.init = function (hard) {
-  if (hard) {
-    tree.root = tree.nil;
-  }
-  this.hl = [];
-  this.hls = [];
-  this.ne = {};
-  this.np = {};
-  this.nn = undefined;
-  this.co = {};
-  this.ro = undefined;
+  this.array = [];
+  this.pop = undefined;
+  this.n = 0;
+  this.onlyTree = false;
 }
 lastStatus = {};
 
@@ -234,32 +139,85 @@ function over() {
 module.exports = {
   getInitialDescriptions: function () {
     this.initialize(true);
-    RBTreeInsert(10);
-    RBTreeInsert(1);
-    RBTreeInsert(2);
-    RBTreeInsert(3);
-    RBTreeInsert(4);
-    RBTreeInsert(5);
-    // RBTreeInsert(4);
-    return this.run('insert', '6');
+
+    return this.run('create', 'The quick brown fox jumps over the lazy dog');
   },
   // FIXME initialize(hard) is ambiguous among all such *.line.js
   //   because of the difference between dsa and app of dsa.
   initialize: function (hard) {
     frames = [];
     stopid = 0;
+    _id = 0;
     currentStatus.init(hard);
     lastStatus = currentStatus.clone();
     return this;
   },
-  insert: RBTreeInsert,
-  inorder: RBTreeInorderWalk,
-  delete: RBTreeDelete,
-  search: RBTreeSearch,
-  check: rbtCheck,
+  create: HuffmanTreeCreate,
   run: function (cmd, param) {
-    this.initialize()[cmd](isNaN(parseInt(param)) ? 0 : parseInt(param));
+    this.initialize()[cmd](param);
     over();
     return { frames: frames, others: {} };
   }
 };
+
+function heap(cf) {
+  this.array = [];
+  this.cf = cf;
+}
+
+heap.prototype.p = function (x) {
+  return x == 0 ? 0 : Math.floor((x-1)/2);
+}
+
+heap.prototype.l = function (x) {
+  return x*2+1;
+}
+
+heap.prototype.r = function (x) {
+  return x*2+2;
+}
+
+heap.prototype.ex = function (i,j) {
+  var tmp = this.array[i];
+  this.array[i] = this.array[j];
+  this.array[j] = tmp;
+}
+
+heap.prototype.insert = function (v) {
+  this.array.push(v);
+  var x = this.array.length-1;
+  while (x != 0 && this.cf(this.array[x], this.array[this.p(x)]) < 0) {
+    this.ex(x,this.p(x));
+    x = this.p(x);
+  }
+}
+
+heap.prototype.pop = function () {
+  var x,y,v;
+  if (this.array.length === 0) {
+    return;
+  }
+  v = this.array[0];
+  this.array[0] = this.array[this.array.length-1];
+  this.array.pop();
+  x = 0; y = -1;
+  while (x !== y) {
+    y = x;
+    if (this.array[this.l(x)] !== undefined) {
+      if (this.cf(this.array[this.l(x)], this.array[x]) < 0) {
+        y = this.l(x);
+      }
+    }
+    if (this.array[this.r(x)] !== undefined) {
+      if (this.cf(this.array[this.r(x)], this.array[y]) < 0) {
+        y = this.r(x);
+      }
+    }
+    if (y != x) {
+      this.ex(x,y);
+      x = y;
+      y = -1;
+    }
+  }
+  return v;
+}

@@ -80,20 +80,20 @@ module.exports = React.createClass({
     if (this.props.isRunning) {
       if (this.props.isPlaying) {
         playButton = (
-          <div className="play-button header-left" onClick={this._onPause}>
+          <div className="play-button header-left" onClick={this._onPause} title="暂停">
             <span className="pause"></span>
           </div>
         );
       } else {
         playButton = (
-          <div className="play-button header-left" onClick={this._onPlay}>
+          <div className="play-button header-left" onClick={this._onPlay} title="开始">
             <span className="play"></span>
           </div>
         );
       }
     } else {
         playButton = (
-          <div className="play-button header-left" onClick={this._onReplay}>
+          <div className="play-button header-left" onClick={this._onReplay} title="重新开始">
             <span className="replay">
                 <span className="play">
                     <span className="play"></span>

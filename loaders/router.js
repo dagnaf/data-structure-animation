@@ -6,8 +6,6 @@ var require_dsa = require('../src/routers/require-dsa');
 var template_req = global.getFunctionBody(require_dsa.requires, '*');
 var template_dep = global.getFunctionBody(require_dsa.dependencies, '*');
 
-var deps = global.deps;
-
 module.exports = function (content) {
   this.cacheable && this.cacheable();
   return content.replace(
@@ -16,7 +14,7 @@ module.exports = function (content) {
       if (global.entries.indexOf(dir) === -1) return '';
       return template_req.replace(/dsa_name/g, dir).replace(
         require_dsa.$('deps'),
-        (deps[dir] || []).map(function (dep) {
+        (global.deps[dir] || []).map(function (dep) {
           return dep.files.map(function (filename) {
             return template_dep.replace(
               /dsa_name/g,dep.path
@@ -26,7 +24,7 @@ module.exports = function (content) {
             // end of deps_template.replace
           }).join(',\n');
           // end of dep_files.map
-        }).join('\n')
+        }).join(',\n')
         // end of deps_dir.map
       );
       // end of template.replace
