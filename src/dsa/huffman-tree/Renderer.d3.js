@@ -274,7 +274,7 @@ function init () {
     .append('g');
 
   this.g = this.svg.append('g')
-    .attr('transform', d3Transform().translate(100, 100).scale(0.5));
+    .attr('transform', d3Transform().translate(100, 200).scale(0.5));
 
   ghigh = this.g.append('g').attr('class', 'high');
   gtree = this.g.append('g').attr('class', 'tree');

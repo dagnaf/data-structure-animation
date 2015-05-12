@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node example/init.js && webpack-dev-server --content-base=example/ --devtool=source-map",
-    "build": "node example/init.js gh && webpack -p --json > analysis.json"
+    "build": "webpack -p --json > analysis.json",
+    "dist": "node example/init.js gh"
   },
   "repository": {
     "type": "git",

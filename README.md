@@ -48,9 +48,9 @@ npm run build
   - [ ] matrix
     - [ ] triangular matrix
     - [ ] sparse matrix
-  - [ ] tree
+  - [X] tree
     - [X] red-black tree
-    - [ ] Huffman tree
+    - [X] Huffman tree
   - [ ] graph
     - [ ] depth/breath first traverse
     - [ ] single source shortest path (Dijkstra)
