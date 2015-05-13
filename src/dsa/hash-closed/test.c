@@ -9,7 +9,6 @@ int ha(const hash_closed *self, const void *k) {
 }
 
 int cf(const void *a, const void *b) {
-    // printf("compare %d and %d\n", *(int *)a, *(int *)b);
     return *(int *)a - *(int *)b;
 }
 

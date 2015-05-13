@@ -7,7 +7,6 @@ typedef struct hash_open {
     int n;
     size_t item_size;
     void *table;
-    void *occupied;
     int (*Hash)(const struct hash_open *, const void *);
     int (*Compare)(const void *, const void *);
 } hash_open;
@@ -22,5 +21,5 @@ void HashTableDestroy(hash_open *ht);
 void *HashTableInsert(hash_open *ht, void *key);
 void *HashTableDelete(hash_open *ht, void *key);
 void *HashTableSearch(hash_open *ht, void *key);
-
+// void print(hash_open *ht);
 #endif

@@ -41,3 +41,7 @@ void MemorySwap(void *a, void *b, size_t size) {
 void MemoryClear(void *a, size_t size) {
     memset(a, 0, size);
 }
+
+void *MemoryAddress(void *a, int i, size_t size) {
+    return (char *)a + i*size;
+}

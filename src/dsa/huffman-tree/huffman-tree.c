@@ -56,8 +56,8 @@ huffman_tree* HuffmanTreeCreate(char *s) {
             tbl[(int)s[i]]++;
         }
     }
-    s2 = (char*)SafeMalloc(sizeof(char)*(n+1));
-    tbl2 = (int*)SafeMalloc(sizeof(int)*(n));
+    s2 = SafeMalloc(sizeof(char)*(n+1));
+    tbl2 = SafeMalloc(sizeof(int)*(n));
     n = 0;
     for (i = 0; i < 256; ++i) {
         if (tbl[i] > 0) {
@@ -83,7 +83,7 @@ huffman_tree* HuffmanTreeCreateWithFreq(char* s, int* tbl) {
     huffman_tree_node* node1;
     huffman_tree_node* node2;
     n = strlen(s);
-    h = MinHeapCreate(n, _CompareFn);
+    h = MinHeapCreate(n, sizeof(huffman_tree_node), _CompareFn);
     for (i = 0; i < n; ++i) {
         node = _NewNode(tbl[i], s[i], NULL, NULL);
         MinHeapInsert(h, node);
@@ -97,7 +97,7 @@ huffman_tree* HuffmanTreeCreateWithFreq(char* s, int* tbl) {
     t = (huffman_tree*)SafeMalloc(sizeof(huffman_tree));
     t->root = (huffman_tree_node*)MinHeapPop(h);
     t->size = 0;
-    t->table = (huffman_tree_item**)SafeMalloc(sizeof(huffman_tree_item*)*n);
-    _Traverse(t, t->root, "");
+    t->table = SafeMalloc(sizeof(huffman_tree_item*)*n);
+    _Traverse(t, t->root, ""); MinHeapDestroy(h);
     return t;
 }

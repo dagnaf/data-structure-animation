@@ -2,20 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../common/util.h"
-#include "./hash-closed.h"
+#include "./hash-open.h"
 
 int ha(const hash_open *self, const void *k) {
     return *(int *)k % self->n;
 }
 
 int cf(const void *a, const void *b) {
-    // printf("compare %d and %d\n", *(int *)a, *(int *)b);
     return *(int *)a - *(int *)b;
 }
 
 int main(int argc, char const *argv[])
 {
-    int i, cmd, occupied;
+    int cmd;
     int n, x;
     int *y;
     scanf("%d", &n);
@@ -36,19 +35,7 @@ int main(int argc, char const *argv[])
                 printf("delete %d(%d)\n", y == NULL ? -1 : *y,x);
                 break;
         }
-        // for (i = 0; i < n; ++i) {
-        //     printf("%4d ", i);
-        // }
-        // printf("\n");
-        // for (i = 0; i < n; ++i) {
-        //     occupied = ((int *)ht->occupied)[i];
-        //     if (occupied == 1) {
-        //         printf("%4d ", ((int *)ht->table)[i]);
-        //     } else {
-        //         printf("%4s ", occupied == 0 ? "emp" : "del");
-        //     }
-        // }
-        // printf("\n");
+        // print(ht);
     }
     HashTableDestroy(ht);
     return 0;

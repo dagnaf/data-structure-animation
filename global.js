@@ -17,8 +17,12 @@ module.exports.entries = [
   'queue-yanghui',
   'rb-tree',
   'huffman-tree',
+  'search'
 ];
-
+var deps_common =     {
+  path: 'common',
+  files: ['util.c', 'util.h']
+};
 module.exports.deps = {
   'stack-eval': [
     {
@@ -33,20 +37,17 @@ module.exports.deps = {
     }
   ],
   'rb-tree': [
-    {
-      path: 'common',
-      files: ['util.c', 'util.h']
-    }
+    deps_common
   ],
   'huffman-tree': [
-    {
-      path: 'common',
-      files: ['util.c', 'util.h']
-    },
+    deps_common,
     {
       path: 'min-heap',
       files: ['min-heap.c', 'min-heap.h']
     }
+  ],
+  'search': [
+    deps_common
   ]
 };
 
@@ -67,6 +68,7 @@ module.exports.zh = {
   'queue-yanghui': '杨辉三角',
   'rb-tree': '红黑树',
   'huffman-tree': '哈夫曼树',
+  'search': '搜索',
 };
 
 module.exports.en = {
@@ -76,4 +78,5 @@ module.exports.en = {
   'queue-yanghui': 'Yang Hui\'s Triangle',
   'rb-tree': 'Red Black Tree',
   'huffman-tree': 'Huffman Tree',
+  'search': 'Array Search',
 };

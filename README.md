@@ -1,6 +1,6 @@
 # Data Structure Animation
 
-Animation for data structure, or the graduation project.
+Animation for data structure, or the graduation project (thesis/report in thesis repo).
 
 [Live Demo](https://dagnaf.github.io/data-structure-animation) powered by gh-pages. (may be outated, see `branches >> master`)
 
@@ -33,45 +33,55 @@ npm run build
 <script type="text/javascript" src="path/to/react.js"></script>
 <script type="text/javascript" src="path/to/d3.js"></script>
 <script type="text/javascript" src="path/to/dsa.js" data-dsa="dsa-name" data-target="container-id"></script>
+<!-- or simply iframe tag -->
+<iframe src="url/to/html/page(contains-above-scripts)" width="width" heigth="height" scrolling="no"></iframe>
 ```
 
-## Todos
+## Animations
 
-- [ ] FIXMEs
-- [ ] data structure
-  - [X] stack
-    - [X] self
-    - [X] eval expression
-  - [X] queue
-    - [X] self
-    - [X] Yanghui
-  - [ ] matrix
-    - [ ] triangular matrix
-    - [ ] sparse matrix
-  - [X] tree
-    - [X] red-black tree
-    - [X] Huffman tree
-  - [ ] graph
-    - [ ] depth/breath first traverse
-    - [ ] single source shortest path (Dijkstra)
-    - [ ] minimum spanning tree (Prim)
-    - [ ] topological sort
-    - [ ] strongly connected components (Tarjan)
-  - [ ] hash
-    - [ ] open ports
-    - [ ] link ports
-- [ ] algorithm
+### Linear
+
+- [ ] array
   - [ ] sort
     - [ ] merge sort
     - [ ] quick sort
   - [ ] search
     - [ ] linear search
     - [ ] binary search
-- [ ] tests (.c & .js)
-- [ ] webpack code splitting
+- [X] stack
+  - [X] basic operations
+  - [X] evaluate simple expressions
+- [X] queue
+  - [X] basic operations
+  - [X] Yanghui's triangle
+- [ ] matrix
+  - [ ] triangular matrix
+  - [ ] sparse matrix
+
+### Non-linear
+
+- [X] tree
+  - [X] red-black tree
+  - [X] Huffman tree
+- [ ] graph
+  - [ ] depth/breath first search
+  - [ ] single source shortest path (Dijkstra)
+  - [ ] minimum spanning tree (Prim)
+  - [ ] topological sort
+  - [ ] strongly connected components (Tarjan)
+- [ ] hash
+  - [ ] open hashing
+  - [ ] closed hashing
+
+## Todos
+
+- [ ] FIXMEs
+- [ ] data structure animation
+- [ ] tests
+- [X] webpack code splitting
 - [ ] webpage contents
 
-## Inspiration
+## Inspirations
 
 [Loupe](https://latentflip.github.io/loupe)
 
