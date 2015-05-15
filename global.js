@@ -17,7 +17,8 @@ module.exports.entries = [
   'queue-yanghui',
   'rb-tree',
   'huffman-tree',
-  'search'
+  'search',
+  'sort',
 ];
 var deps_common =     {
   path: 'common',
@@ -48,7 +49,10 @@ module.exports.deps = {
   ],
   'search': [
     deps_common
-  ]
+  ],
+  'sort': [
+    deps_common
+  ],
 };
 
 module.exports.getFunctionBody = function (fn, opt) {
@@ -69,6 +73,7 @@ module.exports.zh = {
   'rb-tree': '红黑树',
   'huffman-tree': '哈夫曼树',
   'search': '搜索',
+  'sort': '排序',
 };
 
 module.exports.en = {
@@ -79,4 +84,5 @@ module.exports.en = {
   'rb-tree': 'Red Black Tree',
   'huffman-tree': 'Huffman Tree',
   'search': 'Array Search',
+  'sort': 'Array Sort',
 };
