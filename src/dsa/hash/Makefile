@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=test.c hash-open.c hash-open.h ../common/util.c ../common/util.h
+SOURCES=test.c hash.c hash.h ../common/util.c ../common/util.h
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=a.out
 

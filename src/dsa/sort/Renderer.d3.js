@@ -121,7 +121,8 @@ function _draw_chart() {
     .attr('y', function (d,i) { return _y(d,i) < 0 ? -10 : height+20 })
     // .attr('y', function (d,i) { return _y(d,i) - 20 })
     .style('fill', function (d, i) { return _fill(d,i,true) })
-    .style('opacity', _opacity);
+    .style('opacity', _opacity)
+    .text(function (d) { return d })
   gtext.selectAll('text.item').data(status.arr)
     .exit().remove()
 }

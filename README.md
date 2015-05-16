@@ -1,14 +1,15 @@
 # Data Structure Animation
 
-Animation for data structure, or the graduation project (thesis/report in thesis repo).
+Animation for data structure, the [graduation project](https://github.com/dagnaf/ecust-bachelor-thesis-template/tree/dsa).
 
 [Live Demo](https://dagnaf.github.io/data-structure-animation) powered by gh-pages. (may be outated, see `branches >> master`)
 
 ## Build
 ```
-# devtools
-# npm install -g webpack webpack-dev-server bower
-# or, npm install && export PATH=$PWD/node_modules/.bin:$PATH
+# devtools, prerequisites
+npm install -g webpack webpack-dev-server bower
+# or, not npm install globally, then just install as below and
+export PATH=$PWD/node_modules/.bin:$PATH
 ```
 ```
 # install
@@ -24,8 +25,10 @@ bower install
 npm run start
 ```
 ```
-# dist, check analysis.json before use
+# build and minify (check analysis.json before use)
 npm run build
+# dist for gh-pages
+npm run dist
 ```
 
 ## Usage
@@ -37,17 +40,17 @@ npm run build
 <iframe src="url/to/html/page(contains-above-scripts)" width="width" heigth="height" scrolling="no"></iframe>
 ```
 
-## Animations
+## Animations for data structure
 
 ### Linear
 
-- [ ] array
-  - [ ] sort
-    - [ ] merge sort
-    - [ ] quick sort
-  - [ ] search
-    - [ ] linear search
-    - [ ] binary search
+- [X] array
+  - [X] sort
+    - [X] merge sort
+    - [X] quick sort
+  - [X] search
+    - [X] linear search
+    - [X] binary search
 - [X] stack
   - [X] basic operations
   - [X] evaluate simple expressions
@@ -69,9 +72,9 @@ npm run build
   - [ ] minimum spanning tree (Prim)
   - [ ] topological sort
   - [ ] strongly connected components (Tarjan)
-- [ ] hash
-  - [ ] open hashing
-  - [ ] closed hashing
+- [X] hash `new`
+  - [X] open hashing
+  - [X] closed hashing
 
 ## Todos
 

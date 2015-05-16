@@ -173,7 +173,6 @@ module.exports = {
     for (i = 0; i < n; ++i) {
       array.push(Math.ceil(Math.random()*100))
     }
-    // array = [8,2,3,1,3,7,0];
     return this.run('qsort', array.join(' '));
   },
   // FIXME initialize(hard) is ambiguous among all such *.line.js

@@ -19,6 +19,7 @@ module.exports.entries = [
   'huffman-tree',
   'search',
   'sort',
+  'hash',
 ];
 var deps_common =     {
   path: 'common',
@@ -53,6 +54,9 @@ module.exports.deps = {
   'sort': [
     deps_common
   ],
+  'hash': [
+    deps_common
+  ]
 };
 
 module.exports.getFunctionBody = function (fn, opt) {
@@ -74,6 +78,7 @@ module.exports.zh = {
   'huffman-tree': '哈夫曼树',
   'search': '搜索',
   'sort': '排序',
+  'hash': '散列',
 };
 
 module.exports.en = {
@@ -85,4 +90,5 @@ module.exports.en = {
   'huffman-tree': 'Huffman Tree',
   'search': 'Array Search',
   'sort': 'Array Sort',
+  'hash': 'Hash',
 };
