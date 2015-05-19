@@ -6,8 +6,7 @@ module.exports.requires = function () {
 /*
 requires['dsa_name'] = function (callback) {
   require.ensure([], function (require) {
-    required.input = require('../dsa/dsa_name/Input.react.js');
-    required.renderer = require('../dsa/dsa_name/Renderer.d3.js');
+    required.scene = require('../dsa/dsa_name/Scene.react.js');
     required.factory = require('../dsa/dsa_name/dsa_name.line.js')
     required.codes = [
       {
@@ -18,6 +17,8 @@ requires['dsa_name'] = function (callback) {
         name: 'dsa_name.h',
         text: require('../dsa/dsa_name/dsa_name.h')
       },
+      {{'deps'}}
+    ].concat([
       {
         name: 'test.c',
         text: require('../dsa/dsa_name/test.c')
@@ -25,9 +26,8 @@ requires['dsa_name'] = function (callback) {
       {
         name: 'Makefile',
         text: require('../dsa/dsa_name/Makefile')
-      },
-      {{'deps'}}
-    ];
+      }
+    ]);
     callback();
   }, 'dsa_name');
 }

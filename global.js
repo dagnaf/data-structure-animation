@@ -20,6 +20,7 @@ module.exports.entries = [
   'search',
   'sort',
   'hash',
+  "graph"
 ];
 var deps_common =     {
   path: 'common',
@@ -76,9 +77,10 @@ module.exports.zh = {
   'queue-yanghui': '杨辉三角',
   'rb-tree': '红黑树',
   'huffman-tree': '哈夫曼树',
-  'search': '搜索',
-  'sort': '排序',
+  'search': '有序数组搜索',
+  'sort': '数组排序',
   'hash': '散列',
+  "graph": "图",
 };
 
 module.exports.en = {
@@ -88,7 +90,8 @@ module.exports.en = {
   'queue-yanghui': 'Yang Hui\'s Triangle',
   'rb-tree': 'Red Black Tree',
   'huffman-tree': 'Huffman Tree',
-  'search': 'Array Search',
+  'search': 'Sorted Array Search',
   'sort': 'Array Sort',
   'hash': 'Hash',
+  "graph": "Graph",
 };

@@ -1,7 +1,7 @@
 require('./DsaApp.react.less');
 var React = require('react');
 var DsaStore = require('../stores/DsaStore');
-var Scene = require('./Scene.react');
+var Scene = require('../routers/require-dsa').required.scene;
 var Editor = require('./Editor.react');
 var Header = require('./Header.react');
 var Footer = require('./Footer.react');
@@ -22,7 +22,9 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function () {
+    console.log("event change registered");
     DsaStore.addChangeListener(this._onchange);
+    this.setState(getDsaState());
   },
 
   componentWillUnmount: function () {
@@ -37,11 +39,8 @@ module.exports = React.createClass({
           domain={[DsaStore.get('minDelay'), DsaStore.get('maxDelay')]} />
         <div className="wrapper-row">
           <Scene
-            frame={DsaStore.getActiveFrame()}
-            isRunning={this.state.isRunning}
-            isPlaying={this.state.isPlaying}
-            delay={this.state.delay}
-            isFirstFrame={this.state.stamp === 0}
+            frame={DsaStore.getActiveFrame()[this.state.isPlaying ? 'next' : 'current']}
+            delay={this.state.isPlaying ? this.state.delay*0.75 : 15}
             others={DsaStore.getOthers()} />
           <Editor
             files={DsaStore.getFiles()}
@@ -60,8 +59,7 @@ module.exports = React.createClass({
   },
 
   _onchange: function () {
-    console.log('setstage ' + JSON.stringify(getDsaState()));
+    console.log('setState ' + JSON.stringify(getDsaState()));
     this.setState(getDsaState());
   },
-
 });

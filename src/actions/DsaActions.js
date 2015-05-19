@@ -53,12 +53,13 @@ var DsaActions = {
   replayDemo: function () {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_UPDATE_STAMP,
-      newStamp: 0
+      newStamp: 0,
+      callback: debounce(this.playDemo, 100)
     });
-    var self = this;
-    debounce(function () {
-      self.playDemo()
-    }, 100)()
+    // var self = this;
+    // debounce(function () {
+    //   self.playDemo()
+    // }, 100)()
     // this.playDemo();
   },
   updateStamp: function (newStamp, ignore) {
@@ -68,7 +69,7 @@ var DsaActions = {
       ignore: ignore
     });
   },
-  runDemo: function (command, text, check) {
+  runDemo: function (command, param, replay) {
     // if (text && text.trim() === '') return;
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_PAUSE_DEMO,
@@ -77,9 +78,17 @@ var DsaActions = {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_RUN_DEMO,
       command: command,
-      text: text
+      param: param,
     });
-    this.replayDemo();
+    // this.replayDemo();
+    if (replay !== false) {
+      this.replayDemo();
+    }
+  },
+  waitDemo: function () {
+    AppDispatcher.dispatch({
+      actionType: DsaConstants.DSA_WAIT_DEMO,
+    });
   }
 
 };

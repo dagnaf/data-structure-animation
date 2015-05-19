@@ -416,13 +416,14 @@ function _draw_table () {
 }
 
 
-function _init (_status, _delay) {
+function _init (_status, _delay, _others) {
   status = _status;
   delay = _delay;
+  others = _others;
 }
 
-function render (status, delay) {
-  _init(status, delay);
+function render (status, delay, others) {
+  _init(status, delay, others);
   _draw_chars();
   _draw_stacks();
   _draw_stack_tops();

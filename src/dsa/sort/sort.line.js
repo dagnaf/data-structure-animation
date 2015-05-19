@@ -96,7 +96,7 @@ function _mid(x) {
 }
 
 function _pt () {
-  if (i === undefined) {
+  if (arguments.length === 0) {
     currentStatus.pt = [];
   } else {
     currentStatus.pt = Array.prototype.slice.call(arguments);

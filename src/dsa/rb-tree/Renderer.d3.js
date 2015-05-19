@@ -441,7 +441,7 @@ function init () {
       .attr('markerHeight', _marker_width)
       .attr('orient', 'auto')
     .append('path')
-      .attr('d', 'M0,-5L10,0,L0,5');
+      .attr('d', 'M0,-5L10,0L0,5');
 
   this.g = this.svg.append('g')
     .attr('transform', d3Transform().translate(100, 100).scale(1));

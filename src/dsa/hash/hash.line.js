@@ -87,7 +87,7 @@ stop(line,1); if (p[0].d !== 'X') {p.unshift({d:'', id: _id++});_clone();}
 stop(line,1);
 stop(line,1);
 stop(line,1);  p[0].d = key;_clone();
-stop(line,1); return key;
+stop(line,1);_r(1); return key;
 }
 
 function _HashOpenSearch(key) {_k(key);

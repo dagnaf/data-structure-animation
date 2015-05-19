@@ -100,6 +100,11 @@ AppDispatcher.register(function(action) {
       break;
 
     case DsaConstants.DSA_UPDATE_STAMP:
+      if (action.callback) {
+        if (!!_demo.callback) _demo.callback.cancel();
+        _demo.callback = action.callback;
+        _demo.callback();
+      }
       if (_demo.stamp() === action.newStamp) break;
       _demo.update(action.newStamp);
       // FIXME
@@ -108,13 +113,20 @@ AppDispatcher.register(function(action) {
       break;
     // Actions have checked the text
     case DsaConstants.DSA_RUN_DEMO:
-      _demo.run(action.command, action.text);
+      _demo.run(action.command, action.param);
       DsaStore.emitChange(action.actionType);
       break;
 
     case DsaConstants.DSA_UPDATE_DELAY:
       _demo.setDelay(action.newDelay);
       DsaStore.emitChange(action.actionType);
+      break;
+
+    case DsaConstants.DSA_WAIT_DEMO:
+      _demo.destroy();
+      DsaStore.emitChange(action.actionType);
+      break;
+
     default:
       // no op
   }

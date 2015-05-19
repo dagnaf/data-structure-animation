@@ -46,3 +46,6 @@ test
 
 # thesis, sub repository
 documents/thesis
+
+#
+src/dsa/matrix

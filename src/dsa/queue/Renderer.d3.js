@@ -315,7 +315,8 @@ function render (status, delay) {
 }
 
 function init () {
-  N = this.props.others.N;
+  // N = this.props.others.N;
+  N = 8;
   var self = this;
   var zoom = d3.behavior.zoom()
     .scaleExtent([0.1,10])

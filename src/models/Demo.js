@@ -2,15 +2,15 @@ var DsaFactory = require('../routers/require-dsa').required.factory;
 
 var isPlaying = false;
 var delay = 800;
-var _descriptions = DsaFactory.getInitialDescriptions();
-var _breakpoints = _descriptions.frames;
-var length = _breakpoints.length-1;
-var stamp = length;
+var _descriptions = {};//DsaFactory.getInitialDescriptions();
+var _breakpoints = [];//_descriptions.frames;
+var length = -1;//_breakpoints.length-1;
+var stamp = -1;
 var maxDelay = 2500;
 var minDelay = 100;
 
 function isRunning () {
-  return stamp !== length;
+  return stamp !== length && stamp >= 0;
 }
 
 function activeLine () {
@@ -81,4 +81,10 @@ module.exports = {
   maxDelay: function () { return maxDelay; },
   minDelay: function () { return minDelay; },
 
+  destroy: function () {
+    stamp = -1;
+    length = -1;
+    _breakpoints = [];
+    _descriptions = {};
+  }
 };

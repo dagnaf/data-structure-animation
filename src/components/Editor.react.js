@@ -1,7 +1,8 @@
 require('../css/default.css');
 require('./Editor.react.less');
 var React = require('react');
-var DsaActions = require('../actions/DsaActions');
+var d3 = require('d3');
+// var DsaActions = require('../actions/DsaActions');
 
 var _line_height = 15;
 
@@ -23,6 +24,9 @@ module.exports = React.createClass({
   componentDidMount: function () {
   },
   componentDidUpdate: function (prevProps, prevState) {
+    if (prevState.hidden !== this.state.hidden && d3.select(window).on('resize')) {
+      d3.select(window).on('resize')();
+    }
     // if is running, then scrolltop depends on activeLine
     //   else it depends on the your scroll history
     if (this.state.index === 0 && this.props.isRunning &&

@@ -206,7 +206,7 @@ function init () {
       .attr('orient', 'auto')
       .attr('refX', -5)
     .append('path')
-      .attr('d', 'M-5,-5L5,0,L-5,5')
+      .attr('d', 'M-5,-5L5,0L-5,5')
       .attr('opacity', 0.5)
       .attr('fill', function (d,i) { return _hl_color })
 

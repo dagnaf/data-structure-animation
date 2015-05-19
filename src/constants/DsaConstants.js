@@ -6,5 +6,6 @@ module.exports = KeyMirror({
   DSA_PLAY_DEMO: null,
   DSA_REPLAY_DEMO: null,
   DSA_UPDATE_STAMP: null,
-  DSA_RUN_DEMO: null
+  DSA_RUN_DEMO: null,
+  DSA_WAIT_DEMO: null,
 })

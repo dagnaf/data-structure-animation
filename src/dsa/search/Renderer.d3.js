@@ -176,7 +176,7 @@ function init () {
       .attr('orient', 'auto')
       .attr('refX', function (d) { return d === 'left' ? 7 : 1 })
     .append('path')
-      .attr('d', 'M0,-5L10,0,L0,5')
+      .attr('d', 'M0,-5L10,0L0,5')
       .attr('fill', 'none')
       .attr('stroke', _hl_color)
       .attr('stroke-width', 3)

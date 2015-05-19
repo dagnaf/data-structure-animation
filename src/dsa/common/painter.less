@@ -1,0 +1,34 @@
+circle.node {
+  fill: #ccc;
+  stroke: black;
+  stroke-width: 1.5px;
+}
+circle.node.painter-selected {
+  fill: #000;
+}
+
+text.node, text.edge {
+  fill: black;
+  font: 20px sans-serif;
+  pointer-events: none;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  /*text-shadow: none;*/
+}
+path.edge, path.drag {
+  fill: none;
+  stroke: black;
+  stroke-width: 4px;
+}
+path.edge.painter-selected {
+  stroke-dasharray: 10 2;
+  animation: dash .6s linear infinite;
+}
+@keyframes dash {
+  from {
+    stroke-dashoffset: 12;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

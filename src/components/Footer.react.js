@@ -41,7 +41,7 @@ module.exports = React.createClass({
     if (this.sl.__prev__ === undefined) {
       this.sl.__prev__ = '0%';
     }
-    console.log('%cFooter play from'+this.props.val+' to '+_val, 'color:green')
+    console.log('%cFooter play from '+this.props.val+' to '+_val, 'color:green')
     var oldWidth = d3.scale.linear()
       .domain(this.props.domain)
       .range([0, 100])(this.props.val);
@@ -163,6 +163,8 @@ module.exports = React.createClass({
   },
   _onPause: function () {
     DsaActions.pauseDemo();
+    var newStamp = Math.round(parseInt(this.sl.style('width')) * this.props.domain[1] / totalWidth());
+    DsaActions.updateStamp(newStamp);
   },
   _onReplay: function () {
     DsaActions.replayDemo();

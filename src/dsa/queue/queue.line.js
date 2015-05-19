@@ -1,5 +1,5 @@
 var clone = require('clone'); var frames = []; var stopid = 0; var rc;
-var nums = []; var N = 8; _id = 0;
+var nums = []; var N = 8; _id = 0; var queue = [];
 
         var init = function() {
 stop(line,1); currentStatus.head = 0;
