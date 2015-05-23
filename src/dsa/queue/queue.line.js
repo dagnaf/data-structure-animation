@@ -1,54 +1,47 @@
 var clone = require('clone'); var frames = []; var stopid = 0; var rc;
 var nums = []; var N = 8; _id = 0; var queue = [];
 
-        var init = function() {
-stop(line,1); currentStatus.head = 0;
-stop(line,1); currentStatus.tail = 1; queue = []; currentStatus.queue = queue;
-        };
 
-        var isFull = function() {
-stop(line,1);_headtail(1);if (queue.length === N-1) {
-stop(line,1);    return true;
-            } else {
-stop(line,1); _headtail();    return false;
-            }
-        };
 
         var isEmpty = function() { _headtail(1);
-stop(line,1); if (queue.length === 0) {
-stop(line,1);     return true;
-            } else {
-stop(line,1); _headtail();    return false;
-            }
+stop(line,1); return queue.length === 0 ? true : (_headtail(),false);
         };
 
-        var enque = function(val) { _toque(val);
-stop(line,1); if (isFull()) {
-stop(line,1);     console.log('queue full.'); _toque()
-                        } else {
-stop(line,1);     queue.push({v:val, i:_id++}); _toque();
-stop(line,1);     currentStatus.tail++;
-            }
+        var isFull = function() { _headtail(1);
+stop(line,1);return queue.length === N-1 ? true : (_headtail(),false);
         };
 
         var deque = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('queue empty.');
-            } else {
+
+stop(line,1); if (!isEmpty()) {
+
 stop(line,1);     queue.shift(); currentStatus.head++;
             }
+stop(line,1);return;
         };
 
         var front = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('queue empty.');
-stop(line,1);     return -1;
-            } else {
+
+stop(line,1); if (!isEmpty()) {
 stop(line,1);  rc=queue[0].v; _tofront(rc);  return rc;
             }
+stop(line,1);return;
+        };
+
+        var enque = function(val) { _toque(val);
+stop(line,1); if (!isFull()) {
+stop(line,1);     queue.push({v:val, i:_id++}); _toque();
+stop(line,1);     currentStatus.tail++;
+            }
+stop(line,1);return;
         };
 
 // ===================================
+
+        var init = function() {
+  currentStatus.head = 0;
+  currentStatus.tail = 0; queue = []; currentStatus.queue = queue;
+        };
 
 currentStatus = {};
 lastStatus = {};
@@ -99,7 +92,7 @@ module.exports = {
       toque: [],
       headtail: 0,
       head: currentStatus.head || 0,
-      tail: currentStatus.tail || 1
+      tail: currentStatus.tail || 0
     }
     lastStatus = clone(currentStatus);
     return this;
@@ -107,7 +100,10 @@ module.exports = {
   enque: enque,
   deque: deque,
   front: front,
-  init: init,
+  init: function () {
+    init();
+    stop(0);
+  },
   run: function (cmd, param) {
     this.initialize()[cmd](param);
     over();

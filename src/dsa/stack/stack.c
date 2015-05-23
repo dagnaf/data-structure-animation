@@ -1,47 +1,52 @@
-#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include "../common/util.h"
 #include "./stack.h"
 
-void init(Stack *s) {
-    s->top = 0;
-};
+int StackIsEmpty(stack *s) {
+  return s->top > 0 ? 0 : 1;
+}
 
-int isFull(Stack *s) {
-    if (s->top == N) {
-        return 1;
-    } else {
-        return 0;
-    }
-};
+int StackIsFull(stack *s) {
+  return s->top < s->capacity ? 0 : 1;
+}
 
-int isEmpty(Stack *s) {
-    if (s->top == 0) {
-        return 1;
-    } else {
-        return 0;
-    }
-};
+void* StackPop(stack *s) {
+  void *item = NULL;
+  if (!StackIsEmpty(s)) {
+    item = (char *)s->items + (s->top-1)*s->item_size;
+    s->top--;
+  }
+  return item;
+}
 
-void push(Stack *s, int val) {
-    if (isFull(s) == 1) {
-        printf("stack full.\n");
-    } else {
-        s->data[s->top++] = val;
-    }
-};
+void* StackPeak(stack *s) {
+  void *item = NULL;
+  if (!StackIsEmpty(s)) {
+    item = (char *)s->items + (s->top-1)*s->item_size;
+  }
+  return item;
+}
 
-void pop(Stack *s) {
-    if (isEmpty(s) == 1) {
-        printf("stack empty.\n");
-    } else {
-        s->top = s->top - 1;
-    }
-};
+void* StackPush(stack *s, void *x) {
+  if (!StackIsFull(s)) {
+    MemoryCopy((char *)s->items + s->top*s->item_size, x, s->item_size);
+    s->top++;
+    return x;
+  }
+  return NULL;
+}
 
-int peak(Stack *s) {
-    if (isEmpty(s) == 1) {
-        printf("stack empty.\n");
-        return -1;
-    } else {
-        return s->data[s->top - 1];
-    }
-};
+stack *StackCreate(int n, size_t item_size) {
+  stack *s = SafeMalloc(sizeof(stack));
+  s->capacity = n;
+  s->item_size = item_size;
+  s->top = 0;
+  s->items = SafeMalloc(item_size*n);
+  return s;
+}
+
+void StackDestroy(stack *s) {
+  free(s->items);
+  free(s);
+}

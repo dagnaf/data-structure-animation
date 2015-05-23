@@ -44,7 +44,8 @@ function _draw_head_tail () {
     })
     .attrTween("d", function (d, j) {
       if (this.__prev__ === undefined) {
-        var i = d3.interpolate(_radius(j?150:200), _radius(j?100:150));
+        // var i = d3.interpolate(_radius(j?150:200), _radius(j?100:150));
+        var i = d3.interpolate(_radius(j?150:100,150), _radius(j?100:50,150));
         this.__prev__ = _angle(d);
         return function (t) {
           return d3.svg.arc()
@@ -56,8 +57,10 @@ function _draw_head_tail () {
         this.__prev__ = _angle(d);
         return function (t) {
           return d3.svg.arc()
-            .innerRadius(j?100:150)
-            .outerRadius(j?150:200)(i(t));
+            // .innerRadius(j?100:150)
+            .innerRadius(j?100:50)
+            // .outerRadius(j?150:200)(i(t));
+            .outerRadius(j?150:150)(i(t));
         }
       }
     });
@@ -69,8 +72,10 @@ function _draw_head_tail () {
         .attr('dy', 5)
         .attr('transform', d3Transform().translate(function (d, j) {
           return d3.svg.arc()
-            .innerRadius(j?150:200)
-            .outerRadius(j?200:250).centroid(_angle(d));
+            // .innerRadius(j?150:200)
+            .innerRadius(j?150:100,150)
+            // .outerRadius(j?200:250).centroid(_angle(d));
+            .outerRadius(j?200:150,150).centroid(_angle(d));
         }))
         .text(function (d, j) { return j ?'队尾':'队首'})
   gtext.selectAll('text.head').data(data)
@@ -78,8 +83,10 @@ function _draw_head_tail () {
       .duration(delay)
     .attr('transform', d3Transform().translate(function (d, j) {
       return d3.svg.arc()
-            .innerRadius(j?100:150)
-            .outerRadius(j?150:200).centroid(_angle(d, d+1));
+            // .innerRadius(j?100:150)
+            .innerRadius(j?100:50,150)
+            // .outerRadius(j?150:200).centroid(_angle(d, d+1));
+            .outerRadius(j?150:100,150).centroid(_angle(d, d+1));
     }));
 }
 
@@ -97,15 +104,15 @@ function _draw_items () {
       .attrTween('d', function (d, j) {
         if (this.__prev__ === undefined) {
           var i = d3.interpolate(_radius(200), _radius(150));
-          this.__prev__ = _angle(status.head+1+j);
+          this.__prev__ = _angle(status.head+1-1+j);
           return function (t) {
             return d3.svg.arc()
-              .startAngle(_xpie(status.head+1+j))
-              .endAngle(_xpie(status.head+1+j+1))(i(t))
+              .startAngle(_xpie(status.head+1-1+j))
+              .endAngle(_xpie(status.head+1-1+j+1))(i(t))
           }
         } else {
-          var i = d3.interpolate(this.__prev__, _angle(status.head+1+j));
-          this.__prev__ = _angle(status.head+1+j);
+          var i = d3.interpolate(this.__prev__, _angle(status.head+1-1+j));
+          this.__prev__ = _angle(status.head+1-1+j);
           return function (t) {
             return _arc()(i(t));
           }
@@ -132,16 +139,16 @@ function _draw_items () {
       .attrTween('transform', function (d, j) {
         if (this.__prev__ === undefined) {
           var i = d3.interpolate(
-            d3Transform().translate(_arc(50).centroid(_angle(status.head+1+j)))(),
-            d3Transform().translate(_arc().centroid(_angle(status.head+1+j)))()
+            d3Transform().translate(_arc(50).centroid(_angle(status.head+1-1+j)))(),
+            d3Transform().translate(_arc().centroid(_angle(status.head+1-1+j)))()
           );
-          this.__prev__ = status.head+1+j;
+          this.__prev__ = status.head+1-1+j;
         } else {
           var i = d3.interpolate(
             d3Transform().translate(_arc().centroid(_angle(this.__prev__)))(),
-            d3Transform().translate(_arc().centroid(_angle(status.head+1+j)))()
+            d3Transform().translate(_arc().centroid(_angle(status.head+1-1+j)))()
           );
-          this.__prev__ = status.head+1+j;
+          this.__prev__ = status.head+1-1+j;
         }
         return function (t) {
           return i(t);
@@ -239,20 +246,25 @@ function _draw_tofont () {
       .duration(delay)
     .attrTween('d', function (d, j) {
       if (this.__prev__ === undefined) {
-        var i = d3.interpolate(_radius(150), _radius(200));
-        this.__prev__ = _angle(status.head+1);
+        var i = d3.interpolate(_radius(150), _radius(0));
+        // this.__prev__ = _angle(status.head+1);
+        this.__prev__ = _angle(status.head);
         return function (t) {
           return d3.svg.arc()
-            .startAngle(_xpie(status.head+1))
-            .endAngle(_xpie(status.head+1+1))(i(t))
+            // .startAngle(_xpie(status.head+1))
+            .startAngle(_xpie(status.head))
+            // .endAngle(_xpie(status.head+1-1+1))(i(t))
+            .endAngle(_xpie(status.head+1))(i(t))
         }
       } else {
-        var i = d3.interpolate(this.__prev__, _angle(status.head+1));
-        this.__prev__ = _angle(status.head+1);
+        var i = d3.interpolate(this.__prev__, _angle(status.head));
+        // var i = d3.interpolate(this.__prev__, _angle(status.head+1));
+        // this.__prev__ = _angle(status.head+1);
+        this.__prev__ = _angle(status.head);
         return function (t) {
           return d3.svg.arc()
-            .innerRadius(200)
-            .outerRadius(250)(i(t));
+            .innerRadius(0)
+            .outerRadius(50)(i(t));
         }
       }
     });
@@ -277,16 +289,16 @@ function _draw_tofont () {
     .attrTween('transform', function (d, j) {
       if (this.__prev__ === undefined) {
         var i = d3.interpolate(
-          d3Transform().translate(d3.svg.arc().innerRadius(150).outerRadius(200).centroid(_angle(status.head+1)))(),
-          d3Transform().translate(d3.svg.arc().innerRadius(200).outerRadius(250).centroid(_angle(status.head+1)))()
+          d3Transform().translate(d3.svg.arc().innerRadius(150).outerRadius(200).centroid(_angle(status.head)))(),
+          d3Transform().translate(d3.svg.arc().innerRadius(0).outerRadius(50).centroid(_angle(status.head)))()
         );
-        this.__prev__ = status.head+1;
+        this.__prev__ = status.head;
       } else {
         var i = d3.interpolate(
-          d3Transform().translate(_arc(50).centroid(_angle(this.__prev__)))(),
-          d3Transform().translate(_arc(50).centroid(_angle(status.head+1)))()
+          d3Transform().translate(_arc(-150).centroid(_angle(this.__prev__)))(),
+          d3Transform().translate(_arc(-150).centroid(_angle(status.head)))()
         );
-        this.__prev__ = status.head+1;
+        this.__prev__ = status.head;
       }
       return function (t) {
         return i(t);

@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.c queue.c
-OBJECTS=$(SOURCES:.cpp=.o)
+SOURCES=test.c queue.c queue.h ../common/util.c ../common/util.h
+OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=a.out
 
 all: $(SOURCES) $(EXECUTABLE)

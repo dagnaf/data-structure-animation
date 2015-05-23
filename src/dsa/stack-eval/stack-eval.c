@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "../stack/stack.h"
 
 int prior(char instack, char coming) {
@@ -24,47 +25,52 @@ int prior(char instack, char coming) {
     return -1;
 };
 
-void poppush(Stack *nums, Stack *ops) {
+void poppush(stack *nums, stack *ops) {
     int a;
     int b;
     int op;
-    a = peak(nums);
-    pop(nums);
-    b = peak(nums);
-    pop(nums);
-    op = peak(ops);
-    pop(ops);
+    a = *(int *)StackPeak(nums);
+    StackPop(nums);
+    b = *(int *)StackPeak(nums);
+    StackPop(nums);
+    op = *(char *)StackPeak(ops);
+    StackPop(ops);
     switch(op) {
-        case '+': push(nums, a+b); break;
-        case '-': push(nums, b-a); break;
-        case '*': push(nums, a*b); break;
-        case '/': push(nums, b/a); break;
+        case '+': a = a+b; StackPush(nums, &a); break;
+        case '-': a = b-a; StackPush(nums, &a); break;
+        case '*': a = a*b; StackPush(nums, &a); break;
+        case '/': a = b/a; StackPush(nums, &a); break;
         default: break;
     }
 };
 
 int eval(char *str) {
-    int i;
-    Stack nums;
-    init(&nums);
-    Stack ops;
-    init(&ops);
+    int l = strlen(str);
+    int num;
+    char op;
+    stack *nums = StackCreate(l, sizeof(int));
+    stack *ops = StackCreate(l, sizeof(char));
     for (; *str != '\0'; str++) {
         if ('0' <= *str && *str <= '9') {
-            push(&nums,  *str - '0');
+            num = (int)(*str - '0');
+            StackPush(nums, &num);
         } else {
-            while (isEmpty(&ops) == 0 && prior(peak(&ops), *str) == 1) {
-                poppush(&nums, &ops);
+            while (StackIsEmpty(ops) == 0 && prior(*(char *)StackPeak(ops), *str) == 1) {
+                poppush(nums, ops);
             }
             if (*str == ')') {
-                pop(&ops);
+                StackPop(ops);
             } else {
-                push(&ops, *str);
+                op = *str;
+                StackPush(ops, &op);
             }
         }
     }
-    while (isEmpty(&ops) == 0) {
-        poppush(&nums, &ops);
+    while (StackIsEmpty(ops) == 0) {
+        poppush(nums, ops);
     }
-    return peak(&nums);
+    num = *(int *)StackPeak(nums);
+    StackDestroy(nums);
+    StackDestroy(ops);
+    return num;
 };

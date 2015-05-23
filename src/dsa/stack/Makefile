@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.c stack.c
+SOURCES=test.c stack.c stack.h ../common/util.c ../common/util.h
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=a.out
 

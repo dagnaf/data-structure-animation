@@ -1,15 +1,21 @@
-#define N 15
+#ifndef QUEUE_H
+#define QUEUE_H
+#include <stddef.h>
+typedef struct queue {
+  int front;
+  int tail;
+  int capacity;
+  size_t item_size;
+  void *items;
+} queue;
 
-typedef struct {
-    int head;
-    int tail;
-    int data[N];
-} Queue;
+queue *QueueCreate(int n, size_t item_size);
+void QueueDestroy(queue *q);
+int QueueIsEmpty(queue *q);
+int QueueIsFull(queue *q);
+void *QueuePop(queue *q);
+void *QueuePeak(queue *q);
+void *QueuePush(queue *q, void *x);
 
-void init(Queue *q);
-int isFull(Queue *q);
-int isEmpty(Queue *q);
-void enque(Queue *q, int val);
-void deque(Queue *q);
-int front(Queue *q);
+#endif
 

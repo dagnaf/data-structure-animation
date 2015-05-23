@@ -2,9 +2,9 @@
 #include "./stack-eval.h"
 
 int main(int argc, char const *argv[]) {
-  freopen("in", "r", stdin);
-  char s[10];
-  scanf("%s", s);
-  printf("%s = %d\n", s, eval(s));
+  char s[100];
+  while (scanf("%s", s) != EOF) {
+    printf("%s = %d\n", s, eval(s));
+  }
   return 0;
 }

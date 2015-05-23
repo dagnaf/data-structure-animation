@@ -1,49 +1,53 @@
-#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include "../common/util.h"
 #include "./queue.h"
 
-void init(Queue *q) {
-    q->head = 0;
-    q->tail = 1;
+int QueueIsEmpty(queue *q) {
+  return q->front != q->tail ? 0 : 1;
 }
 
-int isFull(Queue *q) {
-    if (q->head == q->tail) {
-        return 1;
-    } else {
-        return 0;
-    }
+int QueueIsFull(queue *q) {
+  return (q->tail+1) % q->capacity != q->front ? 0 : 1;
 }
 
-int isEmpty(Queue *q) {
-    if ((q->head + 1) % N == q->tail) {
-        return 1;
-    } else {
-        return 0;
-    }
+void *QueuePop(queue *q) {
+  void *item = NULL;
+  if (!QueueIsEmpty(q)) {
+    item = (char *)q->items + q->front*q->item_size;
+    q->front = (q->front+1) % q->capacity;
+  }
+  return item;
 }
 
-void enque(Queue *q, int val) {
-    if (isFull(q) == 1) {
-        printf("queue full.\n");
-    } else {
-        q->data[q->tail] = val;
-        q->tail = (q->tail + 1) % N;
-    }
+void *QueuePeak(queue *q) {
+  void *item = NULL;
+  if (!QueueIsEmpty(q)) {
+    item = (char *)q->items + q->front*q->item_size;
+  }
+  return item;
 }
 
-void deque(Queue *q) {
-    if (isEmpty(q) == 1) {
-        printf("queue empty.\n");
-    } else {
-        q->head = (q->head + 1) % N;
-    }
+void *QueuePush(queue *q, void *x) {
+  if (!QueueIsFull(q)) {
+    MemoryCopy((char *)q->items + q->tail*q->item_size, x, q->item_size);
+    q->tail = (q->tail+1) % q->capacity;
+    return x;
+  }
+  return NULL;
 }
 
-int front(Queue *q) {
-    if (isEmpty(q) == 1) {
-        printf("queue empty.\n");
-        return -1;
-    } else {
-        return q->data[(q->head + 1) % N];
-    }
+queue *QueueCreate(int n, size_t item_size) {
+  n = n+1;  // 1 for front-tail
+  queue *q = SafeMalloc(sizeof(queue));
+  q->capacity = n;
+  q->front = q->tail = 0;
+  q->items = SafeMalloc(item_size*n);
+  q->item_size = item_size;
+  return q;
+}
+
+void QueueDestroy(queue *q) {
+  free(q->items);
+  free(q);
 }

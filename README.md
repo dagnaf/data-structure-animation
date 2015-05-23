@@ -66,12 +66,12 @@ npm run dist
 - [X] tree
   - [X] red-black tree
   - [X] Huffman tree
-- [ ] graph
-  - [ ] depth/breath first search
+- [X] graph
+  - [X] depth/breath first search
   - [ ] single source shortest path (Dijkstra)
   - [ ] minimum spanning tree (Prim)
-  - [ ] topological sort
-  - [ ] strongly connected components (Tarjan)
+  - [X] topological sort
+  - [X] strongly connected components (Tarjan)
 - [X] hash `new`
   - [X] open hashing
   - [X] closed hashing

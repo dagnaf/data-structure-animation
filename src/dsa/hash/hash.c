@@ -10,7 +10,7 @@ void _SetTable(hash *ht, int i, void *key) {
     p->next = p;
 }
 
-int _GetSlot(hash *ht, int i) {
+int _GetEmptySlot(hash *ht, int i) {
     int j = i;
     hash_item *p = ((hash_item **)ht->table)[i];
     if (p->item == NULL) {
@@ -27,7 +27,7 @@ int _GetSlot(hash *ht, int i) {
 
 void *HashClosedInsert(hash *ht, void *key) {
     int i = ht->Hash(ht, key);
-    i = _GetSlot(ht, i);
+    i = _GetEmptySlot(ht, i);
     if (i != -1) {
         _SetTable(ht, i, key);
         return key;
@@ -35,13 +35,13 @@ void *HashClosedInsert(hash *ht, void *key) {
     return NULL;
 }
 
-void _UnsetTable(hash *ht, int i) {
+void HashClosedDeleteSlot(hash *ht, int i) {
     hash_item *p = ((hash_item **)ht->table)[i];
     free(p->item);
     p->item = NULL;
 }
 
-int _SearchClosed(hash *ht, void *key) {
+int HashGetSlot(hash *ht, void *key) {
     int i = ht->Hash(ht, key);
     int j;
     hash_item *p = ((hash_item **)ht->table)[i];
@@ -64,16 +64,16 @@ int _SearchClosed(hash *ht, void *key) {
 }
 
 void *HashClosedDelete(hash *ht, void *key) {
-    int i = _SearchClosed(ht, key);
+    int i = HashGetSlot(ht, key);
     if (i == -1) {
         return NULL;
     }
-    _UnsetTable(ht, i);
+    HashClosedDeleteSlot(ht, i);
     return key;
 }
 
 void *HashClosedSearch(hash *ht, void *key) {
-    int i = _SearchClosed(ht, key);
+    int i = HashGetSlot(ht, key);
     return i == -1 ? NULL : key;
 }
 

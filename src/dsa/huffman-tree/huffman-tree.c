@@ -86,13 +86,13 @@ huffman_tree* HuffmanTreeCreateWithFreq(char* s, int* tbl) {
     h = MinHeapCreate(n, sizeof(huffman_tree_node), _CompareFn);
     for (i = 0; i < n; ++i) {
         node = _NewNode(tbl[i], s[i], NULL, NULL);
-        MinHeapInsert(h, node);
+        MinHeapInsert(h, node, 0);
     }
     while (h->size > 1) {
         node1 = (huffman_tree_node*)MinHeapPop(h);
         node2  = (huffman_tree_node*)MinHeapPop(h);
         node = _NewNode(node1->key + node2->key, node1->val, node1, node2);
-        MinHeapInsert(h, node);
+        MinHeapInsert(h, node, 0);
     }
     t = (huffman_tree*)SafeMalloc(sizeof(huffman_tree));
     t->root = (huffman_tree_node*)MinHeapPop(h);

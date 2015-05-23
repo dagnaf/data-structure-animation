@@ -20,7 +20,7 @@ module.exports.entries = [
   'search',
   'sort',
   'hash',
-  "graph"
+  "graph-app"
 ];
 var deps_common =     {
   path: 'common',
@@ -57,6 +57,21 @@ module.exports.deps = {
   ],
   'hash': [
     deps_common
+  ],
+  "graph-app": [
+    deps_common,
+    {
+      path: 'common',
+      files: ['graph.c', 'graph.h']
+    },
+    {
+      path: 'stack',
+      files: ['stack.c', 'stack.h']
+    },
+    {
+      path: 'queue',
+      files: ['queue.c', 'queue.h']
+    }
   ]
 };
 
@@ -80,7 +95,7 @@ module.exports.zh = {
   'search': '有序数组搜索',
   'sort': '数组排序',
   'hash': '散列',
-  "graph": "图",
+  "graph-app": "图",
 };
 
 module.exports.en = {
@@ -93,5 +108,5 @@ module.exports.en = {
   'search': 'Sorted Array Search',
   'sort': 'Array Sort',
   'hash': 'Hash',
-  "graph": "Graph",
+  "graph-app": "Graph",
 };

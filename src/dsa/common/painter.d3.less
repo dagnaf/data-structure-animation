@@ -2,9 +2,13 @@ circle.node {
   fill: #ccc;
   stroke: black;
   stroke-width: 1.5px;
-}
-circle.node.painter-selected {
-  fill: #000;
+  &.painter-selected {
+    fill: #000;
+  }
+  &.highlighted {
+    stroke-dasharray: 10 2;
+    animation: dash .4s linear infinite;
+  }
 }
 
 text.node, text.edge {
@@ -22,7 +26,13 @@ path.edge, path.drag {
 }
 path.edge.painter-selected {
   stroke-dasharray: 10 2;
-  animation: dash .6s linear infinite;
+  animation: dash .4s linear infinite;
+  &.rev-dir {
+    animation-direction: reverse;
+    &.sam-dir {
+      animation-direction: alternate;
+    }
+  }
 }
 @keyframes dash {
   from {

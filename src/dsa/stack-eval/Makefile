@@ -1,8 +1,8 @@
 CC=gcc
 CFLAGS=-c -Wall
 LDFLAGS=
-SOURCES=main.c stack-eval.c ../stack/stack.c
-OBJECTS=$(SOURCES:.cpp=.o)
+SOURCES=test.c stack-eval.c ../stack/stack.c ../common/util.c
+OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=a.out
 
 all: $(SOURCES) $(EXECUTABLE)

@@ -1,51 +1,47 @@
 var clone = require('clone'); var frames = []; var stopid = 0; var rc;
 var stack = []; var N = 5;
 
-        var init = function() {
-stop(line,1);  stack = []; currentStatus.stack = stack;
-        };
 
-        var isFull = function() { _stacktop(1);
-stop(line,1); if (stack.length === N) {
-stop(line,1);    return true;
-            } else {
-stop(line,1); _stacktop();    return false;
-            }
-        };
 
         var isEmpty = function() { _stacktop(1);
-stop(line,1); if (stack.length === 0) {
-stop(line,1);     return true;
-            } else {
-stop(line,1); _stacktop();    return false;
-            }
-        };
+stop(line,1);          return stack.length === 0 ? true : (_stacktop(),false);
+};
 
-        var push = function(val) { _topush(val);
-stop(line,1); if (isFull()) {
-stop(line,1);     console.log('stack full.');
-                        } else {
-stop(line,1);     stack.push(val); _topush();
-            }
-        };
+        var isFull = function() { _stacktop(1);
+stop(line,1);         return stack.length === N ? true : (_stacktop(),false);
+};
 
         var pop = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('stack empty.');
-            } else {
+
+  if (stop(line,1),!isEmpty()) {
+
 stop(line,1);     stack.pop();
-            }
-        };
+  }
+stop(line,1);  return;
+};
 
         var peak = function() {
-stop(line,1); if (isEmpty()) {
-stop(line,1);     console.log('stack empty.');
-stop(line,1);     return -1;
-            } else {
+
+stop(line,1); if (!isEmpty()) {
 stop(line,1);  rc=stack[stack.length - 1]; _topeak(rc);  return rc;
             }
-        };
+stop(line,1);return;
+};
+
+        var push = function(val) { _topush(val);
+stop(line,1); if (!isFull()) {
+
+stop(line,1);     stack.push(val); _topush();
+stop(line,1); return;
+}
+stop(line,1); return;
+};
 // ===================================
+
+        var init = function() {
+          stack = []; currentStatus.stack = stack;
+        };
+
 
 currentStatus = {};
 lastStatus = {};
@@ -103,7 +99,10 @@ module.exports = {
   push: push,
   pop: pop,
   peak: peak,
-  init: init,
+  init: function () {
+    init();
+    stop(0);
+  },
   run: function (cmd, param) {
     this.initialize()[cmd](param);
     over();

@@ -24,9 +24,12 @@ hash *HashCreate(
 );
 void HashDestroy(hash *ht);
 
+int HashGetSlot(hash *ht, void *key);
 void *HashClosedInsert(hash *ht, void *key);
 void *HashClosedDelete(hash *ht, void *key);
+void HashClosedDeleteSlot(hash *ht, int i);
 void *HashClosedSearch(hash *ht, void *key);
+
 void *HashOpenInsert(hash *ht, void *key);
 void *HashOpenDelete(hash *ht, void *key);
 void *HashOpenSearch(hash *ht, void *key);

@@ -5,26 +5,26 @@ void yanghui(n) {
     int i;
     int j;
     int a;
-    int b;
-    Queue nums;
-    init(&nums);
-    enque(&nums, 1);
+    int one = 1;
+    queue *nums = QueueCreate(n+1, sizeof(int));
+    QueuePush(nums, &one);
     for (i = 1; i <= n; ++i) {
-        enque(&nums, 1);
+        QueuePush(nums, &one);
         for (j = 0; j < i-1; ++j) {
-            a = front(&nums);
-            deque(&nums);
-            b = front(&nums);
-            enque(&nums, a+b);
+            a = *(int *)QueuePeak(nums);
+            QueuePop(nums);
+            a += *(int *)QueuePeak(nums);
+            QueuePush(nums, &a);
         }
-        deque(&nums);
-        enque(&nums, 1);
+        QueuePop(nums);
+        QueuePush(nums, &one);
     }
     for (i = 0; i < n+1; ++i) {
-        a = front(&nums);
+        a = *(int *)QueuePeak(nums);
         printf("%d ", a);
-        deque(&nums);
+        QueuePop(nums);
     }
     printf("\n");
+    QueueDestroy(nums);
     return;
 }

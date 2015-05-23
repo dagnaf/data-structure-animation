@@ -3,8 +3,8 @@
 
 int main(int argc, char const *argv[]) {
   int n;
-  freopen("in", "r", stdin);
-  scanf("%d", &n);
-  print_line(n);
+  while (scanf("%d", &n) != EOF) {
+    yanghui(n);
+  }
   return 0;
-};
+}
