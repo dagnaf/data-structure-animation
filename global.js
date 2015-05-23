@@ -20,59 +20,30 @@ module.exports.entries = [
   'search',
   'sort',
   'hash',
-  "graph-app"
+  "graph-app",
+  "mst"
 ];
-var deps_common =     {
-  path: 'common',
-  files: ['util.c', 'util.h']
-};
+function Deps(path, name) {
+  name = name || path;
+  return {
+    path: path,
+    files: [name+'.c', name+'.h']
+  }
+}
+var common_util = Deps('common', 'util');
+var common_graph = Deps('common', 'graph');
 module.exports.deps = {
-  'stack-eval': [
-    {
-      path: 'stack',
-      files: ['stack.c', 'stack.h']
-    }
-  ],
-  'queue-yanghui': [
-    {
-      path: 'queue',
-      files: ['queue.c', 'queue.h']
-    }
-  ],
-  'rb-tree': [
-    deps_common
-  ],
-  'huffman-tree': [
-    deps_common,
-    {
-      path: 'min-heap',
-      files: ['min-heap.c', 'min-heap.h']
-    }
-  ],
-  'search': [
-    deps_common
-  ],
-  'sort': [
-    deps_common
-  ],
-  'hash': [
-    deps_common
-  ],
-  "graph-app": [
-    deps_common,
-    {
-      path: 'common',
-      files: ['graph.c', 'graph.h']
-    },
-    {
-      path: 'stack',
-      files: ['stack.c', 'stack.h']
-    },
-    {
-      path: 'queue',
-      files: ['queue.c', 'queue.h']
-    }
-  ]
+  'stack': [common_util],
+  'stack-eval': [Deps('stack'),common_util],
+  'queue': [common_util],
+  'queue-yanghui': [Deps('queue'),common_util],
+  'rb-tree': [common_util],
+  'huffman-tree': [Deps('min-heap'),common_util],
+  'search': [common_util],
+  'sort': [common_util],
+  'hash': [common_util],
+  "graph-app": [common_graph,Deps('stack'),Deps('queue'),common_util],
+  "mst": [common_graph,Deps('min-heap'),common_util],
 };
 
 module.exports.getFunctionBody = function (fn, opt) {
@@ -96,6 +67,7 @@ module.exports.zh = {
   'sort': '数组排序',
   'hash': '散列',
   "graph-app": "图",
+  "mst": "最小生成树",
 };
 
 module.exports.en = {
@@ -109,4 +81,5 @@ module.exports.en = {
   'sort': 'Array Sort',
   'hash': 'Hash',
   "graph-app": "Graph",
+  "mst": "Minimum Spanning Tree",
 };

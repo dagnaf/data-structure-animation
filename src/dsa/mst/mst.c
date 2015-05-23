@@ -48,7 +48,9 @@ graph_edge **GraphPrim(graph *g, int (*CompFn)(const void*, const void*)) {
             mst[i-1] = pn->e;
         }
         pns[pn->i].w = &_gNegInfinity;
-        e = g->adja[pn->i]->next;
+        if (i == g->n-1) {
+            break;
+        }
         for (e = g->adja[pn->i]->next; e != NULL; e = e->next) {
             if (pns[e->v].w == &_gPosInfinity ||
                         (pns[e->v].w != &_gNegInfinity && _gGraphEdgeWeightCompare(pns[e->v].w, e->w) > 0)

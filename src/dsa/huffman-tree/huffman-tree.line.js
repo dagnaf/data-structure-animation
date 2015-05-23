@@ -1,5 +1,5 @@
 var clone = require('clone'); var frames = []; var stopid = 0; var rc; var line = 0;
-var currentStatus = {}; var _id = 0;
+var currentStatus = {}; var _id = 0; var heap = require('../common/min-heap.js');
 /*
 
 
@@ -86,13 +86,13 @@ function HuffmanTreeCreateWithFreq(tbl) {
 stop(line,1);    h = new heap(_CompareFn); currentStatus.sorted = true;
     for (i = 0; i < n; ++i) {
         h.insert(tbl[i]);
-    }currentStatus.array = h.array;
+    }_ga(h);/*h.array;*/
 
     while (stop(line,1),h.array.length > 1) {
-stop(line);        node1 = h.pop();currentStatus.hl = 1; currentStatus.pop = [node1];
-stop(line,1);        node2  = h.pop();currentStatus.hl = 2; currentStatus.pop.push(node2);
+stop(line);        node1 = h.pop();_ga(h);currentStatus.hl = 1; currentStatus.pop = [node1];
+stop(line,1);        node2  = h.pop();_ga(h);currentStatus.hl = 2; currentStatus.pop.push(node2);
 stop(line,1);        node = _NewNode(node1.key + node2.key, '', node1, node2); currentStatus.pop = [node]; currentStatus.hl = 1;
-stop(line,1);        h.insert(node); currentStatus.pop = []; currentStatus.hl = 0;
+stop(line,1);        h.insert(node);_ga(h); currentStatus.pop = []; currentStatus.hl = 0;
     }
 stop(line,1);
 stop(line);
@@ -102,6 +102,10 @@ stop(line);currentStatus.zo = true;
 stop(line,1);    return t;
 }
 // ===================================
+
+function _ga(h) {
+  currentStatus.array = h.array.map(function (d) { return d.v });
+}
 
 currentStatus.clone = function () {
   return {
@@ -166,64 +170,64 @@ module.exports = {
   }
 };
 
-function heap(cf) {
-  this.array = [];
-  this.cf = cf;
-}
+// function heap(cf) {
+//   this.array = [];
+//   this.cf = cf;
+// }
 
-heap.prototype.p = function (x) {
-  return x == 0 ? 0 : Math.floor((x-1)/2);
-}
+// heap.prototype.p = function (x) {
+//   return x == 0 ? 0 : Math.floor((x-1)/2);
+// }
 
-heap.prototype.l = function (x) {
-  return x*2+1;
-}
+// heap.prototype.l = function (x) {
+//   return x*2+1;
+// }
 
-heap.prototype.r = function (x) {
-  return x*2+2;
-}
+// heap.prototype.r = function (x) {
+//   return x*2+2;
+// }
 
-heap.prototype.ex = function (i,j) {
-  var tmp = this.array[i];
-  this.array[i] = this.array[j];
-  this.array[j] = tmp;
-}
+// heap.prototype.ex = function (i,j) {
+//   var tmp = this.array[i];
+//   this.array[i] = this.array[j];
+//   this.array[j] = tmp;
+// }
 
-heap.prototype.insert = function (v) {
-  this.array.push(v);
-  var x = this.array.length-1;
-  while (x != 0 && this.cf(this.array[x], this.array[this.p(x)]) < 0) {
-    this.ex(x,this.p(x));
-    x = this.p(x);
-  }
-}
+// heap.prototype.insert = function (v) {
+//   this.array.push(v);
+//   var x = this.array.length-1;
+//   while (x != 0 && this.cf(this.array[x], this.array[this.p(x)]) < 0) {
+//     this.ex(x,this.p(x));
+//     x = this.p(x);
+//   }
+// }
 
-heap.prototype.pop = function () {
-  var x,y,v;
-  if (this.array.length === 0) {
-    return;
-  }
-  v = this.array[0];
-  this.array[0] = this.array[this.array.length-1];
-  this.array.pop();
-  x = 0; y = -1;
-  while (x !== y) {
-    y = x;
-    if (this.array[this.l(x)] !== undefined) {
-      if (this.cf(this.array[this.l(x)], this.array[x]) < 0) {
-        y = this.l(x);
-      }
-    }
-    if (this.array[this.r(x)] !== undefined) {
-      if (this.cf(this.array[this.r(x)], this.array[y]) < 0) {
-        y = this.r(x);
-      }
-    }
-    if (y != x) {
-      this.ex(x,y);
-      x = y;
-      y = -1;
-    }
-  }
-  return v;
-}
+// heap.prototype.pop = function () {
+//   var x,y,v;
+//   if (this.array.length === 0) {
+//     return;
+//   }
+//   v = this.array[0];
+//   this.array[0] = this.array[this.array.length-1];
+//   this.array.pop();
+//   x = 0; y = -1;
+//   while (x !== y) {
+//     y = x;
+//     if (this.array[this.l(x)] !== undefined) {
+//       if (this.cf(this.array[this.l(x)], this.array[x]) < 0) {
+//         y = this.l(x);
+//       }
+//     }
+//     if (this.array[this.r(x)] !== undefined) {
+//       if (this.cf(this.array[this.r(x)], this.array[y]) < 0) {
+//         y = this.r(x);
+//       }
+//     }
+//     if (y != x) {
+//       this.ex(x,y);
+//       x = y;
+//       y = -1;
+//     }
+//   }
+//   return v;
+// }

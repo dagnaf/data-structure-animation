@@ -469,12 +469,12 @@ function stop(wait) {
   }
   if (weighted) {
     // if not weight specified, take it as 0, but not show
-    // graph.edges.forEach(function (d) {
-    //   if (d.val === undefined) {
-    //     d.val = 0;
-    //   }
-    // })
-    // tick();
+    graph.edges.forEach(function (d) {
+      if (d.val === undefined) {
+        d.val = 1;
+      }
+    })
+    tick();
   }
   if (wait !== false) {
     force.stop();

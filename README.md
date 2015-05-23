@@ -57,22 +57,22 @@ npm run dist
 - [X] queue
   - [X] basic operations
   - [X] Yanghui's triangle
-- [ ] matrix
-  - [ ] triangular matrix
-  - [ ] sparse matrix
+- [ ] ~~matrix~~
+  - [ ] ~~triangular matrix~~
+  - [ ] ~~sparse matrix~~
 
 ### Non-linear
 
 - [X] tree
   - [X] red-black tree
   - [X] Huffman tree
-- [X] graph
+- [X] graph `new`
   - [X] depth/breath first search
   - [ ] single source shortest path (Dijkstra)
-  - [ ] minimum spanning tree (Prim)
+  - [X] minimum spanning tree (Prim) `new`
   - [X] topological sort
   - [X] strongly connected components (Tarjan)
-- [X] hash `new`
+- [X] hash
   - [X] open hashing
   - [X] closed hashing
 

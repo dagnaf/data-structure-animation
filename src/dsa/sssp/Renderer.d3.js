@@ -156,7 +156,7 @@ function same(d) {
     return sameEdge(d,se,true);
   })
 }
-function _draw_edges() {
+function _draw_deges() {
   gedges.selectAll('path.edge')
     .classed('painter-selected', selected)
     .classed('rev-dir', reversed)
@@ -252,7 +252,7 @@ function _init(_status, _delay, _others) {
 function render(status, delay, others) {
   _init(status, delay, others);
   _draw_nodes();
-  _draw_edges();
+  _draw_deges();
   _draw_topo();
   _draw_scc();
 }
