@@ -91,7 +91,9 @@ function init (opt) {
 
   svg = d3.select(svgDom).append("g").attr("class","svg-entry");
   gbase = svg.append("g").attr("class", "base");
-  gedges = gbase.append("g").attr("class", "edges");
+  gedges = gbase.append("g").attr("class", "edges")
+      .classed('directional', directional)
+      .classed('weighted', weighted);
   gnodes = gbase.append("g").attr("class", "nodes");
   gtexts = svg.append("g").attr("class", "text").attr("transform","translate(0,7)");
 

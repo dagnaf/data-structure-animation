@@ -20,28 +20,25 @@ module.exports = React.createClass({
       _onLoad: this._onLoad,
       nodes: [
         {x: 50, y: 150, fixed: true},
-        {x: 50, y: 300, fixed: true},
-        {x: 200, y: 150, fixed: true},
-        {x: 200, y: 300, fixed: true},
-        {x: 350, y: 300, fixed: true},
-        {x: 350, y: 150, fixed: true},
-        {x: 500, y: 150, fixed: true},
-        {x: 500, y: 300, fixed: true},
+        {x: 150, y: 250, fixed: true},
+        {x: 150, y: 50, fixed: true},
+        {x: 300, y: 250, fixed: true},
+        {x: 300, y: 50, fixed: true},
       ],
       edges: [
-        {u: 0, v: 1},
-        {u: 1, v: 2},
-        {u: 2, v: 0},
-        {u: 3, v: 1},
-        {u: 3, v: 2},
-        {u: 3, v: 4, reflexive: true},
-        {u: 4, v: 5},
-        {u: 5, v: 2},
-        {u: 5, v: 6, reflexive: true},
-        {u: 7, v: 6},
-        {u: 7, v: 4},
+        {u: 0, v: 1, w: 5},
+        {u: 0, v: 2, w: 3},
+        {u: 1, v: 2, w: 1},
+        {u: 1, v: 3, w: 6},
+        {u: 1, v: 4, w: 4},
+        {u: 2, v: 1, w: 2},
+        {u: 2, v: 4, w: 6},
+        {u: 3, v: 0, w: 3},
+        {u: 3, v: 4, w: 7},
+        {u: 4, v: 3, w: 2},
       ],
       directional: true,
+      weighted: true,
       nowait: true
     });
     Renderer.init(Painter.raw());
@@ -90,7 +87,7 @@ module.exports = React.createClass({
     Renderer.init(Painter.raw());
     DsaActions.runDemo(cmd, {
       g: Painter.data(),
-      x: this.state.text
+      src: this.state.text
     });
   },
   _onConvert: function (directional, weighted) {
@@ -105,8 +102,8 @@ module.exports = React.createClass({
     if (this.state.painting) {
       return (
         <div>
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,false,false)} value="无向图" title="无向无权图" />
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,true,false)} value="有向图" title="有向无权图" />
+          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,false,true)} value="无向图" title="无向带权图" />
+          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,true,true)} value="有向图" title="有向带权图" />
           <input className="cmd-button" readOnly={true} onClick={Painter.clear} value="清空" title="清空" />
           <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="完成" title="完成" />
         </div>
@@ -114,11 +111,8 @@ module.exports = React.createClass({
     } else {
       return (
         <div>
-          <input onChange={this._onChange.bind(this,'text')} value={this.state.text} placeholder="数字"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'dfs')} value="深度优先搜索" title="深度优先搜索" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'bfs')} value="广度优先搜索" title="广度优先搜索" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'topo')} value="拓扑排序" title="拓扑排序" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'scctarjan')} value="强连通分量" title="强连通分量" />
+          <input onChange={this._onChange.bind(this,'text')} value={this.state.text} placeholder="源点"/>
+          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'dijkstra')} value="Dijkstra单源最短路径" title="Dijkstra单源最短路径" />
           <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="编辑图" title="编辑图" />
         </div>
       )

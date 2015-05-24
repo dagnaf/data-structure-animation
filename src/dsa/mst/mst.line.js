@@ -51,8 +51,8 @@ stop(line,1);        pns[pn.i].w = _gNegInfinity;
         if (stop(line,1),i === g.n-1) {_s('hl');
 stop(line,1);          break;
         }
-        for (ei = 0;stop(line,1), _s('se'),ei < g.e[pn.i].length; ei++) {var e = g.e[pn.i][ei];
-            if (stop(line,1),_s('se',e),pns[e.v].w === _gPosInfinity ||
+        for (ei = 0;stop(line,1), _s('se'),_s('hle'),ei < g.e[pn.i].length; ei++) {var e = g.e[pn.i][ei];
+            if (stop(line,1),_s('se',e),_s('hle',e),pns[e.v].w === _gPosInfinity ||
                         (pns[e.v].w !== _gNegInfinity && pns[e.v].w - e.w > 0)
                 ) {_s('ine',e);
                 pns[e.v].w = e.w;
@@ -84,6 +84,7 @@ currentStatus.clone = function () {
     ine: clone(this.ine) || [],
     se: clone(this.se) || [],
     hl: clone(this.hl) || [],
+    hle: clone(this.hle) || [],
     pns: clone(this.pns) || [],
   }
 }
@@ -92,6 +93,7 @@ currentStatus.init = function (hard) {
   this.ine = [];
   this.pns = [];
   this.hl = [];
+  this.hle = [];
 }
 lastStatus = {};
 

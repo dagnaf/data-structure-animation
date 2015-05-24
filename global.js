@@ -21,7 +21,8 @@ module.exports.entries = [
   'sort',
   'hash',
   "graph-app",
-  "mst"
+  "mst",
+  "sssp",
 ];
 function Deps(path, name) {
   name = name || path;
@@ -44,6 +45,7 @@ module.exports.deps = {
   'hash': [common_util],
   "graph-app": [common_graph,Deps('stack'),Deps('queue'),common_util],
   "mst": [common_graph,Deps('min-heap'),common_util],
+  "sssp": [common_graph,Deps('min-heap'),common_util],
 };
 
 module.exports.getFunctionBody = function (fn, opt) {
@@ -68,6 +70,7 @@ module.exports.zh = {
   'hash': '散列',
   "graph-app": "图",
   "mst": "最小生成树",
+  "sssp": "单源最短路径",
 };
 
 module.exports.en = {
@@ -82,4 +85,5 @@ module.exports.en = {
   'hash': 'Hash',
   "graph-app": "Graph",
   "mst": "Minimum Spanning Tree",
+  "sssp": "Single Source Shortest Path",
 };

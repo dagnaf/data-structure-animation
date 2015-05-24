@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../graph/graph.h"
+#include "../common/graph.h"
 #include "./mst.h"
 
 int Compare(const void *a, const void *b) {

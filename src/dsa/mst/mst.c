@@ -1,4 +1,4 @@
-#include "../graph/graph.h"
+#include "../common/graph.h"
 #include "../min-heap/min-heap.h"
 #include "../common/util.h"
 #include <stdlib.h>

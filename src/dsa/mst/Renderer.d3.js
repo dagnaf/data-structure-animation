@@ -122,6 +122,7 @@ function _draw_edges() {
   gedges.selectAll('path.edge')
     .classed('painter-selected', selected)
     .classed('rev-dir', reversed)
+    .classed('highlighted', function (d) { return status.hle.some(function (se) { return se && sameEdge(d,se); }); })
     // .classed('sam-dir', same)
   gedges.selectAll('path.ine').data(status.ine, fneid)
     .enter().insert('path', ':first-child')

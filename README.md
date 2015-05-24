@@ -68,7 +68,7 @@ npm run dist
   - [X] Huffman tree
 - [X] graph `new`
   - [X] depth/breath first search
-  - [ ] single source shortest path (Dijkstra)
+  - [X] single source shortest path (Dijkstra) `new`
   - [X] minimum spanning tree (Prim) `new`
   - [X] topological sort
   - [X] strongly connected components (Tarjan)

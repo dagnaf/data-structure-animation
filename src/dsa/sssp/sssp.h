@@ -1,7 +1,7 @@
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
-#include "../graph/graph.h"
+#include "../common/graph.h"
 #include "../stack/stack.h"
 
 stack *GraphDijkstra(

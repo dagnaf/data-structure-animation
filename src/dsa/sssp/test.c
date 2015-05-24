@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../graph/graph.h"
-#include "./dijkstra.h"
+#include "../common/graph.h"
+#include "./sssp.h"
 #include "../stack/stack.h"
 
 int Compare(const void *a, const void *b) {
