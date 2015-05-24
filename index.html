@@ -1,102 +1,263 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>index - test</title>
-  <link rel="stylesheet" type="text/css" href="./demo.css">
-</head>
+<meta charset="utf-8">
+<style>
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+circle.node {
+  cursor: pointer;
+  stroke: #3182bd;
+  stroke-width: 1.5px;
+}
+text {
+  font: 15px sans-serif;
+  text-anchor: middle;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+text.name {
+  pointer-events: none;
+}
+a text.name {
+  pointer-events: initial;
+}
+
+line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+svg.legend {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.legend rect {
+  fill: white;
+  stroke: black;
+}
+.legend text {
+  text-anchor: initial;
+}
+
+.hidden {
+  opacity: 0.2;
+}
+
+</style>
 <body>
-<h1>data-structure-animation <small><abbr title="Sun May 24 2015 12:52:35 GMT+0800 (CST)" class="time-ago"></abbr></small></h1>
-<!--
-    <ul>
-      <li>
-        <span>线性</span>
-        <ul>
-          <li>
-            <span>数组</span>
-            <ul>
-              <li>
-                <a href="sort.html">排序</a>
-                <ul>
-                  <li><span>快速排序</span></li>
-                  <li><span>归并排序</span></li>
-                </ul>
-              </li>
-              <li>
-                <a href="search.html">查找</a>
-                <ul>
-                  <li><span>线性查找</span></li>
-                  <li><span>二分查找</span></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a href="stack.html">栈</a>
-            <ul>
-              <li><a href="stack-eval.html">算术表达式求值</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="queue.html">队列</a>
-            <ul>
-              <li><a href="queue-yanghui.html">杨辉三角</a></li>
-            </ul>
-          </li>
-          <li>
-            <span>矩阵</span>
-            <ul>
-              <li><a href="mat-tri.html">上三角矩阵</a></li>
-              <li><a href="mat-sparse.html">稀疏矩阵</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <span>非线性</span>
-        <ul>
-          <li>
-            <span>树</span>
-            <ul>
-              <li><a href="rb-tree.html">红黑树</a></li>
-              <li><a href="huffman-tree.html">哈夫曼树</a></li>
-            </ul>
-          </li>
-          <li>
-            <span>图</span>
-            <ul>
-              <li><a href="g-dfs-bfs.html">深度优先遍历、广度优先遍历</a></li>
-              <li><a href="g-topo.html">拓扑排序</a></li>
-              <li><a href="g-sssp-dijkstra.html">最短路径（Dijkstra算法）</a></li>
-              <li><a href="g-mst-prim.html">最小生成树（Prim算法）</a></li>
-              <li><a href="g-scc-tarjan.html">强连通分量（Tarjan算法）</a></li>
-            </ul>
-          </li>
-          <li>
-            <span>散列</span>
-            <ul>
-              <li><a href="hash-open.html">链地址</a></li>
-              <li><a href="hash-closed.html">开地址</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
--->
-<ul>
-<li><a href="stack.html">栈 | Stack</a></li>
-<li><a href="stack-eval.html">计算表达式 | Evaluate Expressions</a></li>
-<li><a href="queue.html">队列 | Queue</a></li>
-<li><a href="queue-yanghui.html">杨辉三角 | Yang Hui's Triangle</a></li>
-<li><a href="rb-tree.html">红黑树 | Red Black Tree</a></li>
-<li><a href="huffman-tree.html">哈夫曼树 | Huffman Tree</a></li>
-<li><a href="search.html">有序数组搜索 | Sorted Array Search</a></li>
-<li><a href="sort.html">数组排序 | Array Sort</a></li>
-<li><a href="hash.html">散列 | Hash</a></li>
-<li><a href="graph-app.html">图 | Graph</a></li>
-<li><a href="mst.html">最小生成树 | Minimum Spanning Tree</a></li>
-<li><a href="sssp.html">单源最短路径 | Single Source Shortest Path</a></li>
-</ul>
-<p><a href="https://github.com/dagnaf/data-structure-animation">Source Code</a></p>
-<script type="text/javascript" src="./demo.js"></script>
-</body>
-</html>
+<script type="text/javascript" src="./bower_components/d3/d3.js" charset="utf-8"></script>
+<script>
+
+var width = window.innerWidth,
+    height = window.innerHeight,
+    root;
+
+var force = d3.layout.force()
+    .linkDistance(80)
+    .charge(-320)
+    .gravity(.05)
+    .size([width, height])
+    .on("tick", tick);
+
+d3.select(window).on("resize", function () {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  d3.select("svg.main-svg").attr("width", width).attr("height",height);
+  force.size([width, height]).resume();
+})
+
+var svg = d3.select("body").append("svg")
+    .attr("class", "main-svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var glink = svg.append("g"),
+    gnode = svg.append("g"),
+    gtext = svg.append("g").attr("transform", "translate(0,5)"),
+    ga = svg.append("g").attr("transform", "translate(0,5)");
+
+d3.json("contents_sized.json", function(error, json) {
+  root = json;
+  update();
+});
+
+function update() {
+  var nodes = flatten(root),
+      links = d3.layout.tree().links(nodes);
+
+  // Restart the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  // Update links.
+  link = glink.selectAll("line.link").data(links, function(d) { return d.target.id; });
+
+  link.exit().remove();
+
+  link.enter().append("line")
+      .attr("class", "link");
+
+  // Update nodes.
+  node = gnode.selectAll("circle.node").data(nodes, function(d) { return d.id; });
+
+  node.exit().remove();
+
+  node.enter().append("circle")
+      .attr("class", "node")
+      .attr("r", function(d) { return d.rad = (Math.sqrt(d.size) / 5 || 4.5); })
+      .on("click", click)
+      .call(force.drag);
+
+  gnode.selectAll("circle.node")
+      .style("fill", color);
+
+  text = gtext.selectAll("text.name").data(nodes.filter(function (d) {  return !d.href; }), function(d) { return d.id; });
+
+  text.enter().append("text")
+      .attr("class", "name")
+      .text(function(d) { return d.zh; })
+      // .attr("title", function(d) { return d.en; })
+      .attr("x", function (d) {
+        var l = this.getComputedTextLength();
+          return l > d.rad*2 ? l/2+d.rad+5 : null;
+      })
+
+  text.exit().remove();
+
+  a = ga.selectAll("a.addr").data(nodes.filter(function (d) {  return d.href; }), function(d) { return d.id; });
+
+  a.enter().append("a")
+      .attr("class", "addr")
+      .attr("xlink:href", function (d) { return d.name + ".html"})
+      .attr("target", "_blank")
+      .append("text")
+          .attr("class", "name")
+          .text(function(d) { return d.zh; })
+              .attr("x", function (d) {
+                var l = this.getComputedTextLength();
+                  return l > d.rad*2 ? l/2+d.rad+5 : null;
+              })
+
+  a.exit().remove();
+}
+
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  text.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  a.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+function color(d) {
+  return d.href ? "#fd8d3c"
+      : d._children ? "#3182bd"
+      : "#c6dbef";
+  // return d._children ? "#3182bd" // collapsed package
+  //     : d.children ? "#c6dbef" // expanded package
+  //     : "#fd8d3c"; // leaf node
+}
+
+// Toggle children on click.
+function click(d) {
+  if (d3.event.defaultPrevented) return; // ignore drag
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  highlight(true);
+  update();
+}
+
+// Returns a list of all nodes under the root.
+function flatten(root) {
+  var nodes = [], i = 0;
+
+  function recurse(node) {
+    if (node.children) node.children.forEach(recurse);
+    if (!node.id) node.id = ++i;
+    nodes.push(node);
+  }
+
+  recurse(root);
+  return nodes;
+}
+
+function expandAll() {
+  gnode.selectAll("circle.node").each(function (d) {
+    if (d._children) {
+      d.children = d._children;
+      d._children = null;
+    }
+    update();
+  })
+}
+function highlight(reset) {
+  gnode.selectAll("circle.node").classed("hidden", reset ? false : function (d) {
+    return d.href !== true;
+  })
+  glink.selectAll("line.link").classed("hidden", reset ? false : true);
+  gtext.selectAll("text.name").classed("hidden", reset ? false : true);
+}
+function legend_click(d,i) {
+  switch(i) {
+    case 0:
+      expandAll();
+      highlight();
+      break;
+    case 1:
+      expandAll();
+      highlight(true);
+      break;
+  }
+}
+var legend = d3.select("body").append("svg")
+    .attr("class", "legend")
+    .attr("height", 120)
+    .attr("width", 220)
+    .append("g")
+    .attr("transform", "translate(10,10)");
+legend.append("rect")
+    .attr("width", 200)
+    .attr("height", 80);
+
+legend.append("text")
+  .text("数据结构课程动态演示系统")
+  .attr("transform", "translate(10,20)");
+
+var items = [
+  {color: "#fd8d3c", text: "动画演示"},
+  {color: "#c6dbef", text: "目录内容"},
+]
+var gitems = legend.selectAll("g.item").data(items);
+var l_rad = 7;
+gitems = gitems.enter().append("g")
+    .attr("class","item")
+    .attr("transform", function (d, i) {
+      return "translate(20,"+ (40+(l_rad*2+10)*i)+")";
+    }).on("click", legend_click);
+gitems.append("circle")
+    .attr("class","node")
+    .attr("r", l_rad)
+    .style("fill", function (d) { return d.color})
+gitems.append("text")
+    .attr("class","name")
+    .text(function (d) { return d.text; })
+    .attr("dy", 5)
+    .attr("dx", l_rad+10)
+</script>
