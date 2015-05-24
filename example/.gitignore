@@ -5,3 +5,6 @@ bower_components
 templates
 bower.json
 init.js
+contents.json
+statistic.js
+translation.json

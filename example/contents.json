@@ -1,0 +1,86 @@
+{
+  "name": "data-structure",
+  "children": [
+   {
+    "name": "linear",
+    "children": [
+     {
+      "name": "array",
+      "children": [
+       {
+        "name": "sort",
+        "children": [
+         {"name": "msort"},
+         {"name": "qsort"}
+        ]
+       },
+       {
+        "name": "search",
+        "children": [
+         {"name": "linear-search"},
+         {"name": "binary-search"}
+        ]
+       }
+      ]
+     },
+     {
+      "name": "stack",
+      "children": [
+       {"name": "stack-eval"}
+      ]
+     },
+     {
+      "name": "queue",
+      "children": [
+       {"name": "queue-yanghui"}
+      ]
+     }
+    ]
+   },
+   {
+    "name": "non-linear",
+    "children": [
+     {
+      "name": "tree",
+      "children": [
+       {"name": "rb-tree"},
+       {"name": "huffman-tree"}
+      ]
+     },
+     {
+      "name": "graph-app",
+      "children": [
+       {"name": "dfs"},
+       {"name": "bfs"},
+       {"name": "topo-sort"},
+       {
+        "name": "scc",
+        "children": [
+         {"name": "scc-tarjan"}
+        ]
+       },
+       {
+        "name": "mst",
+        "children": [
+         {"name": "prim"}
+        ]
+       },
+       {
+        "name": "sssp",
+        "children": [
+         {"name": "dijkstra"}
+        ]
+       }
+      ]
+     },
+     {
+      "name": "hash",
+      "children": [
+       {"name": "closed-hash"},
+       {"name": "open-hash"}
+      ]
+     }
+    ]
+   }
+  ]
+}

@@ -17,9 +17,9 @@ global.entries.forEach(function (e) {
 });
 
 // generate index (simple list)
-fs.writeFileSync(path.join(output, 'index.html'), index.replace('listofdsa', global.entries.map(function (e) {
-  return '<li><a href="'+e+'.html">'+global.zh[e] +' | ' + global.en[e]+'</a></li>'
-}).join('\n')).replace('lastupdate', new Date()), 'utf-8');
+// fs.writeFileSync(path.join(output, 'index.html'), index.replace('listofdsa', global.entries.map(function (e) {
+//   return '<li><a href="'+e+'.html">'+global.zh[e] +' | ' + global.en[e]+'</a></li>'
+// }).join('\n')).replace('lastupdate', new Date()), 'utf-8');
 
 
 if (_gh) {

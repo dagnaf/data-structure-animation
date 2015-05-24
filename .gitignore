@@ -49,3 +49,5 @@ documents/thesis
 
 #
 src/dsa/matrix
+
+example/contents_sized.json

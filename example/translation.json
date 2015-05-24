@@ -1,0 +1,122 @@
+{
+  "data-structure": {
+    "zh": "数据结构",
+    "en": "Data Structure"
+  },
+  "linear": {
+    "zh": "线性",
+    "en": "Linear"
+  },
+  "array": {
+    "zh": "数组",
+    "en": "Array"
+  },
+  "sort": {
+    "zh": "排序",
+    "en": "Sort"
+  },
+  "msort": {
+    "zh": "归并排序",
+    "en": "Merge Sort"
+  },
+  "qsort": {
+    "zh": "快速排序",
+    "en": "Quick Sort"
+  },
+  "search": {
+    "zh": "有序查找",
+    "en": "Sorted Search"
+  },
+  "linear-search": {
+    "zh": "顺序查找",
+    "en": "Linear Search"
+  },
+  "binary-search": {
+    "zh": "二分查找",
+    "en": "Binary Search"
+  },
+  "stack": {
+    "zh": "栈",
+    "en": "Stack"
+  },
+  "stack-eval": {
+    "zh": "算术表达式",
+    "en": "Expression Evalutaion"
+  },
+  "queue": {
+    "zh": "队列",
+    "en": "Queue"
+  },
+  "queue-yanghui": {
+    "zh": "杨辉三角",
+    "en": "Yanghui's Triangle"
+  },
+  "non-linear": {
+    "zh": "非线性",
+    "en": "Non-linear"
+  },
+  "tree": {
+    "zh": "树",
+    "en": "Linear"
+  },
+  "rb-tree": {
+    "zh": "红黑树",
+    "en": "Red Black Tree"
+  },
+  "huffman-tree": {
+    "zh": "哈夫曼树",
+    "en": "Huffman Tree"
+  },
+  "graph-app": {
+    "zh": "图",
+    "en": "Graph"
+  },
+  "dfs": {
+    "zh": "深度优先搜索",
+    "en": "Depth First Search"
+  },
+  "bfs": {
+    "zh": "广度优先搜索",
+    "en": "Breadth First Search"
+  },
+  "topo-sort": {
+    "zh": "拓扑排序",
+    "en": "Topological Sort"
+  },
+  "scc": {
+    "zh": "强连通分量",
+    "en": "Strongly Connected Components"
+  },
+  "scc-tarjan": {
+    "zh": "Tarjan算法",
+    "en": "Tarjan"
+  },
+  "mst": {
+    "zh": "最小生成树",
+    "en": "Minumum Spanning Tree"
+  },
+  "prim": {
+    "zh": "Prim算法",
+    "en": "Prim"
+  },
+  "sssp": {
+    "zh": "单源最短路径",
+    "en": "Single Source Shortest Path"
+  },
+  "dijkstra": {
+    "zh": "Dijkstra算法",
+    "en": "Dijkstra"
+  },
+  "hash": {
+    "zh": "散列",
+    "en": "Hash"
+  },
+  "closed-hash": {
+    "zh": "开地址法",
+    "en": "Closed Hashing"
+  },
+  "open-hash": {
+    "zh": "链地址法",
+    "en": "Open Hashing"
+  }
+}
