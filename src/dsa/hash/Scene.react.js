@@ -1,6 +1,7 @@
 var React = require('react');
 var DsaActions = require('../../actions/DsaActions');
 var Renderer = require('./Renderer.d3');
+var Legend = require('./Legend.react');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -8,6 +9,7 @@ module.exports = React.createClass({
       text: '',
       fn: '',
       demo: 'insert',
+      help: true
     }
   },
   componentDidMount: function () {
@@ -34,13 +36,14 @@ module.exports = React.createClass({
       {button: {demo: "search", onClick: this._onClick.bind(this,'search'), value:"查找"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
       {button: {demo: "insert", onClick: this._onClick.bind(this,'insert'), value:"插入"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
       {button: {demo: "delete", onClick: this._onClick.bind(this,'delete'), value:"删除"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
+      {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
     ]
     var self = this;
     return (
       <div className="wrapper-code">
         <div className="list">
           {inputs.map(function (d,i) {
-            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var classes = "input-group" + (d.button.help || d.button.demo === self.state.demo ? " input-current" : "");
             var items = d.items ? d.items : [];
             return (
               <div key={i} className={classes}>
@@ -57,6 +60,7 @@ module.exports = React.createClass({
           })}
         </div>
         <div ref="svg" className="scene"/>
+        <Legend show={this.state.help} />
       </div>
     );
   },
@@ -72,5 +76,8 @@ module.exports = React.createClass({
     } else {
       DsaActions.runDemo(cmd, this.state.text);
     }
-  }
+  },
+  _onHelp: function () {
+    this.setState({help: !this.state.help});
+  },
 });

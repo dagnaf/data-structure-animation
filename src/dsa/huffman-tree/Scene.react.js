@@ -1,12 +1,14 @@
 var React = require('react');
 var DsaActions = require('../../actions/DsaActions');
 var Renderer = require('./Renderer.d3');
+var Legend = require('./Legend.react');
 
 module.exports = React.createClass({
   getInitialState: function () {
     return {
       text: 'Huffman-tree-animation',
       demo: 'create',
+      help: true
     }
   },
   componentDidMount: function () {
@@ -20,17 +22,33 @@ module.exports = React.createClass({
     Renderer.render(this.props.frame.status, this.props.delay, this.props.others);
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // input-button(fake-input) should show under the input element
+    var inputs = [
+      {button: {demo: "create", onClick: this._onClick.bind(this,'create'), value:"编码"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"字符串"}]},
+      {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
+    ]
+    var self = this;
     return (
       <div className="wrapper-code">
         <div className="list">
-          <div className={"input-group "+(this.state.demo === 'create' ? 'input-current' : '')}>
-            <input className="input-button" readOnly={true} onClick={this._onClick.bind(this, 'create')} value="编码" title="编码"/>
-            <input className="input-item" onChange={this._onChange} value={this.state.text} placeholder="字符串" title={this.state.text}/>
-          </div>
+          {inputs.map(function (d,i) {
+            var classes = "input-group" + (d.button.help || d.button.demo === self.state.demo ? " input-current" : "");
+            var items = d.items ? d.items : [];
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.button.onClick} value={d.button.value} title={d.button.value} />
+                <div>
+                  {items.map(function (dd, ii) {
+                    return (
+                      <input key={ii} className="input-item" onChange={dd.onChange} value={dd.value} title={dd.value} placeholder={dd.placeholder} />
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
         <div ref="svg" className="scene"/>
+        <Legend show={this.state.help} />
       </div>
     );
   },
@@ -39,5 +57,8 @@ module.exports = React.createClass({
   },
   _onClick: function (cmd) {
     DsaActions.runDemo(cmd, this.state.text);
-  }
+  },
+  _onHelp: function () {
+    this.setState({help: !this.state.help});
+  },
 });

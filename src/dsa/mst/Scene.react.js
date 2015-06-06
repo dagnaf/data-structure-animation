@@ -3,6 +3,8 @@ var React = require('react');
 var DsaActions = require('../../actions/DsaActions');
 var Painter = require("../common/painter.d3");
 var Renderer = require('./Renderer.d3');
+var Legend = require('./Legend.react');
+var PainterLegend = require('../common/painter.react');
 
 module.exports = React.createClass({
   getInitialState: function () {
@@ -11,6 +13,7 @@ module.exports = React.createClass({
       loaded: false,
       text: '',
       demo: '',
+      help: true,
     }
   },
   componentDidMount: function () {
@@ -63,14 +66,14 @@ module.exports = React.createClass({
     }
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // input-button(fake-input) should show under the input element
+    var legend = this.state.painting ? (<PainterLegend show={this.state.help}/>) : (<Legend show={this.state.help}/>);
     return (
       <div className="wrapper-code">
         <div className="list">
           {this.getInputList()}
         </div>
         <div ref="svg" className="scene"/>
+        {legend}
       </div>
     );
   },
@@ -88,11 +91,6 @@ module.exports = React.createClass({
     }
     this.setState({ painting: !this.state.painting, demo: "" });
   },
-  // _onChange: function (o, e) {
-  //   var state = {};
-  //   state[o] = e.target.value;
-  //   this.setState(state);
-  // },
   _onClick: function (cmd) {
     this.setState({ demo: cmd});
     Renderer.clear();
@@ -102,9 +100,9 @@ module.exports = React.createClass({
       x: this.state.text
     });
   },
-  // _onConvert: function (directional, weighted) {
-  //   Painter.convert(directional, weighted);
-  // },
+  _onHelp: function () {
+    this.setState({help: !this.state.help});
+  },
   getInputList: function () {
     if (this.state.loaded === false) {
       return (
@@ -113,21 +111,33 @@ module.exports = React.createClass({
     }
     var self = this;
     if (this.state.painting) {
+      var inputs = [
+        {onClick: Painter.clear, value:"清空"},
+        {onClick: this._onPainting, value:"完成"},
+        {help: this.state.help, onClick: this._onHelp, value:"帮助"},
+      ];
       return (
         <div>
-          <input className="input-button" readOnly={true} onClick={Painter.clear} value="清空" title="清空" />
-          <input className="input-button" readOnly={true} onClick={this._onPainting} value="完成" title="完成" />
+          {inputs.map(function (d, i) {
+            var classes = "input-group" + (d.value === self.state.graphType || d.help? " input-current" : "");
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.onClick} value={d.value} title={d.value} />
+              </div>
+            )
+          })}
         </div>
-      )
+      );
     } else {
       var inputs = [
         {button: {demo: "prim", onClick: this._onClick.bind(this,'prim'), value:"Prim最小生成树"}},
         {button: {demo: "", onClick: this._onPainting, value:"编辑图"}},
+        {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
       ];
       return (
         <div>
           {inputs.map(function (d,i) {
-            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var classes = "input-group" + (d.button.demo === self.state.demo || d.button.help ? " input-current" : "");
             var items = d.items ? d.items : [];
             return (
               <div key={i} className={classes}>

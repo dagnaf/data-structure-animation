@@ -259,12 +259,13 @@ path {
 
 line {
   /*stroke-width: 3;*/
-  stroke-opacity: 0.5;
   &.parent {
     stroke: red;
+    stroke-opacity: 0.5;
   }
   &.child {
     stroke: black;
+    stroke-opacity: 0.5;
   }
 }
 #p-end, #left-end, #right-end {
@@ -295,4 +296,17 @@ pre, code, div, ul {
     stroke-width: 3;
     shape-rendering: crispEdges;
   }
+}
+
+.legend {
+  position: absolute;
+  top: 10px;
+  left: 90px;
+  & text {
+    text-anchor: start;
+  }
+}
+
+.legend .outline {
+  fill: rgba(255,255,255,0.85);
 }

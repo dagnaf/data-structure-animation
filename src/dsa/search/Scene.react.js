@@ -1,12 +1,14 @@
 var React = require('react');
 var DsaActions = require('../../actions/DsaActions');
 var Renderer = require('./Renderer.d3');
+var Legend = require('./Legend.react');
 
 module.exports = React.createClass({
   getInitialState: function () {
     return {
       text: '5',
-      demo: 'bsearch'
+      demo: 'bsearch',
+      help: true
     }
   },
   componentDidMount: function () {
@@ -22,16 +24,17 @@ module.exports = React.createClass({
   },
   render: function () {
     var inputs = [
-      {button: {demo: "create", onClick: this._onClick.bind(this,'create'), value:"新数组"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"数组"}]},
-      {button: {demo: "lsearch", onClick: this._onClick.bind(this,'lsearch'), value:"线性查找"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"数字"}]},
-      {button: {demo: "bsearch", onClick: this._onClick.bind(this,'bsearch'), value:"二分查找"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"数字"}]},
+      {button: {demo: "create", onClick: this._onClick.bind(this,'create'), value:"新数组"},     items: [{onChange:this._onChange/*.bind(this)*/,value:this.state.text,placeholder:"数组"}]},
+      {button: {demo: "lsearch", onClick: this._onClick.bind(this,'lsearch'), value:"线性查找"}, items: [{onChange:this._onChange/*.bind(this)*/,value:this.state.text,placeholder:"数字"}]},
+      {button: {demo: "bsearch", onClick: this._onClick.bind(this,'bsearch'), value:"二分查找"}, items: [{onChange:this._onChange/*.bind(this)*/,value:this.state.text,placeholder:"数字"}]},
+      {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
     ]
     var self = this;
     return (
       <div className="wrapper-code">
         <div className="list">
           {inputs.map(function (d,i) {
-            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var classes = "input-group" + (d.button.help || d.button.demo === self.state.demo ? " input-current" : "");
             var items = d.items ? d.items : [];
             return (
               <div key={i} className={classes}>
@@ -48,6 +51,7 @@ module.exports = React.createClass({
           })}
         </div>
         <div ref="svg" className="scene"/>
+        <Legend show={this.state.help} />
       </div>
     );
   },
@@ -57,5 +61,8 @@ module.exports = React.createClass({
   _onClick: function (cmd) {
     this.setState({demo: cmd});
     DsaActions.runDemo(cmd, this.state.text);
-  }
+  },
+  _onHelp: function () {
+    this.setState({help: !this.state.help});
+  },
 });

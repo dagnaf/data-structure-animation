@@ -82,7 +82,7 @@ module.exports = React.createClass({
         <ul className="list file-list">
           {this.props.files.map(function (file, i) {
             var classes = '';
-            if (this.state.index === i) classes += ' active';
+            if (this.state.index === i && !this.state.hidden) classes += ' active';
             return (
               <li key={i}>
                 <input
