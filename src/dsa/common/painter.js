@@ -398,7 +398,7 @@ function deleteSelected() {
     })
   } else {
     i = graph.edges.indexOf(selected);
-    if (i != -1) {
+    if (i !== -1) {
       graph.edges.splice(graph.edges.indexOf(selected), 1);
     }
   }

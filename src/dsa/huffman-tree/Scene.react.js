@@ -5,12 +5,13 @@ var Renderer = require('./Renderer.d3');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      text: ''
+      text: 'Huffman-tree-animation',
+      demo: 'create',
     }
   },
   componentDidMount: function () {
     Renderer.init.bind(this)();
-    DsaActions.runDemo('create', 'Huffman Tree', false);
+    DsaActions.runDemo('create', 'Huffman-tree-animation', false);
   },
   componentDidUpdate: function (prevProps) {
     if (this.props === prevProps || this.props.frame === undefined) {
@@ -20,12 +21,14 @@ module.exports = React.createClass({
   },
   render: function () {
     // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
+    // input-button(fake-input) should show under the input element
     return (
       <div className="wrapper-code">
         <div className="list">
-          <input onChange={this._onChange} value={this.state.text} placeholder="字符串"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'create')} value="编码" title="编码"/>
+          <div className={"input-group "+(this.state.demo === 'create' ? 'input-current' : '')}>
+            <input className="input-button" readOnly={true} onClick={this._onClick.bind(this, 'create')} value="编码" title="编码"/>
+            <input className="input-item" onChange={this._onChange} value={this.state.text} placeholder="字符串" title={this.state.text}/>
+          </div>
         </div>
         <div ref="svg" className="scene"/>
       </div>

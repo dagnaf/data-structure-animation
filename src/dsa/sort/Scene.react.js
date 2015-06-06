@@ -5,7 +5,8 @@ var Renderer = require('./Renderer.d3');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      text: ''
+      text: '',
+      demo: 'qsort'
     }
   },
   componentDidMount: function () {
@@ -24,14 +25,30 @@ module.exports = React.createClass({
     Renderer.render(this.props.frame.status, this.props.delay, this.props.others);
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
+    var inputs = [
+      {button: {demo: "msort", onClick: this._onClick.bind(this,'msort'), value:"归并排序"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"数组"}]},
+      {button: {demo: "qsort", onClick: this._onClick.bind(this,'qsort'), value:"快速排序"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"数组"}]},
+    ]
+    var self = this;
     return (
       <div className="wrapper-code">
         <div className="list">
-          <input onChange={this._onChange} value={this.state.text} placeholder="数组"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'msort')} value="归并排序" title="归并排序"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'qsort')} value="快速排序" title="快速排序"/>
+          {inputs.map(function (d,i) {
+            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var items = d.items ? d.items : [];
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.button.onClick} value={d.button.value} title={d.button.value} />
+                <div>
+                  {items.map(function (dd, ii) {
+                    return (
+                      <input key={ii} className="input-item" onChange={dd.onChange} value={dd.value} title={dd.value} placeholder={dd.placeholder} />
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
         <div ref="svg" className="scene"/>
       </div>
@@ -41,6 +58,7 @@ module.exports = React.createClass({
     this.setState({text: e.target.value});
   },
   _onClick: function (cmd) {
+    this.setState({demo: cmd});
     DsaActions.runDemo(cmd, this.state.text);
   }
 });

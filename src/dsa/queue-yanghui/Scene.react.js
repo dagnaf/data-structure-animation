@@ -5,7 +5,8 @@ var Renderer = require('./Renderer.d3');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      text: ''
+      text: '8',
+      demo: 'yanghui'
     }
   },
   componentDidMount: function () {
@@ -19,13 +20,13 @@ module.exports = React.createClass({
     Renderer.render(this.props.frame.status, this.props.delay, this.props.others);
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
     return (
       <div className="wrapper-code">
         <div className="list">
-          <input onChange={this._onChange} value={this.state.text} placeholder="整数"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'yanghui')} value="计算杨辉三角"/>
+          <div className={"input-group "+(this.state.demo === 'yanghui' ? 'input-current' : '')}>
+            <input className="input-button" readOnly={true} onClick={this._onClick.bind(this, 'yanghui')} value="计算杨辉三角"/>
+            <input className="input-item" onChange={this._onChange} value={this.state.text} placeholder="整数"/>
+          </div>
         </div>
         <div ref="svg" className="scene"/>
       </div>

@@ -5,7 +5,8 @@ var Renderer = require('./Renderer.d3');
 module.exports = React.createClass({
   getInitialState: function () {
     return {
-      text: ''
+      text: '',
+      demo: 'enque',
     }
   },
   componentDidMount: function () {
@@ -24,16 +25,31 @@ module.exports = React.createClass({
     Renderer.render(this.props.frame.status, this.props.delay, this.props.others);
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
+    var inputs = [
+      {button: {demo: "enque", onClick: this._onClick.bind(this,'enque'), value:"入队"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"整数"}]},
+      {button: {demo: "deque", onClick: this._onClick.bind(this,'deque'), value:"出队"}},
+      {button: {demo: "front", onClick: this._onClick.bind(this,'front'), value:"队首"}},
+    ]
+    var self = this;
     return (
       <div className="wrapper-code">
         <div className="list">
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'init')} value="初始化"/>
-          <input onChange={this._onChange} value={this.state.text} placeholder="整数"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'enque')} value="入队"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'deque')} value="出队"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'front')} value="队首"/>
+          {inputs.map(function (d,i) {
+            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var items = d.items ? d.items : [];
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.button.onClick} value={d.button.value} title={d.button.value} />
+                <div>
+                  {items.map(function (dd, ii) {
+                    return (
+                      <input key={ii} className="input-item" onChange={dd.onChange} value={dd.value} title={dd.value} placeholder={dd.placeholder} />
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
         <div ref="svg" className="scene"/>
       </div>
@@ -43,6 +59,7 @@ module.exports = React.createClass({
     this.setState({text: e.target.value});
   },
   _onClick: function (cmd) {
+    this.setState({demo:cmd});
     DsaActions.runDemo(cmd, this.state.text);
   }
 });

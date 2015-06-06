@@ -9,7 +9,9 @@ module.exports = React.createClass({
     return {
       painting: false,
       loaded: false,
-      text: ''
+      text: '',
+      demo: '',
+      graphType: '有向图'
     }
   },
   componentDidMount: function () {
@@ -53,7 +55,7 @@ module.exports = React.createClass({
   },
   render: function () {
     // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
+    // input-button(fake-input) should show under the input element
     return (
       <div className="wrapper-code">
         <div className="list">
@@ -75,7 +77,7 @@ module.exports = React.createClass({
       DsaActions.waitDemo();
       Painter.restart();
     }
-    this.setState({ painting: !this.state.painting });
+    this.setState({ painting: !this.state.painting,demo: "" });
   },
   _onChange: function (o, e) {
     var state = {};
@@ -83,6 +85,7 @@ module.exports = React.createClass({
     this.setState(state);
   },
   _onClick: function (cmd) {
+    this.setState({demo: cmd});
     Renderer.clear();
     Renderer.init(Painter.raw());
     DsaActions.runDemo(cmd, {
@@ -91,31 +94,60 @@ module.exports = React.createClass({
     });
   },
   _onConvert: function (directional, weighted) {
+    this.setState({graphType: directional ? "有向图" : "无向图"})
     Painter.convert(directional, weighted);
   },
   getInputList: function () {
     if (this.state.loaded === false) {
       return (
-        <input className="cmd-button" readOnly={true} value="加载中" title="加载中" />
+        <input className="input-button" readOnly={true} value="加载中" title="加载中" />
       );
     }
+    var self = this;
     if (this.state.painting) {
+      var inputs = [
+        {onClick: this._onConvert.bind(this,false,true), value:"无向图"},
+        {onClick: this._onConvert.bind(this,true,true), value:"有向图"},
+        {onClick: Painter.clear, value:"清空"},
+        {onClick: this._onPainting, value:"完成"},
+      ];
       return (
         <div>
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,false,true)} value="无向图" title="无向带权图" />
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,true,true)} value="有向图" title="有向带权图" />
-          <input className="cmd-button" readOnly={true} onClick={Painter.clear} value="清空" title="清空" />
-          <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="完成" title="完成" />
+          {inputs.map(function (d, i) {
+            var classes = "input-group" + (d.value === self.state.graphType ? " input-current" : "");
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.onClick} value={d.value} title={d.value} />
+              </div>
+            )
+          })}
         </div>
       )
     } else {
+      var inputs = [
+        {button: {demo: "dijkstra", onClick: this._onClick.bind(this,'dijkstra'), value:"Dijkstra单源最短路径"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"源点"}]},
+        {button: {demo: "", onClick: this._onPainting, value:"编辑图"}},
+      ];
       return (
         <div>
-          <input onChange={this._onChange.bind(this,'text')} value={this.state.text} placeholder="源点"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'dijkstra')} value="Dijkstra单源最短路径" title="Dijkstra单源最短路径" />
-          <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="编辑图" title="编辑图" />
+          {inputs.map(function (d,i) {
+            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var items = d.items ? d.items : [];
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.button.onClick} value={d.button.value} title={d.button.value} />
+                <div>
+                  {items.map(function (dd, ii) {
+                    return (
+                      <input key={ii} className="input-item" onChange={dd.onChange} value={dd.value} title={dd.value} placeholder={dd.placeholder} />
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
-      )
+      );
     }
   }
 });

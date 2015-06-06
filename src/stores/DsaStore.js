@@ -111,6 +111,7 @@ AppDispatcher.register(function(action) {
       if (action.ignore) break;
       DsaStore.emitChange(action.actionType);
       break;
+
     // Actions have checked the text
     case DsaConstants.DSA_RUN_DEMO:
       _demo.run(action.command, action.param);
@@ -127,6 +128,11 @@ AppDispatcher.register(function(action) {
       DsaStore.emitChange(action.actionType);
       break;
 
+    case DsaConstants.DSA_END_DEMO:
+      // _demo.destroy();
+      _demo.end();
+      DsaStore.emitChange(action.actionType);
+      break;
     default:
       // no op
   }

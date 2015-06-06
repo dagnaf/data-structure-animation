@@ -1,3 +1,4 @@
+require("./Renderer.d3.less")
 var d3 = require('d3');
 var d3Transform = require('d3-transform');
 
@@ -461,6 +462,7 @@ function init () {
       .enter()
         .append('rect')
           .attr('class', 'op-grid')
+          .classed('grid-head', function (d) { return d.r === 0 || d.c === 0; })
           .attr('transform',
             d3Transform().translate(function (d, i) {
               return [2*(100)+(50)*d.c, (50)+(50)*d.r];

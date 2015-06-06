@@ -83,12 +83,19 @@ var DsaActions = {
     // this.replayDemo();
     if (replay !== false) {
       this.replayDemo();
+    } else {
+      this.endDemo();
     }
   },
   waitDemo: function () {
     AppDispatcher.dispatch({
       actionType: DsaConstants.DSA_WAIT_DEMO,
     });
+  },
+  endDemo: function () {
+    AppDispatcher.dispatch({
+      actionType: DsaConstants.DSA_END_DEMO,
+    })
   }
 
 };

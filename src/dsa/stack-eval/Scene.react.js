@@ -20,12 +20,14 @@ module.exports = React.createClass({
   },
   render: function () {
     // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
+    // input-button(fake-input) should show under the input element
     return (
       <div className="wrapper-code">
         <div className="list">
-          <input onChange={this._onChange} value={this.state.text} placeholder="表达式"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this, 'eval')} value="计算"/>
+          <div className="input-group input-current">
+            <input className="input-button" readOnly={true} onClick={this._onClick.bind(this, 'eval')} value="计算"/>
+            <input className="input-item" onChange={this._onChange} value={this.state.text} placeholder="表达式"/>
+          </div>
         </div>
         <div ref="svg" className="scene"/>
       </div>

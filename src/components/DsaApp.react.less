@@ -30,9 +30,44 @@
     }
   }
 }
-.cmd-button {
+.input-button {
   cursor: pointer;
 }
+.input-item {
+  display: none;
+}
+.input-group:hover .input-item {
+  display: block;
+}
+.input-group:hover input {
+  background-color: @back-color;
+}
+.input-item:focus {
+  display: block;
+}
+.input-group {
+  position: relative;
+}
+.input-current:after {
+  content: "";
+/*  width: 0;
+  height: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  border-left: 10px solid @back-color;
+  border-right: 10px solid transparent;
+  border-top: 10px solid @back-color;
+  border-bottom: 10px solid transparent;
+  border-width: 10px;*/
+  width: 10px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: @back-color;
+}
+
 .file-list input {
   cursor: pointer;
   &.active, &:hover, &:focus {

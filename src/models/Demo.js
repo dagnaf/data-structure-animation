@@ -86,5 +86,8 @@ module.exports = {
     length = -1;
     _breakpoints = [];
     _descriptions = {};
+  },
+  end: function () {
+    stamp = length;
   }
 };

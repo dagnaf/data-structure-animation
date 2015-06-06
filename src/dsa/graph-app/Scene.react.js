@@ -9,7 +9,9 @@ module.exports = React.createClass({
     return {
       painting: false,
       loaded: false,
-      text: ''
+      text: '',
+      graphType: '有向图',
+      demo: ''
     }
   },
   componentDidMount: function () {
@@ -55,8 +57,6 @@ module.exports = React.createClass({
     }
   },
   render: function () {
-    // TODO: input to be wrapped with div, then on focus or hover,
-    // cmd-button(fake-input) should show under the input element
     return (
       <div className="wrapper-code">
         <div className="list">
@@ -78,7 +78,7 @@ module.exports = React.createClass({
       DsaActions.waitDemo();
       Painter.restart();
     }
-    this.setState({ painting: !this.state.painting });
+    this.setState({ painting: !this.state.painting,demo: "" });
   },
   _onChange: function (o, e) {
     var state = {};
@@ -86,6 +86,7 @@ module.exports = React.createClass({
     this.setState(state);
   },
   _onClick: function (cmd) {
+    this.setState({demo: cmd});
     Renderer.clear();
     Renderer.init(Painter.raw());
     DsaActions.runDemo(cmd, {
@@ -94,32 +95,61 @@ module.exports = React.createClass({
     });
   },
   _onConvert: function (directional, weighted) {
+    this.setState({graphType: directional ? "有向图" : "无向图"})
     Painter.convert(directional, weighted);
   },
   getInputList: function () {
     if (this.state.loaded === false) {
       return (
-        <input className="cmd-button" readOnly={true} value="加载中" title="加载中" />
+        <input className="input-button" readOnly={true} value="加载中" title="加载中" />
       );
     }
+    var self = this;
     if (this.state.painting) {
+      var inputs = [
+        {onClick: this._onConvert.bind(this,false,false), value:"无向图"},
+        {onClick: this._onConvert.bind(this,true,false), value:"有向图"},
+        {onClick: Painter.clear, value:"清空"},
+        {onClick: this._onPainting, value:"完成"},
+      ];
       return (
         <div>
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,false,false)} value="无向图" title="无向无权图" />
-          <input className="cmd-button" readOnly={true} onClick={this._onConvert.bind(this,true,false)} value="有向图" title="有向无权图" />
-          <input className="cmd-button" readOnly={true} onClick={Painter.clear} value="清空" title="清空" />
-          <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="完成" title="完成" />
+          {inputs.map(function (d, i) {
+            var classes = "input-group" + (d.value === self.state.graphType ? " input-current" : "");
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.onClick} value={d.value} title={d.value} />
+              </div>
+            )
+          })}
         </div>
       )
     } else {
+      var inputs = [
+        {button: {demo: "dfs", onClick: this._onClick.bind(this,'dfs'), value:"深度优先搜索"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
+        {button: {demo: "bfs", onClick: this._onClick.bind(this,'bfs'), value:"广度优先搜索"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
+        {button: {demo: "topo", onClick: this._onClick.bind(this,'topo'), value:"拓扑排序"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"数字"}]},
+        {button: {demo: "scctarjan", onClick: this._onClick.bind(this,'scctarjan'), value:"强连通分量"}},
+        {button: {demo: "", onClick: this._onPainting, value:"编辑图"}},
+      ];
       return (
         <div>
-          <input onChange={this._onChange.bind(this,'text')} value={this.state.text} placeholder="数字"/>
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'dfs')} value="深度优先搜索" title="深度优先搜索" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'bfs')} value="广度优先搜索" title="广度优先搜索" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'topo')} value="拓扑排序" title="拓扑排序" />
-          <input className="cmd-button" readOnly={true} onClick={this._onClick.bind(this,'scctarjan')} value="强连通分量" title="强连通分量" />
-          <input className="cmd-button" readOnly={true} onClick={this._onPainting} value="编辑图" title="编辑图" />
+          {inputs.map(function (d,i) {
+            var classes = "input-group" + (d.button.demo === self.state.demo ? " input-current" : "");
+            var items = d.items ? d.items : [];
+            return (
+              <div key={i} className={classes}>
+                <input className="input-button" readOnly={true} onClick={d.button.onClick} value={d.button.value} title={d.button.value} />
+                <div>
+                  {items.map(function (dd, ii) {
+                    return (
+                      <input key={ii} className="input-item" onChange={dd.onChange} value={dd.value} title={dd.value} placeholder={dd.placeholder} />
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )
     }

@@ -9,7 +9,8 @@ var template_page_html = 'template_page'+_gh+'.html';
 console.log(process.argv, template_page_html);
 
 var html = fs.readFileSync(path.join(output, 'templates', template_page_html), 'utf-8');
-var index = fs.readFileSync(path.join(output, 'templates', 'template_index.html'), 'utf-8');
+// var index = fs.readFileSync(path.join(output, 'templates', 'template_index.html'), 'utf-8');
+var index = fs.readFileSync(path.join(output, 'templates', 'template_index_v2.html'), 'utf-8');
 
 // generate html pages for each dsa
 global.entries.forEach(function (e) {
@@ -20,7 +21,8 @@ global.entries.forEach(function (e) {
 // fs.writeFileSync(path.join(output, 'index.html'), index.replace('listofdsa', global.entries.map(function (e) {
 //   return '<li><a href="'+e+'.html">'+global.zh[e] +' | ' + global.en[e]+'</a></li>'
 // }).join('\n')).replace('lastupdate', new Date()), 'utf-8');
-
+var cdn = "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js";
+fs.writeFileSync(path.join(output, 'index.html'), index.replace('d3_src', _gh ? cdn : "./bower_components/d3/d3.js"));
 
 if (_gh) {
   var ghpages = require('gh-pages');
