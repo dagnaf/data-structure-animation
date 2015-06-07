@@ -5,47 +5,28 @@ module.exports = React.createClass({
       display: this.props.show ? 'block' : 'none'
     };
     return (
-      <svg className="legend" width="210" height="210" style={inlineStyle}>
-        <rect className="outline" stroke="black" x="0" y="0" width="200" height="190"></rect>
-        <g transform="translate(15,20)">
+      <svg className="legend" width="210" height="120" style={inlineStyle}>
+        <rect className="outline" stroke="black" x="0" y="0" width="200" height="110"></rect>
+        <g transform="translate(15,10)">
           <g transform="translate(0,0)">
-            <g transform="scale(0.5)">
-              <path d="M0,0L50,0" className="edge painter-selected" markerEnd="url(#arrow-end)"></path>
-            </g>
+            <rect width="45" height="15" fill="brown" />
           </g>
           <g transform="translate(0,25)">
-            <g transform="scale(0.5)">
-              <path d="M0,0L50,0" className="ine"></path>
-            </g>
+            <rect width="45" height="15" fill="coral" />
           </g>
-          <g transform="translate(6,50)">
-            <circle cx="0" cy="0" r="6" className="node highlighted"></circle>
+          <g transform="translate(0,50)">
+            <rect width="45" height="15" fill="deepskyblue" />
           </g>
-
-          <g transform="translate(6,75)">
-            <circle cx="0" cy="0" r="6" className="node visited"></circle>
+          <g transform="translate(0,75)">
+            <rect width="15" height="15" fill="tomato" />
+            <rect x="15" width="15" height="15" fill="coral" />
+            <rect x="30" width="15" height="15" fill="deepskyblue" />
           </g>
-
-          <g transform="translate(6,100)">
-            <circle r="6" className="node"></circle>
-            <path d="M0,0L0,-6A6,6 0 0,1 5.19,3Z" className="inq"></path>
-          </g>
-          <g transform="translate(6,125)">
-            <circle r="6" className="node"></circle>
-            <text x="2" y="-2" fontSize="10px">[a]</text>
-          </g>
-          <g transform="translate(6,150)">
-            <circle r="6" className="node"></circle>
-            <text x="2" y="-2" fontSize="10px">(a,b)</text>
-          </g>
-          <g transform="translate(0,5)">
-            <text x="40" y="0">当前边</text>
-            <text x="40" y="25">遍历边</text>
-            <text x="40" y="50">当前结点</text>
-            <text x="40" y="75">已访问的结点</text>
-            <text x="40" y="100">访问中的结点</text>
-            <text x="40" y="125">结点拓扑序号</text>
-            <text x="40" y="150">时间戳和最远结点</text>
+          <g transform="translate(0,14)">
+            <text x="60" y="0">栈</text>
+            <text x="60" y="25">数据</text>
+            <text x="60" y="50">当前字符</text>
+            <text x="60" y="75">优先级表</text>
           </g>
         </g>
       </svg>

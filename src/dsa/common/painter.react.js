@@ -63,12 +63,12 @@ module.exports = React.createClass({
             <text x="3" y="5">a</text>
           </g>
           <g transform="translate(0,5)">
-            <text x="40" y="0">拖动空白区域</text>
-            <text x="40" y="25">滚动鼠标轴</text>
-            <text x="40" y="50">双击空白区</text>
-            <text x="40" y="75">shift键后拖动结点</text>
+            <text x="40" y="0">拖动空白区平移</text>
+            <text x="40" y="25">滚动鼠标轴缩放</text>
+            <text x="40" y="50">双击添加结点</text>
+            <text x="40" y="75">shift键拖动结点</text>
             <text x="40" y="100">退格键删除结点</text>
-            <text x="40" y="125">结点上新建边</text>
+            <text x="40" y="125">结点上拖动添加边</text>
             <text x="40" y="150">退格键删除边</text>
             <text x="40" y="175">回车键输入权值</text>
           </g>

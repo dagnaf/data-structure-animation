@@ -1,7 +1,7 @@
 var DsaFactory = require('../routers/require-dsa').required.factory;
 
 var isPlaying = false;
-var delay = 800;
+var delay = parseInt(localStorage.getItem("dsa-delay")) || 800;
 var _descriptions = {};//DsaFactory.getInitialDescriptions();
 var _breakpoints = [];//_descriptions.frames;
 var length = -1;//_breakpoints.length-1;
@@ -36,6 +36,7 @@ function update (newStamp) {
 
 function setDelay (newDelay) {
   delay = newDelay;
+  localStorage.setItem("dsa-delay", delay);
   console.log('_DEMO set delay= '+ newDelay);
 }
 

@@ -5,7 +5,7 @@ module.exports = React.createClass({
       display: this.props.show ? 'block' : 'none'
     };
     return (
-      <svg className="legend" width="210" height="90" style={inlineStyle}>
+      <svg className="legend" width="210" height="100" style={inlineStyle}>
         <rect className="outline" stroke="black" x="0" y="0" width="200" height="90"></rect>
         <g transform="translate(15,20)">
           <g transform="translate(6,0)">

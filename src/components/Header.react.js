@@ -7,8 +7,17 @@ var totalWidth = function () {
   return document.querySelector('.dsa-app').clientWidth - sideWidth*2;
   // return document.getElementById('dsaapp').clientWidth - sideWidth*2;
 }
+function _scroll() {
+  var doc = document.documentElement;
+  return {
+    left: (window.pageXOffset || doc.scrollLeft) - (doc.clientLeft || 0),
+    top: (window.pageYOffset || doc.scrollTop)  - (doc.clientTop || 0)
+  }
+}
 var clientWidth = function (clientX) {
-  return Math.max(0,Math.min(totalWidth(), clientX - sideWidth));
+  var offsetLeft = document.querySelector('.dsa-app').offsetLeft+sideWidth;
+  clientX += _scroll().left - offsetLeft;
+  return Math.max(0,Math.min(totalWidth(), clientX));
 }
 
 module.exports = React.createClass({

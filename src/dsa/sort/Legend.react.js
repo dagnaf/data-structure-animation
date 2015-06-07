@@ -5,47 +5,27 @@ module.exports = React.createClass({
       display: this.props.show ? 'block' : 'none'
     };
     return (
-      <svg className="legend" width="210" height="210" style={inlineStyle}>
-        <rect className="outline" stroke="black" x="0" y="0" width="200" height="190"></rect>
+      <svg className="legend" width="210" height="120" style={inlineStyle}>
+        <rect className="outline" stroke="black" x="0" y="0" width="200" height="115"></rect>
         <g transform="translate(15,20)">
           <g transform="translate(0,0)">
-            <g transform="scale(0.5)">
-              <path d="M0,0L50,0" className="edge painter-selected" markerEnd="url(#arrow-end)"></path>
-            </g>
+            <line className="pt" stroke="#1f77b4" strokeWidth="5" strokeOpacity="0.5" markerEnd="url(#i-arr)" x1="0" x2="20" y1="0" y2="0"></line>
           </g>
           <g transform="translate(0,25)">
-            <g transform="scale(0.5)">
-              <path d="M0,0L50,0" className="ine"></path>
-            </g>
+            <line className="pt" stroke="#ff7f0e" strokeWidth="5" strokeOpacity="0.5" markerEnd="url(#j-arr)" x1="0" x2="20" y1="0" y2="0"></line>
           </g>
-          <g transform="translate(6,50)">
-            <circle cx="0" cy="0" r="6" className="node highlighted"></circle>
+          <g transform="translate(0,50)">
+            <line className="mid" strokeOpacity="1" x1="0" x2="32" y1="0" y2="0" stroke="rgb(0, 191, 255)" strokeWidth="5" strokeDasharray="5px, 1.5px"></line>
           </g>
 
-          <g transform="translate(6,75)">
-            <circle cx="0" cy="0" r="6" className="node visited"></circle>
-          </g>
-
-          <g transform="translate(6,100)">
-            <circle r="6" className="node"></circle>
-            <path d="M0,0L0,-6A6,6 0 0,1 5.19,3Z" className="inq"></path>
-          </g>
-          <g transform="translate(6,125)">
-            <circle r="6" className="node"></circle>
-            <text x="2" y="-2" fontSize="10px">[a]</text>
-          </g>
-          <g transform="translate(6,150)">
-            <circle r="6" className="node"></circle>
-            <text x="2" y="-2" fontSize="10px">(a,b)</text>
+          <g transform="translate(0,68)">
+            <rect width="15" height="15" fill="none" stroke="#1f77b4" />
           </g>
           <g transform="translate(0,5)">
-            <text x="40" y="0">当前边</text>
-            <text x="40" y="25">遍历边</text>
-            <text x="40" y="50">当前结点</text>
-            <text x="40" y="75">已访问的结点</text>
-            <text x="40" y="100">访问中的结点</text>
-            <text x="40" y="125">结点拓扑序号</text>
-            <text x="40" y="150">时间戳和最远结点</text>
+            <text x="40" y="0">i 指针</text>
+            <text x="40" y="25">j 指针</text>
+            <text x="40" y="50">分区线</text>
+            <text x="40" y="75">已完成排序的元素</text>
           </g>
         </g>
       </svg>

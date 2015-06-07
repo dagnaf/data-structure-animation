@@ -1,0 +1,130 @@
+.quater3 {
+  position: absolute;
+  width: 14px;
+  height: 12px;
+  background: gainsboro;
+  bottom: -8px;
+  left: -8px;
+}
+.q-line {
+  position: relative;
+  top: 8px;
+  left: 0px;
+  background: white;
+  width: 8px;
+  height: 12px;
+  border-top-left-radius: 8px;
+}
+.q-dot {
+  position: absolute;
+  top: 14px;
+  background: white;
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+}
+.qmark {
+  margin-left: 8px;
+  height: 24px;
+  width: 24px;
+  border-radius: 24px;
+}
+
+.tip-full {
+  cursor: default;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  // background-color: rgba(255,0,0,0.4);
+}
+
+@arrow-width: 10px;
+
+.tip-item {
+  & span {
+    cursor: pointer;
+    &:hover {
+      color: gray;
+    }
+  }
+  min-width: 200px;
+  transition: all 1s ease;
+  position: absolute;
+  color: black;
+  background-color: rgba(255,255,255,0.85);
+  border: 1px solid black;
+  /* border-radius: 10px; */
+  padding: 15px;
+  box-shadow: 1px 1px 1px;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  &:before, &:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border: @arrow-width solid transparent;
+  }
+  &.tip-item-left {
+    &:before, &:after {
+      border-left-width: 0;
+    }
+    &:before {
+      border-right-color: black;
+      left: -@arrow-width - 1px;
+      top: 50%;
+    }
+    &:after {
+      border-right-color: white;
+      left: -@arrow-width;
+      top: 50%;
+    }
+  }
+  &.tip-item-right {
+    &:before, &:after {
+      border-right-width: 0;
+    }
+    &:before {
+      border-left-color: black;
+      right: -@arrow-width - 1px;
+      top: 50%;
+    }
+    &:after {
+      border-left-color: white;
+      right: -@arrow-width;
+      top: 50%;
+    }
+  }
+  &.tip-item-top {
+    &:before, &:after {
+      border-top-width: 0;
+    }
+    &:before {
+      border-bottom-color: black;
+      top: -@arrow-width - 1px;
+      left: 50%;
+    }
+    &:after {
+      border-bottom-color: white;
+      top: -@arrow-width;
+      left: 50%;
+    }
+  }
+  &.tip-item-bottom {
+    &:before, &:after {
+      border-bottom-width: 0;
+    }
+    &:before {
+      border-top-color: black;
+      bottom: -@arrow-width - 1px;
+      left: 50%;
+    }
+    &:after {
+      border-top-color: white;
+      bottom: -@arrow-width;
+      left: 50%;
+    }
+  }
+}
