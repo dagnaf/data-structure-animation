@@ -4,6 +4,13 @@ body {
 }
 #demo {
   height: 100vh;
+/*
+  height: 500px;
+  width: 500px;
+  position: absolute;
+  top: 100px;
+  left: 200px;
+*/
 }
 h1 small {
   font-size: 0.5em;
