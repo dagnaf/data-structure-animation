@@ -17,21 +17,6 @@ module.exports = React.createClass({
             <rect y="5" width="8" height="8" fill="black" />
             <text x="1" y="6" fontSize="10px" fill="black" >s</text>
           </g>
-          <g transform="translate(0,50)">
-            <rect y="5" width="15" height="15" fill="red" />
-          </g>
-
-          <g transform="translate(0,83)">
-            <path markerEnd="url(#arrow)" d="M0,0L20,0" stroke="deepskyblue" strokeWidth="5"/>
-          </g>
-
-          <g transform="translate(0,100)">
-            <rect width="15" height="15" fill="coral" stroke="black" />
-          </g>
-          <g transform="translate(0,125)">
-            <rect width="15" height="15" fill="coral" />
-            <text x="4" y="12" fontSize="10px" fill="red" >X</text>
-          </g>
           <g transform="translate(0,14)">
             <text x="40" y="0">字符和出现次数</text>
             <text x="40" y="25">树中结点和权值</text>

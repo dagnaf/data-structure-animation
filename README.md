@@ -66,10 +66,10 @@ npm run dist
 - [X] tree
   - [X] red-black tree
   - [X] Huffman tree
-- [X] graph `new`
+- [X] graph
   - [X] depth/breath first search
-  - [X] single source shortest path (Dijkstra) `new`
-  - [X] minimum spanning tree (Prim) `new`
+  - [X] single source shortest path (Dijkstra)
+  - [X] minimum spanning tree (Prim)
   - [X] topological sort
   - [X] strongly connected components (Tarjan)
 - [X] hash
@@ -82,7 +82,7 @@ npm run dist
 - [ ] data structure animation
 - [ ] tests
 - [X] webpack code splitting
-- [ ] webpage contents
+- [X] webpage contents
 
 ## Inspirations
 

@@ -67,9 +67,13 @@
     "zh": "哈夫曼树",
     "en": "Huffman Tree"
   },
-  "graph-app": {
+  "graph": {
     "zh": "图",
     "en": "Graph"
+  },
+  "graph-app": {
+    "zh": "遍历",
+    "en": "Traverse"
   },
   "dfs": {
     "zh": "深度优先搜索",

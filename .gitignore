@@ -46,6 +46,7 @@ test
 
 # thesis, sub repository
 documents/thesis
+documents/oral-defense
 
 #
 src/dsa/matrix

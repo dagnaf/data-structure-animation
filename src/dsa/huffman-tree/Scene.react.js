@@ -23,7 +23,7 @@ module.exports = React.createClass({
   },
   render: function () {
     var inputs = [
-      {button: {demo: "create", onClick: this._onClick.bind(this,'create'), value:"编码"}, items: [{onChange:this._onChange.bind(this,'text'),value:this.state.text,placeholder:"字符串"}]},
+      {button: {demo: "create", onClick: this._onClick.bind(this,'create'), value:"编码"}, items: [{onChange:this._onChange.bind(this),value:this.state.text,placeholder:"字符串"}]},
       {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
     ]
     var self = this;

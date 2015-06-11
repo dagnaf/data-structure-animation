@@ -25,7 +25,7 @@ var tips = [
   { html: "调节播放速度。", style: {/*width:"200px",*/top: "85px", left: "50%",marginLeft:"-100px"}, dir: "top" },
   { html: "控制播放进度。", style: {/*width:"200px",*/top: "100%", marginTop: "-160px", left: "50%",marginLeft: "-100px"}, dir: "bottom" },
   { html: "查看代码文件。", style: {/*width:"200px",*/top: "50%", left: "100%",marginLeft: "-300px",marginTop: "-35px"}, dir: "right" },
-  { html: "如有疑问，请联系开发者。", style: {/*width:"225px",*/top: "50%", left: "50%",marginTop: "-50px",marginLeft:"-110px"}, dir: "" },
+  { html: "如有疑问，请<a href=\"https://github.com/dagnaf/data-structure-animation/issues\" target=\"_blank\">联系</a>开发者。", style: {/*width:"225px",*/top: "50%", left: "50%",marginTop: "-50px",marginLeft:"-110px"}, dir: "" },
 ]
 module.exports = React.createClass({
   getInitialState: function () {

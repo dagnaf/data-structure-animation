@@ -48,15 +48,20 @@
       ]
      },
      {
-      "name": "graph-app",
+      "name": "graph",
       "children": [
-       {"name": "dfs"},
-       {"name": "bfs"},
-       {"name": "topo-sort"},
        {
-        "name": "scc",
+        "name": "graph-app",
         "children": [
-         {"name": "scc-tarjan"}
+         {"name": "dfs"},
+         {"name": "bfs"},
+         {"name": "topo-sort"},
+         {
+          "name": "scc",
+          "children": [
+           {"name": "scc-tarjan"}
+          ]
+         }
         ]
        },
        {
