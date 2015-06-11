@@ -48,6 +48,10 @@ svg.legend {
   opacity: 0.2;
 }
 
+g.item {
+  cursor: pointer;
+}
+
 </style>
 <body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
@@ -71,10 +75,22 @@ d3.select(window).on("resize", function () {
   force.size([width, height]).resume();
 })
 
+var zoom = d3.behavior.zoom()
+    .scaleExtent([.1,10])
+    .on("zoom", _onZoom);
+
 var svg = d3.select("body").append("svg")
     .attr("class", "main-svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .call(zoom)
+    .append("g");
+
+function _onZoom() {
+  gtranslate = d3.event.translate;
+  gscale = d3.event.scale;
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
 
 var glink = svg.append("g"),
     gnode = svg.append("g"),
@@ -85,6 +101,27 @@ d3.json("contents_sized.json", function(error, json) {
   root = json;
   update();
 });
+
+function dragstarted(d) {
+  d3.event.sourceEvent.stopPropagation();
+  d3.select(this).classed("dragging", true);
+  force.start();
+}
+
+function dragged(d) {
+  d3.select(this).attr("transform", "translate("+(d.x = d3.event.x)+","+(d.y = d3.event.y)+")")
+  // d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+}
+
+function dragended(d) {
+  d3.select(this).classed("dragging", false);
+}
+
+var drag = force.drag()
+  .origin(function(d) { return d; })
+  .on("dragstart", dragstarted)
+  .on("drag", dragged)
+  .on("dragend", dragended)
 
 function update() {
   var nodes = flatten(root),
@@ -113,7 +150,7 @@ function update() {
       .attr("class", "node")
       .attr("r", function(d) { return d.rad = (Math.sqrt(d.size) / 5 || 4.5); })
       .on("click", click)
-      .call(force.drag);
+      .call(drag);
 
   gnode.selectAll("circle.node")
       .style("fill", color);
@@ -126,7 +163,7 @@ function update() {
       // .attr("title", function(d) { return d.en; })
       .attr("x", function (d) {
         var l = this.getComputedTextLength();
-          return l > d.rad*2 ? l/2+d.rad+5 : null;
+          return l > d.rad*2-2 ? l/2+d.rad+5 : null;
       })
 
   text.exit().remove();
@@ -142,7 +179,7 @@ function update() {
           .text(function(d) { return d.zh; })
               .attr("x", function (d) {
                 var l = this.getComputedTextLength();
-                  return l > d.rad*2 ? l/2+d.rad+5 : null;
+                  return l > d.rad*2-2 ? l/2+d.rad+5 : null;
               })
 
   a.exit().remove();
@@ -251,6 +288,13 @@ gitems = gitems.enter().append("g")
     .attr("transform", function (d, i) {
       return "translate(20,"+ (40+(l_rad*2+10)*i)+")";
     }).on("click", legend_click);
+gitems.append("rect")
+    .attr("fill", "green")
+    .attr("stroke-width", 0)
+    .attr("x", -8)
+    .attr("y", -8)
+    .attr("height", 18)
+    .attr("width", 100)
 gitems.append("circle")
     .attr("class","node")
     .attr("r", l_rad)
