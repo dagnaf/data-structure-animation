@@ -69,7 +69,8 @@ function stop(l, i, animation) {
 }
 
 function over() {
-  stop(frames[frames.length-1].line, 1);
+  if (frames[frames.length-1])
+    stop(frames[frames.length-1].line, 1);
 }
 
 module.exports = {
@@ -92,7 +93,7 @@ module.exports = {
       toque: [],
       headtail: 0,
       head: currentStatus.head || 0,
-      tail: currentStatus.tail || 0
+      tail: (hard ? 0 : (currentStatus.tail || 0))
     }
     lastStatus = clone(currentStatus);
     return this;
@@ -108,5 +109,8 @@ module.exports = {
     this.initialize()[cmd](param);
     over();
     return { frames: frames, others: { N: N } };
+  },
+  reset: function() {
+    this.initialize(true);
   }
 };

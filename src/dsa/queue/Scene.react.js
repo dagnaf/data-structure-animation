@@ -31,6 +31,7 @@ module.exports = React.createClass({
       {button: {demo: "enque", onClick: this._onClick.bind(this,'enque'), value:"入队"}, items: [{onChange:this._onChange,value:this.state.text,placeholder:"整数"}]},
       {button: {demo: "deque", onClick: this._onClick.bind(this,'deque'), value:"出队"}},
       {button: {demo: "front", onClick: this._onClick.bind(this,'front'), value:"队首"}},
+      {button: {demo: "reset", onClick: this._onReset, value:"重置"}},
       {button: {help: this.state.help, onClick: this._onHelp, value:"帮助"}},
     ]
     var self = this;
@@ -65,6 +66,12 @@ module.exports = React.createClass({
   _onClick: function (cmd) {
     this.setState({demo:cmd});
     DsaActions.runDemo(cmd, this.state.text);
+  },
+  _onReset: function () {
+    DsaActions.runDemo('reset');
+    DsaActions.pauseDemo();
+    DsaActions.waitDemo();
+    Renderer.clear();
   },
   _onHelp: function () {
     this.setState({help: !this.state.help});

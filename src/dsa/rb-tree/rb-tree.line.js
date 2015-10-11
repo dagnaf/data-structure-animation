@@ -372,6 +372,7 @@ currentStatus.init = function (hard) {
   if (hard) {
     tree.root = tree.nil;
   }
+  this.lastTree = undefined;
   this.hl = [];
   this.hls = [];
   this.ne = {};
@@ -396,7 +397,8 @@ function stop(l, i, animation) {
 }
 
 function over() {
-  stop(frames[frames.length-1].line, 1);
+  if (frames[frames.length-1])
+    stop(frames[frames.length-1].line, 1);
 }
 
 module.exports = {
@@ -425,6 +427,9 @@ module.exports = {
   delete: RBTreeDelete,
   search: RBTreeSearch,
   check: rbtCheck,
+  reset: function () {
+    this.initialize(true);
+  },
   run: function (cmd, param) {
     this.initialize()[cmd](isNaN(parseInt(param)) ? 0 : parseInt(param));
     over();

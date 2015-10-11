@@ -6,6 +6,7 @@ var require_dsa = require('../src/routers/require-dsa');
 var template_req = global.getFunctionBody(require_dsa.requires, '*');
 var template_dep = global.getFunctionBody(require_dsa.dependencies, '*');
 
+// FIXME: replace function better require from ../src/routers/require-dsa
 module.exports = function (content) {
   this.cacheable && this.cacheable();
   return content.replace(

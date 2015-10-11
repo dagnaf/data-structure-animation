@@ -151,7 +151,9 @@ function _getNodesAndEdgesWithNil() {
     pos[i].curr.y = pos_curr_y[i];
   }
   // add new/extra/min/pointer node
-  if (status.nn) {
+  // FIXME: code messed up,
+  // work around: add the 2nd condition for case that the tree is empty
+  if (status.nn && pos[status.nn.ref] !== undefined) {
     // push new add node
     nodes.push(_newNode(status.nn));
     // push new node pos
@@ -462,5 +464,11 @@ function init () {
 
 module.exports = {
   init: init,
-  render: render
+  render: render,
+  clear: function () {
+    ghigh.selectAll('path.rot').remove();
+    gedges.selectAll('line.edge').remove();
+    gnodes.selectAll('circle.node').remove();
+    gtext.selectAll('text').remove();
+  }
 };

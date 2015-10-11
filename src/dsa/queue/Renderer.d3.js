@@ -365,5 +365,16 @@ function init () {
 
 module.exports = {
   init: init,
-  render: render
+  render: render,
+  clear: function () {
+    //FIXME
+    render({
+      queue: [],
+      tofront: [],
+      toque: [],
+      headtail: 0,
+      head: 0,
+      tail: 0
+    }, 10);
+  }
 }

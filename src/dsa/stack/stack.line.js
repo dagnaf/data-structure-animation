@@ -70,7 +70,8 @@ function stop(l, i, animation) {
 }
 
 function over() {
-  stop(frames[frames.length-1].line, 1);
+  if (frames[frames.length-1])
+    stop(frames[frames.length-1].line, 1);
 }
 
 module.exports = {
@@ -107,5 +108,8 @@ module.exports = {
     this.initialize()[cmd](param);
     over();
     return { frames: frames };
+  },
+  reset: function () {
+    this.initialize(true);
   }
 };

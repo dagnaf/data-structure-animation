@@ -337,5 +337,14 @@ function init () {
 
 module.exports = {
   init: init,
-  render: render
+  render: render,
+  clear: function () {
+    //FIXME
+    render({
+      stack: [],
+      topush: [],
+      topeak: [],
+      stacktop: []
+    }, 10);
+  }
 }
